@@ -3,6 +3,7 @@ import './styles/style.scss';
 
 import { Sprint } from './pages/games/sprint';
 import { AudioGame } from './pages/games/audiocall';
+import { Main } from './pages/main';
 import { Error404 } from './pages/Error404';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -11,12 +12,14 @@ import { Utils } from './utils/utils';
 
 const sprintInstance = new Sprint();
 const audioGameInstance = new AudioGame();
+const mainInstance = new Main();
 const error404Instance = new Error404();
 
 const headerInstance = new Header();
 const footerInstance = new Footer();
 
 const routes: { [selector: string]: Sprint } = {
+  '/': mainInstance,
   '/game-sprint': sprintInstance,
   '/game-audiocall': audioGameInstance,
 };

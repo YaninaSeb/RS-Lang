@@ -1,7 +1,14 @@
-export const headerHTML = `
-<nav class="navbar header" role="navigation" aria-label="main navigation">
-    <a href="./#" class="btn__header garage">Главная</a>
-    <a href="./#/game-sprint" class="btn__header game-sprint">Спринт</a>
-    <a href="./#/game-audiocall" class="btn__header game-sprint">Аудио вызов</a>
-    <a href="./#/textbook" class="btn__header winners">Учебник</a>
-</nav>`;
+export const headerHTML = ` <header class="nav">
+    <div class="nav-link_to_pages">
+        <a class="link-main" href="./#"><span>Главная</span></a>
+        <a class="link-book" href="./#/textbook"><span>Учебник</span></a>
+        <a class="link-vocabulary" href="./#/game-audiocall"><span>Аудиовызов</span></a>
+        <a class="link-game_sprint" href="./#/game-sprint"><span>Спринт</span></a>
+        <a class="link-static" href="./#/statistic"><span>Статистика</span></a>
+    </div>
+
+    <div class="link-authorization">
+        <a class="" href=""><span>Войти</span></a>
+    </div>
+</header>`;
+
