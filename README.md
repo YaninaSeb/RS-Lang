@@ -1,1 +1,1 @@
-# rslang
+# webpack-boilerplate
