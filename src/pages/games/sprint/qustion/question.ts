@@ -1,4 +1,5 @@
 import { getWords } from '../../../../utils/api';
+import { randomFalseWordSprint } from '../../../../utils/listener';
 import { questionElement } from './question-html';
 
 export class Question {
