@@ -1,3 +1,6 @@
+import { getWords } from '../../../utils/api';
+import { renderSprintQuestion } from '../../../utils/listener';
+import { Question } from './qustion';
 import { sprintElement } from './sprint-html';
 import './sprint.scss';
 
@@ -12,15 +15,23 @@ export class Sprint {
     const sectionQuestion: HTMLElement | null = document.querySelector('.questions');
     const sectionMain: HTMLElement | null = document.querySelector('.main');
     const btnBack: HTMLElement | null = document.querySelector('.button__prev');
+    const blockQuestion: HTMLElement | null = document.querySelector('.sprint__block-question');
 
-    btnStart?.addEventListener('click', () => {
+    const arrWords = await getWords(1, 1);
+    console.log(arrWords);
+    btnStart?.addEventListener('click', async () => {
       sections.forEach((section) => section.classList.add('close'));
       sectionQuestion?.classList.remove('close');
+      const wordValues = await renderSprintQuestion(3, arrWords);
+      console.log(wordValues)
+      const questionInstance = new Question(wordValues.img, wordValues.nameEng, wordValues.nameRus);
+      blockQuestion!.innerHTML = await questionInstance.render();
     });
 
-    btnBack?.addEventListener('click', () => {
+    btnBack?.addEventListener('click', async() => {
       sections.forEach((section) => section.classList.add('close'));
       sectionMain?.classList.remove('close');
     });
+
   }
 }

@@ -38,13 +38,7 @@ export const sprintElement = () => `<div class="wrap__game">
       <li class="result__answer-item"></li>
       <li class="result__answer-item"></li>
     </ul>
-    <img src="#" alt="Image" class="img__word" />
-    <div class="word__text">dog</div>
-    <div class="word__translation">Собака</div>
-    <div class="wrap__answer-btn">
-      <div class="answer__btn btn__false">Не верно</div>
-      <div class="answer__btn btn__true">Верно</div>
-    </div>
+   <div class="sprint__block-question"></div>
   </div>
 </section>
 </div>`;
