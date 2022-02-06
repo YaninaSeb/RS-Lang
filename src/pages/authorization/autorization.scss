@@ -1,0 +1,93 @@
+.autorization {
+    width: 100wv;
+    height: 85vh;
+}
+
+.autorization-bg {
+    position: absolute;
+    background: url('../../assets/img/entry.png');
+    background-size: 108%;
+    background-repeat: no-repeat;
+    top: 15%;
+    left: -5%;  
+    width: 60vw;
+    height: 80vh;
+}
+
+
+.container-autorization {
+    position: absolute;
+    top: 20%;
+    right: 5%;  
+
+    width: 35vw;
+    height: 60vh;
+
+    background-color: white;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+
+.title-entry,
+.title-registry {
+    width: 50%;
+    height: 13%;
+    font-size: 3.5vmin;
+    font-weight: 900;
+    padding-top: 1vh;
+    padding-bottom: 10px;
+
+    border-bottom: 2px solid #455774;
+    background-color: #455774;
+    color: white;
+    transition: 0.4s;
+}
+.hide-title {
+    background-color: white;
+    color: gray;
+    border-bottom: 2px solid gray;
+}
+
+.title-entry:hover,
+.title-registry:hover {
+    cursor: pointer;
+    font-size: 3.8vmin;
+}
+
+.input-autorization {
+    width: 30vw;
+    height: 5vh;
+    margin-bottom: 2.5vh;
+    margin-top: 0.5vh;
+}
+.label-autorization {
+    font-size: 3vmin;
+    color: gray;
+}
+
+.btn-registry,
+.btn-entry {
+    width: 30vw;
+    height: 6vh;
+    margin-top: 5vh;
+
+    background-color: #455774;
+    border-radius: 10px;
+    color: white;
+    font-size: 2.5vmin;
+    font-weight: 600;
+    transition: 0.4s;
+}
+.btn-registry:hover {
+    cursor: pointer;
+    transform: scale(103%);
+}
+
+.hide-autorization {
+    display: none;
+}

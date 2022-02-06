@@ -8,7 +8,7 @@ export const headerHTML = ` <header class="nav">
     </div>
 
     <div class="link-authorization">
-        <a class="" href=""><span>Войти</span></a>
+        <a class="" href="./#/autorization"><span>Войти</span></a>
     </div>
 </header>`;
 
