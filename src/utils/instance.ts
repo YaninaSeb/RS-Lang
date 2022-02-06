@@ -14,3 +14,6 @@ export interface wordInterface {
   word: string;
   wordTranslate: string;
 }
+export interface storeSprintInterface {
+  answers: {word: wordInterface, answer: boolean}[] 
+}

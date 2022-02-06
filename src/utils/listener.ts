@@ -1,11 +1,12 @@
 import { wordInterface } from './instance';
 
-export const renderSprintQuestion = async (id: number, arrWords: wordInterface[]) => {
-  const img = arrWords[id].image;
-  const nameEng = arrWords[id].word;
+export const renderSprintQuestion = async (id: number, arrWords: wordInterface[], word: wordInterface) => {
+  const img = word.image;
+  const nameEng = word.word;
   const randomId = randomFalseWordSprint(id, arrWords);
   const nameRus = arrWords[randomId].wordTranslate;
-  return { img, nameEng, nameRus };
+  const answer = randomId === id; 
+  return { img, nameEng, nameRus, answer };
 };
 
 export const randomFalseWordSprint = (id: number, arrWords: wordInterface[]) => {

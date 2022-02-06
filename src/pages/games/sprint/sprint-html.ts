@@ -40,8 +40,8 @@ export const sprintElement = () => `<div class="wrap__game">
     </ul>
    <div class="sprint__block-question"></div>
    <div class="wrap__answer-btn">
-  <div class="answer__btn btn__false">Не верно</div>
-  <div class="answer__btn btn__true">Верно</div>
+  <div class="answer__btn btn__false" data-answer="false">Не верно</div>
+  <div class="answer__btn btn__true" data-answer="true">Верно</div>
 </div>
   </div>
 </section>
