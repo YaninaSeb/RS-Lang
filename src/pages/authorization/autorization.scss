@@ -83,7 +83,8 @@
     font-weight: 600;
     transition: 0.4s;
 }
-.btn-registry:hover {
+.btn-registry:hover,
+.btn-entry:hover {
     cursor: pointer;
     transform: scale(103%);
 }
