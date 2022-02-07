@@ -1,46 +1,49 @@
+import { electron } from 'webpack';
 import { NUMBER_OF_ANSWER } from './audiocall';
-import { array, generateWords, randomInteger, Word } from './utils/utils';
+import { array, arrayOfRandomNumbers, generateWords, randomWrongAnswer, shuffleAnswers, Word } from './utils/utils';
 
-export const audio = new Audio();
-audio.volume = 0.2;
+
 let arrayOfResults: Word[] = [];
 
-export const renderFirstLevel = async () => {
-  await generateWords(0);
+export const renderLevel = async (group: number) => {
+  await generateWords(group);
+  randomWrongAnswer();
   arrayOfResults = [];
   arrayOfResults.push(array[NUMBER_OF_ANSWER]);
-  audio.src = `https://raw.githubusercontent.com/BlackMamba51/react-rslang-be/main/${array[NUMBER_OF_ANSWER].audio}`;
-  audio.play();
   const html = `
-    <div data-word="${array[NUMBER_OF_ANSWER].word}" class="audio"></div>
+    <div onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].word}" class="audio">
+      <audio autoplay id="${array[NUMBER_OF_ANSWER].audio}-audio" src="https://raw.githubusercontent.com/BlackMamba51/react-rslang-be/main/${array[NUMBER_OF_ANSWER].audio}"></audio>
+    </div>
     <div class="answers__container">
-      <button value="${array[NUMBER_OF_ANSWER].word}" id="${array[NUMBER_OF_ANSWER].id}" class="answers">${array[NUMBER_OF_ANSWER].wordTranslate}</button>
-      <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
-      <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
-      <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
+      <button data-word="${array[NUMBER_OF_ANSWER].word}" value="${array[NUMBER_OF_ANSWER].word}" id="${array[NUMBER_OF_ANSWER].id}" class="answers answer1">${array[NUMBER_OF_ANSWER].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[0]].word}" value="${array[arrayOfRandomNumbers[0]].word}" id="${array[arrayOfRandomNumbers[0]].id}" class="answers answer2">${array[arrayOfRandomNumbers[0]].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[1]].word}" id="${array[arrayOfRandomNumbers[1]].id}" class="answers answer3">${array[arrayOfRandomNumbers[1]].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[2]].word}" id="${array[arrayOfRandomNumbers[2]].id}" class="answers answer4">${array[arrayOfRandomNumbers[2]].wordTranslate}</button>
     </div>
   `;
   (document.querySelector('.answers__body') as HTMLElement).innerHTML = html;
   (document.querySelector('.audio') as HTMLElement).addEventListener('click', () => {
-    audio.play();
   });
+  shuffleAnswers();
 };
 
 export function updateLevel() {
+  randomWrongAnswer();
   arrayOfResults.push(array[NUMBER_OF_ANSWER]);
-  audio.src = `https://raw.githubusercontent.com/BlackMamba51/react-rslang-be/main/${array[NUMBER_OF_ANSWER].audio}`;
-  audio.play();
   const html = `
-  <div data-word="${array[NUMBER_OF_ANSWER].word}" class="audio"></div>
-  <div class="answers__container">
-    <button value="${array[NUMBER_OF_ANSWER].word}" id="${array[NUMBER_OF_ANSWER].id}" class="answers">${array[NUMBER_OF_ANSWER].wordTranslate}</button>
-    <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
-    <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
-    <button value="${array[randomInteger(0, 19)].word}" id="${array[randomInteger(0, 19)].id}" class="answers">${array[randomInteger(0, 19)].wordTranslate}</button>
-  </div>
+    <div onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].word}" class="audio">
+      <audio autoplay id="${array[NUMBER_OF_ANSWER].audio}-audio" src="https://raw.githubusercontent.com/BlackMamba51/react-rslang-be/main/${array[NUMBER_OF_ANSWER].audio}"></audio>
+    </div>
+    <div class="answers__container">
+      <button data-word="${array[NUMBER_OF_ANSWER].word}" value="${array[NUMBER_OF_ANSWER].word}" id="${array[NUMBER_OF_ANSWER].id}" class="answers answer1">${array[NUMBER_OF_ANSWER].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[0]].word}" value="${array[arrayOfRandomNumbers[0]].word}" id="${array[arrayOfRandomNumbers[0]].id}" class="answers answer2">${array[arrayOfRandomNumbers[0]].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[1]].word}" id="${array[arrayOfRandomNumbers[1]].id}" class="answers answer3">${array[arrayOfRandomNumbers[1]].wordTranslate}</button>
+      <button data-word="${array[arrayOfRandomNumbers[2]].word}" id="${array[arrayOfRandomNumbers[2]].id}" class="answers answer4">${array[arrayOfRandomNumbers[2]].wordTranslate}</button>
+    </div>
   `;
   (document.querySelector('.answers__body') as HTMLElement).innerHTML = html;
   renderResultsTable();
+  shuffleAnswers();
 }
 
 
@@ -62,44 +65,46 @@ export const renderResultsTable = () => `
 
 export const renderAuidoCallStatistic = () => {
   const html = `
-    <div class="audiocall-statistic__body">
-      <div class="audiocall-statistic__content">
-        <h2 class="statistic-title">Результаты</h2>
         <table class="table">
+        <caption>Результаты</caption>
           ${renderResultsTable()}
         </table>
-      </div>
-    </div>
   `;
-  (document.querySelector('.audiocall-statistic') as HTMLElement).innerHTML = html;
+  (document.querySelector('.audiocall-statistic__content') as HTMLElement).innerHTML = html;
 }
 
 export const audioElement = () => `
   <section class="audiocall">
+  <a href="./#" class="audiocall-close"></a>
     <div class="container">
       <div class="audiocall__body">
         <div class="audiocall-description">
           <h1 class="audiocall-title">Аудиовызов</h1>
           <div class="audiocall-text">Выберите из вариантов ответа правильный перевод слова, который услышите</div>
           <div class="audiocall-levels">
-            <button id="first-level" class="first-level levels">1</button>
-            <button id="second-level" class="second-level levels">2</button>
-            <button id="third-level" class="third-level levels">3</button>
-            <button id="fourth-level" class="fourth-level levels">4</button>
-            <button id="fifth-level" class="fifth-level levels">5</button>
-            <button id="sixth-level" class="sixth-level levels">6</button>
+            <button value="0" id="first-level" class="first-level levels">1</button>
+            <button value="1" id="second-level" class="second-level levels">2</button>
+            <button value="2" id="third-level" class="third-level levels">3</button>
+            <button value="3" id="fourth-level" class="fourth-level levels">4</button>
+            <button value="4" id="fifth-level" class="fifth-level levels">5</button>
+            <button value="5" id="sixth-level" class="sixth-level levels">6</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="audiocall-round">
-      <div class="audiocall-close"></div>
+    <div class="audiocall-round hide">
       <div class="container">
-        <div class="answers__body hide">
-        </div>
+        <div class="answers__body"></div>
       </div>
     </div>
-    <div class="audiocall-statistic">
-      
+    <div class="audiocall-statistic hide">
+      <div class="container">
+        <div class="audiocall-statistic__body">
+          <div class="audiocall-statistic__content"></div>
+          <div class="results-buttons">
+            <button value="" class="repeat"></button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>`;

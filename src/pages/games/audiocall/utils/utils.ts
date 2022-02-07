@@ -1,7 +1,32 @@
+import { indexOf } from 'lodash';
 import { getWords } from '../api/api';
-import { audio } from '../audiocall-html';
+import { NUMBER_OF_ANSWER } from '../audiocall';
 
 const COUNT_OF_WORDS = 20;
+export let arrayOfRandomNumbers: number[] = [];
+
+
+export function shuffleAnswers() {
+  let div = new Array(4);
+  for (let buttons = 0; buttons < 4; buttons++) {
+    div[buttons] = document.querySelector(`.answer${buttons + 1}`);
+    (document.querySelector('.answers__container') as HTMLElement).removeChild(div[buttons]);
+  }
+  while (div.length > 0) {
+    (document.querySelector('.answers__container') as HTMLElement).appendChild(div.splice(Math.floor(Math.random() * div.length),1)[0]);
+  }
+}
+
+export function randomWrongAnswer() {
+  arrayOfRandomNumbers = [];
+  const countOfCycles = 3;
+  let arrayOfTwentyNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+  arrayOfTwentyNumbers.splice(arrayOfTwentyNumbers.indexOf(NUMBER_OF_ANSWER), 1);
+  for(let cycles = 1; cycles <= countOfCycles; cycles++){
+    arrayOfRandomNumbers.push(arrayOfTwentyNumbers.splice(Math.random()*arrayOfTwentyNumbers.length,1)[0]);
+  }
+  return arrayOfRandomNumbers;
+}
 
 export function randomInteger(min: number, max: number) {
   const number = min + Math.random() * (max + 1 - min);
@@ -40,6 +65,8 @@ document.body.addEventListener('click', (event) => {
     array = [];
   }
 });
+
+
 
 
 
