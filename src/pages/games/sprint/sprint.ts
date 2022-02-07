@@ -19,7 +19,8 @@ export class Sprint {
     const btnBack: HTMLElement | null = document.querySelector('.button__prev');
     const blockQuestion: HTMLElement | null = document.querySelector('.sprint__block-question');
     const blockAnswer: HTMLElement | null = document.querySelector('.wrap__answer-btn');
-    const blockStart: HTMLElement | null = document.querySelector('.wrap__start');
+    const blockQuestinWrap: HTMLElement | null = document.querySelector('.wrap__question');
+
 
     const arrWords: wordInterface[] = await getWords(2, 1);
     btnStart?.addEventListener('click', async () => {
@@ -27,22 +28,22 @@ export class Sprint {
       sectionQuestion?.classList.remove('close');
       let i = 0;
       const wordValues = await Promise.all(arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word)));
-      console.log(wordValues)
-      //const wordValues = await renderSprintQuestion(2, arrWords);
-      // const questionInstance = new Question(wordValues[2].img, wordValues[2].nameEng, wordValues.nameRus);
-      // blockQuestion!.innerHTML = await questionInstance.render();
-      // blockAnswer?.addEventListener(
-      //   'click',
-      //   (event) => {
-      //     if (event.target instanceof HTMLElement && event.target.dataset.answer) {
-      //       const answer = event.target.dataset.answer === String(wordValues.answer);
-      //       storeSprint.answers.push({ word: arrWords[2], answer: answer });
-      //       i++;
-      //       console.log(i)
-      //     }
-      //   },
-      //   { once: true }
-      // );
+      console.log(wordValues);  
+      const questionInstance = new Question(wordValues[i].img, wordValues[i].nameEng, wordValues[i].nameRus);
+      blockQuestion!.innerHTML = await questionInstance.render();
+      blockAnswer?.addEventListener('click', async (event) => {
+          if (event.target instanceof HTMLElement && event.target.dataset.answer) {
+            const answer = event.target.dataset.answer === String(wordValues[i].answer);
+            storeSprint.answers.push({ word: arrWords[i], answer: answer });
+            answer ? blockQuestinWrap?.classList.add('questin__true') : blockQuestinWrap?.classList.add('questin__false');
+            answer ? blockQuestinWrap?.classList.remove('questin__true') : blockQuestinWrap?.classList.remove('questin__false');
+            i++;
+            const questionInstance = new Question(wordValues[i].img, wordValues[i].nameEng, wordValues[i].nameRus);
+            blockQuestion!.innerHTML = await questionInstance.render();
+            console.log(storeSprint.answers)
+          }
+        }
+      );
     });
 
     btnBack?.addEventListener('click', async () => {
