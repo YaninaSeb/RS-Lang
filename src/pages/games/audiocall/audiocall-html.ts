@@ -66,7 +66,7 @@ export const renderResultsTable = () => `
   <tbody>
       ${arrayOfResults.map((word: Word) => `
         <tr>
-          <td onclick="document.querySelector('#${word.word}-audio').play()" class="statistic-audio"><audio id="${word.word}-audio" src="https://raw.githubusercontent.com/BlackMamba51/react-rslang-be/main/${word.audio}"></audio></td>
+          <td onclick="document.querySelector('#${word.word}-audio').play()" class="statistic-audio"><audio id="${word.word}-audio" src="./../../../../assets/${word.audio}"></audio></td>
           <td>${word.word}</td>
           <td>${word.transcription}</td>
           <td>${word.wordTranslate}</td>
@@ -120,7 +120,8 @@ export const audioElement = () => `
         <div class="audiocall-statistic__body">
           <div class="audiocall-statistic__content"></div>
           <div class="results-buttons">
-            <button value="" class="repeat"></button>
+            <button value="" class="repeat after-game"></button>
+            <a href="#/textbook"><button class="book-button after-game"></button></a>
           </div>
         </div>
       </div>

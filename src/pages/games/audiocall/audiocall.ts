@@ -82,32 +82,37 @@ export class AudioGame {
       NUMBER_OF_ANSWER = 0;
       updateLevel();
     });
-    nextButton.addEventListener('click', function() {
-      NUMBER_OF_ANSWER++;
-      array[NUMBER_OF_ANSWER].choice = 'wrong';
-      updateLevel();
+    nextButton.addEventListener('click', async function() {
       if (NUMBER_OF_ANSWER === 19) {
+        await renderAuidoCallStatistic();
         while (answersBody.firstChild) {
           answersBody.removeChild(answersBody.firstChild);
         }
         (document.querySelector('.audiocall-round') as HTMLElement).classList.add('hide');
+        (document.querySelector('.audiocall-close') as HTMLElement).classList.add('hide');
         (document.querySelector('.audiocall-statistic') as HTMLElement).classList.remove('hide');
-        renderAuidoCallStatistic();
-      }
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.code === 'Enter') {
+      } else {
         NUMBER_OF_ANSWER++;
         array[NUMBER_OF_ANSWER].choice = 'wrong';
         updateLevel();
+      }
+      
+    });
+
+    document.addEventListener('keydown', async (event) => {
+      if (event.code === 'Enter') {
         if (NUMBER_OF_ANSWER === 19) {
+          await renderAuidoCallStatistic();
           while (answersBody.firstChild) {
             answersBody.removeChild(answersBody.firstChild);
           }
           (document.querySelector('.audiocall-round') as HTMLElement).classList.add('hide');
+          (document.querySelector('.audiocall-close') as HTMLElement).classList.add('hide');
           (document.querySelector('.audiocall-statistic') as HTMLElement).classList.remove('hide');
-          renderAuidoCallStatistic();
+       } else {
+        NUMBER_OF_ANSWER++;
+        array[NUMBER_OF_ANSWER].choice = 'wrong';
+        updateLevel();
        }
       }
     });
