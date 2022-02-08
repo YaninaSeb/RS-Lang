@@ -1,3 +1,5 @@
+import { dataUser } from "../../pages/authorization/autorization";
+
 export const headerHTML = ` <header class="nav">
     <div class="nav-link_to_pages">
         <a class="link-main" href="./#"><span>Главная</span></a>
@@ -8,7 +10,9 @@ export const headerHTML = ` <header class="nav">
     </div>
 
     <div class="link-authorization">
-        <a class="" href="./#/autorization"><span>Войти</span></a>
+        <div class="title-user">${dataUser.name}</div>
+        <a class="" href="./#/autorization"><div class="img-login" title="Войти"></div></a>
+        <div class="img-logout" title="Выйти"></div>
     </div>
 </header>`;
 

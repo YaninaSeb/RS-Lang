@@ -26,7 +26,7 @@ const routes: { [selector: string]: Sprint } = {
   '/game-audiocall': audioGameInstance,
   '/autorization': autorizationInstance
 };
-
+ 
 const router = async () => {
   document.body.innerHTML = '';
   const header = document.createElement('div');

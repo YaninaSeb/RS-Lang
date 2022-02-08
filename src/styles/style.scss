@@ -33,18 +33,37 @@ a:hover {
   margin-right: 1vw;
   color: #8899b4;
 }
-
-.link-authorization a {
-  text-decoration: none;
-  color: #8899b4;
-}
-
-.nav-link_to_pages a:hover,
-.link-authorization a:hover {
+.nav-link_to_pages a:hover {
   border-bottom: 1px solid white;
   color: white;
 }
 
+.link-authorization {
+  text-decoration: none;
+  color: #8899b4;
+  display: flex;
+  flex-direction: row;
+}
+
+.img-login {
+  width: 4vw;
+  height: 6vh;
+  background: url('../assets/img/log_in.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: -1.2vh;
+  margin-left: 1.5vw;
+}
+.img-logout {
+  display: none;
+  width: 4vw;
+  height: 6vh;
+  background: url('../assets/img/log_out.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: -1.2vh;
+  margin-left: 1.5vw;
+}
 
 /* HOME PAGE -> MAIN*/
 
