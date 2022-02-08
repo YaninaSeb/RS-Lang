@@ -187,15 +187,22 @@ tr {
   display: flex;
   flex-direction: column;
 }
+
 .repeat {
   background: url('./../../../assets/svg/redo-circular-arrow_icon-icons.com_56886.svg');
+}
+.book-button {
+  background: url('./../../../assets/svg/education_book_learn_learning_icon_149694.svg');
+  margin-top: 30px;
+}
+.after-game {
   width: 70px;
   height: 70px;
   background-size: 70px 70px;
   cursor: pointer;
   transition: all .7s ease;
 }
-.repeat:hover {
+.after-game:hover {
   transform: scale(1.2) rotate(360deg);
 }
 .right-word {
