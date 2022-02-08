@@ -1,6 +1,7 @@
-import { indexOf } from 'lodash';
+
 import { getWords } from '../api/api';
 import { NUMBER_OF_ANSWER } from '../audiocall';
+import { renderRightWord } from '../audiocall-html';
 
 const COUNT_OF_WORDS = 20;
 export let arrayOfRandomNumbers: number[] = [];
@@ -46,6 +47,8 @@ export type Word = {
   wordTranslate: string,
   transcription: string,
   choice: string,
+  textMeaning: string,
+  textExample: string,
 };
 
 export async function generateWords(group: number) {
@@ -65,6 +68,12 @@ document.body.addEventListener('click', (event) => {
     array = [];
   }
 });
+
+export async function showRightWord() {
+  (document.querySelector('.right-word') as HTMLElement).classList.remove('hide');
+  (document.querySelector('.audio') as HTMLElement).classList.add('hide');
+  renderRightWord();
+}
 
 
 
