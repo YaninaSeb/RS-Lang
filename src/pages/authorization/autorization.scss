@@ -37,7 +37,7 @@
   border-bottom: 2px solid #455774;
   background-color: #455774;
   color: white;
-  transition: 0.4s;
+  transition: 0.3s;
 }
 .hide-title {
   background-color: white;
@@ -47,7 +47,7 @@
 .title-entry:hover,
 .title-registry:hover {
   cursor: pointer;
-  font-size: 3.8vmin;
+  transform: scale(103%);
 }
 .input-autorization {
   width: 30vw;
@@ -57,9 +57,9 @@
   padding: 0 10px;
 }
 
-.input-autorization:invalid {
-  border: 1px solid red;
-}
+// .input-autorization:invalid {
+//   border: 1px solid red;
+// }
 
 .label-autorization {
   font-size: 3vmin;
