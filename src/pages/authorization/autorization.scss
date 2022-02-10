@@ -30,7 +30,7 @@
 .title-registry {
   width: 50%;
   height: 13%;
-  font-size: 3.5vmin;
+  font-size: 3.2vmin;
   font-weight: 900;
   padding-top: 1vh;
   padding-bottom: 10px;
@@ -57,14 +57,20 @@
   padding: 0 10px;
 }
 
-// .input-autorization:invalid {
-//   border: 1px solid red;
-// }
+.input-autorization:invalid:required {
+  border: 1px solid red;
+}
 
 .label-autorization {
   font-size: 3vmin;
   color: gray;
 }
+
+.error-message-entry,
+.error-message-registry {
+  color: red;
+}
+
 .btn-registry,
 .btn-entry {
   width: 30vw;

@@ -3,8 +3,9 @@ export const dataUser: any = {
   userId: '',
   token: '',
   refreshToken: '',
-  message: ''
+  errCode: ''
 };
+
 
   // регистрация нового пользователя
   export const createUser = async (user: object) => {
@@ -17,32 +18,46 @@ export const dataUser: any = {
         },
         body: JSON.stringify(user)
       });
+
+      if (!rawResponse.ok) {
+        throw new Error(`${rawResponse.status}`);
+      }
+
       const content = await rawResponse.json();
-    } catch (err) {
-      console.log('Ошибка' + err);
+
+    } catch (err: any) {
+      dataUser.errCode = err.message;
     }
   };
 
   // вход уже зарегистрированного пользователя
   export const loginUser = async (user: object) => {
-    const rawResponse = await fetch('https://rs-lang25.herokuapp.com/signin', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    });
-    const content = await rawResponse.json();
+    try {
+      const rawResponse = await fetch('https://rs-lang25.herokuapp.com/signin', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      });
 
-    dataUser.name = content.name;
-    dataUser.token = content.token;
-    dataUser.refreshToken = content.refreshToken;
-    dataUser.userId = content.userId;
-    dataUser.message = content.message;
+      if (!rawResponse.ok) {
+        throw new Error(`${rawResponse.status}`);
+      }
 
-    console.log(content);
-    console.log(dataUser);
+      const content = await rawResponse.json();
+
+      dataUser.name = content.name;
+      dataUser.token = content.token;
+      dataUser.refreshToken = content.refreshToken;
+      dataUser.userId = content.userId;
+      dataUser.message = content.message;
+
+      console.log(content);
+    } catch (err: any) {
+      dataUser.errCode = err.message;
+    }
   };
 
   // получение пользователя по id
@@ -56,29 +71,6 @@ export const dataUser: any = {
     return rawResponse.json();
   };
 
-  // обновление пользователя по id
-  export const updateUser = async (user: object, id: string) => {
-    const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    });
-  };
-
-
-  // удаление пользователя по id
-  export const deleteUser = async (id: string, token: string) => {
-    await fetch(`https://rs-lang25.herokuapp.com/users/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-     }
-    });
-  };
-
   // получение нового токена пользователя
   export const getNewTokenUser = async (id: string) => {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/tokens`, {
@@ -86,8 +78,6 @@ export const dataUser: any = {
     });
     return rawResponse.json();
   };
-
-
 
 
 

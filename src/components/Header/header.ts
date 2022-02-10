@@ -1,6 +1,6 @@
 import './header.scss';
 import { headerHTML } from './header-html';
-import { dataUser, deleteUser } from '../../pages/authorization/users-api';
+import { dataUser } from '../../pages/authorization/users-api';
 
 export class Header {
   async render() {
@@ -20,9 +20,6 @@ export class Header {
 
     //кнопка удаления пользователя
     imgLogOut.addEventListener('click', () => {
-        console.log('выход');
-    
-        deleteUser(dataUser.userId, dataUser.token).then(() => {
           dataUser.name = '';
           dataUser.token = '';
           dataUser.refreshToken = '';
@@ -31,10 +28,8 @@ export class Header {
           titleUser.textContent = dataUser.name;
           imgLogIn.style.display = 'block';
           imgLogOut.style.display = 'none';
-        });
       }
     );
-
     return;
   }
 }

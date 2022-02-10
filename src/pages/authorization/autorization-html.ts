@@ -12,9 +12,10 @@ export const autorizationElement = () => `
         <input class="input-autorization" type="email" id="mail-entry" required>
       </div>
       <div>
-        <label class="label-autorization" for="password-entry">Пароль (не менее 8 символов)</label><br>
+        <label class="label-autorization" for="password-entry">Пароль</label><br>
         <input class="input-autorization" type="password" id="password-entry" minlength="8" required>
       </div>
+      <div class="error-message-entry"></div>
       <button class="btn-entry">Войти</button>
     </div>
 
@@ -28,12 +29,12 @@ export const autorizationElement = () => `
         <input class="input-autorization" type="text" id="username-registry" required>
       </div>
       <div>
-        <label class="label-autorization" for="password-registry">Пароль (не менее 8 символов)</label><br>
+        <label class="label-autorization" for="password-registry">Пароль</label><br>
         <input class="input-autorization" type="password" id="password-registry" required minlength="8">
       </div>
+      <div class="error-message-registry"></div>
       <button class="btn-registry">Зарегистрироваться</button>
     </div>
-    
     
   </div>
 </section>

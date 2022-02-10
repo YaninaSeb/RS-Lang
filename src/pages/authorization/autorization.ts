@@ -1,7 +1,6 @@
 import { autorizationElement } from './autorization-html';
 import './autorization.scss';
-import { dataUser, createUser, loginUser, deleteUser} from './users-api';
-import { Main } from '../main';
+import { dataUser, createUser, loginUser} from './users-api';
 
 export class Autorization {
   async render() {
@@ -23,7 +22,9 @@ export class Autorization {
     const titleUser = <HTMLElement>document.querySelector('.title-user');
     const imgLogIn = <HTMLElement>document.querySelector('.img-login');
     const imgLogOut = <HTMLElement>document.querySelector('.img-logout');
-
+    const linkToHomePage = <HTMLLinkElement>document.querySelector('.link-main');
+    const errMessageRegistry = <HTMLDivElement>document.querySelector('.error-message-registry');
+    const errMessageEntry = <HTMLDivElement>document.querySelector('.error-message-entry');
 
     //смена внешнего вида входа - регистрации
     optionEntry.addEventListener('click', () => {
@@ -54,10 +55,6 @@ export class Autorization {
       }
     }
 
-
-    const mainInstance = new Main();
-
-
       //кнопка регистрации
     btnRegistry.addEventListener('click', () => {
       const email = inputEmailRegistry.value;
@@ -65,11 +62,17 @@ export class Autorization {
       const password = inputPasswordRegistry.value;
     
       createUser({ 'name': name, 'email': email, 'password': password }).then(() => {
-        loginUser({ 'email': email, 'password': password }).then(() => {
-          changeBtnEntry();
-
-          mainInstance.render();
-        });
+        if (dataUser.errCode != '') {
+          errMessageRegistry.textContent = 'Неверный адрес электронной почты или пароль!';
+          dataUser.errCode == '417' ? errMessageRegistry.textContent = 'Пользователь с указанной электронной почтой уже зарегистрирован!' : false;
+          dataUser.errCode = '';
+        } else {
+          loginUser({ 'email': email, 'password': password }).then(() => {
+            errMessageRegistry.textContent = '';
+            changeBtnEntry();
+            linkToHomePage.click();
+          });
+        }
       });
     });
 
@@ -79,8 +82,13 @@ export class Autorization {
       const password = inputPasswordEntry.value;
 
       loginUser({ 'email': email, 'password': password }).then(() => {
-        changeBtnEntry();
-        console.log(dataUser);
+        if (dataUser.errCode != '') {
+          errMessageEntry.textContent = 'Неверный адрес электронной почты или пароль!';
+          dataUser.errCode = '';
+        } else {
+          changeBtnEntry();
+          linkToHomePage.click();
+        }
       });
     });
 
