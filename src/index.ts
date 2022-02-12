@@ -5,23 +5,24 @@ import { Sprint } from './pages/games/sprint';
 import { AudioGame } from './pages/games/audiocall';
 import { Main } from './pages/main';
 import { Autorization } from './pages/authorization';
+import { Book } from './pages/book';
 import { Error404 } from './pages/Error404';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-
 import { Utils } from './utils/utils';
 
 const sprintInstance = new Sprint();
 const audioGameInstance = new AudioGame();
 const mainInstance = new Main();
 const autorizationInstance = new Autorization();
+const bookInstance = new Book();
 const error404Instance = new Error404();
-
 const headerInstance = new Header();
 const footerInstance = new Footer();
 
 const routes: { [selector: string]: Sprint } = {
   '/': mainInstance,
+  '/book': bookInstance,
   '/game-sprint': sprintInstance,
   '/game-audiocall': audioGameInstance,
   '/autorization': autorizationInstance
