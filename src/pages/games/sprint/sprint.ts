@@ -20,6 +20,9 @@ export class Sprint {
     const blockQuestion: HTMLElement | null = document.querySelector('.sprint__block-question');
     const blockAnswer: HTMLElement | null = document.querySelector('.wrap__answer-btn');
     const blockQuestinWrap: HTMLElement | null = document.querySelector('.wrap__question');
+    const blockTimer: HTMLElement | null = document.querySelector('.timer__sprint');
+    const blockScore: HTMLElement | null = document.querySelector('.score__sprint');
+
     let arrWords: wordInterface[] = [];
     let wordValues: {
       img: string;
@@ -30,8 +33,9 @@ export class Sprint {
     let questionNumber = 0;
 
     btnStart?.addEventListener('click', async () => {
-      timerSprint();
+      timerSprint(blockTimer!);
       arrWords = await getWords(1, 1);
+      console.log(arrWords);
       wordValues = await Promise.all(
         arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word))
       );
@@ -53,7 +57,8 @@ export class Sprint {
           storeSprint,
           arrWords,
           questionNumber,
-          blockQuestinWrap!
+          blockQuestinWrap!,
+          blockScore!
         );
         questionNumber++;
         const questionInstance = await new Question(
@@ -62,8 +67,7 @@ export class Sprint {
           wordValues[questionNumber].nameRus
         );
         blockQuestion!.innerHTML = await questionInstance.render();
-        console.log(storeSprint.answers);
-        console.log(questionNumber);
+        console.log(storeSprint.correctAnswers);
       }
     });
 
@@ -72,6 +76,8 @@ export class Sprint {
       sectionMain?.classList.remove('close');
       storeSprint.answers.splice(0, storeSprint.answers.length);
       questionNumber = 0;
+      blockTimer!.innerHTML = `01:00`;
+      clearInterval(storeSprint.timer!);
     });
   }
 }

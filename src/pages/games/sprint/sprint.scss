@@ -14,10 +14,13 @@
 .timer__sprint {
   text-align: center;
   margin-bottom: 15px;
+  color:rgb(22, 18, 212);
 }
 .score__sprint {
   text-align: center;
   margin-bottom: 40px;
+  font-size: 32px;
+  color: rgb(56, 196, 14);
 }
 .wrap__question {
   margin: 0 auto;
@@ -142,4 +145,16 @@
 }
 .questin__false {
   border: 4px solid red;
+}
+.timer__sprint {
+  font-size: 24px;
+}
+.button__prev {
+  width: 30px;
+}
+.button__sound {
+  display: none;
+}
+.activ__music {
+  display: block;
 }

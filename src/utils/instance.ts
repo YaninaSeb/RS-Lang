@@ -15,5 +15,8 @@ export interface wordInterface {
   wordTranslate: string;
 }
 export interface storeSprintInterface {
-  answers: {word: wordInterface, answer: boolean}[] 
+  answers: {word: wordInterface, answer: boolean}[] ,
+  correctAnswers: number,
+  points: number,
+  timer: NodeJS.Timer | null,
 }
