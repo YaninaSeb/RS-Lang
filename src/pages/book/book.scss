@@ -1,0 +1,112 @@
+.book-page {
+    width: 100vw;
+    height: 77vh;
+    margin-top: 7vh;
+
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.book-navigation {
+    position: fixed;
+    left: 30%;
+    top: 6.8vh;
+
+    display:flex;
+    flex-direction: row;
+    padding: 10px;
+}
+ 
+select { //убрать стрелки
+    appearance: none;
+}
+
+.pages-book {
+    display:flex;
+    flex-direction: row;
+}
+
+.num-group,
+.games {
+    width: 10vw;
+    margin: 0 10px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border-color: #455774;
+    color: #455774;
+    cursor: pointer;
+}
+.num-pages {
+    width: 10vw;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    cursor: pointer;
+}
+.prev-page,
+.next-page {
+    border: 1px solid black;
+    width: 3vw;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    padding: 5px;
+    cursor: pointer;
+}
+.prev-page {
+    border-radius: 5px 0 0 5px;
+}
+.next-page {
+    border-radius: 0 5px 5px 0;
+}
+
+
+
+
+.container-words {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-word {
+    width: 80vw;
+    height: auto;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+
+    background-color: rgba(136, 153, 180, 0.2);
+
+    display: flex;
+    flex-direction: row;
+    word-wrap: break-word;
+}
+
+.img-word {
+    width: 40%;
+    height: 100%;
+}
+
+.word-en {
+  font-size: 2vw;
+  padding-bottom: 25px;
+  font-weight: 600;
+}
+
+.sentence-one-en,
+.sentence-two-en {
+  font-size: 1.5vw;
+  word-wrap: break-word;
+}
+
+.sentence-one-ru,
+.sentence-two-ru {
+  font-size: 1.2vw;
+  padding-bottom: 10px;
+  color: rgb(0, 0, 0, 0.6);
+  word-wrap: break-word;
+}
