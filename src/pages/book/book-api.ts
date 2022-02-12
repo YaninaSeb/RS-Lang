@@ -1,4 +1,9 @@
-export const getWords = async (numPage: number, numGroup: number) => {
+export const infoBook = {
+  group: 1,
+  page: 1
+}
+
+export const getWords = async (numGroup: number, numPage: number) => {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/words?page=${numPage}&group=${numGroup}`, {
       method: 'GET',
       headers: {
@@ -13,3 +18,19 @@ export const getWords = async (numPage: number, numGroup: number) => {
     return content;
 };
 
+
+
+    // function setLocalStorageUser() {
+    //   localStorage.setItem('groupBook', (infoBook.group).toString());
+    //   localStorage.setItem('pageBook', (infoBook.page).toString());
+    // }
+    // window.addEventListener('beforeunload', setLocalStorageUser);
+    
+    // function getLocalStorageUser() {
+    //   infoBook.group = Number(localStorage.getItem('groupBook'));
+    //   infoBook.page = Number(localStorage.getItem('pageBook'));
+    // }
+    // window.addEventListener('load', () => {
+    //   getLocalStorageUser();
+    //   createPageBook();
+    // });
