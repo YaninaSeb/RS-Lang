@@ -1,3 +1,5 @@
+import { userStatistic } from './statistic-api';
+
 export const statisticElement = () => `
   <section class="statistic">
     <div class="container">
@@ -9,7 +11,7 @@ export const statisticElement = () => `
             <h3 class="game-title">Аудиовызов</h3>
             <div class="statistic__container">
               <div class="game-text">Изучено слов:</div>
-              <div class="words-learned">0</div>
+              <div class="words-learned">${userStatistic.audiocallLearnedWords}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Правильно %:</div>
@@ -24,7 +26,7 @@ export const statisticElement = () => `
             <h3 class="game-title">Спринт</h3>
             <div class="statistic__container">
               <div class="game-text">Изучено слов:</div>
-              <div class="words-learned">0</div>
+              <div class="words-learned">${userStatistic.sprintLearnedWords}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Правильно %:</div>
@@ -36,7 +38,26 @@ export const statisticElement = () => `
             </div>
           </div>
         </div>
+        <div class="day-statistic blur">
+          <h2 class="statistic-title">Общая статистика</h2>
+          <div class="statistic__container">
+            <div class="game-text">Изучено слов:</div>
+            <div class="words-learned">${userStatistic.learnedWords}</div>
+          </div>
+          <div class="statistic__container">
+            <div class="game-text">Правильно %:</div>
+            <div class="percent-game">0</div>
+          </div>
+        </div>
       </div>
+      <div class="unauthorized-statistic hide"></div>
     </div>
   </section>
-`
+`;
+
+export const renderUnauthorized = () => {
+  const html = `
+    <div class="unauthorized-message">Для просмотра статистики, необходимо авторизоваться</div>
+  `;
+  (document.querySelector('.unauthorized-statistic') as HTMLElement).innerHTML = html;
+}

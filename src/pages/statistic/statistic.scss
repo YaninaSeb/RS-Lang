@@ -1,3 +1,6 @@
+.hide {
+  display: none;
+}
 .blur {
   background: rgba(124, 160, 160, 0.2);
   backdrop-filter: blur(8px);
@@ -43,4 +46,20 @@
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
+}
+.day-statistic {
+  padding: 20px;
+  width: 840px;
+  margin: 0 auto;
+  margin-top: 40px;
+  border: 1px solid black;
+  border-radius: 10px;
+  transition: all .7s ease;
+}
+.day-statistic:hover {
+  transform: scale(1.3);
+}
+.unauthorized-message {
+  text-align: center;
+  margin-top: 400px;
 }
