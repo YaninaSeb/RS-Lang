@@ -46,7 +46,7 @@
 }
 .result__answer-item {
   list-style: none;
-  padding: 5px;
+  padding: 10px;
   border: 1px solid black;
   border-radius: 100%;
   margin: 5px;
@@ -157,4 +157,7 @@
 }
 .activ__music {
   display: block;
+}
+.activ__round {
+  background-color: rgb(94, 216, 24);
 }

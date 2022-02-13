@@ -22,6 +22,7 @@ export class Sprint {
     const blockQuestinWrap: HTMLElement | null = document.querySelector('.wrap__question');
     const blockTimer: HTMLElement | null = document.querySelector('.timer__sprint');
     const blockScore: HTMLElement | null = document.querySelector('.score__sprint');
+    const resultAnswerArr: NodeListOf<HTMLElement> = document.querySelectorAll('.result__answer-item');
 
     let arrWords: wordInterface[] = [];
     let wordValues: {
@@ -58,7 +59,8 @@ export class Sprint {
           arrWords,
           questionNumber,
           blockQuestinWrap!,
-          blockScore!
+          blockScore!,
+          resultAnswerArr
         );
         questionNumber++;
         const questionInstance = await new Question(
@@ -67,7 +69,6 @@ export class Sprint {
           wordValues[questionNumber].nameRus
         );
         blockQuestion!.innerHTML = await questionInstance.render();
-        console.log(storeSprint.correctAnswers);
       }
     });
 

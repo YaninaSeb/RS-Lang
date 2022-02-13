@@ -32,7 +32,8 @@ export const answerAdd = (
   arrWords: wordInterface[],
   i: number,
   blockQuestinWrap: HTMLElement,
-  blockScore: HTMLElement
+  blockScore: HTMLElement,
+  blockArr: NodeListOf<HTMLElement>
 ) => {
   if (event.target instanceof HTMLElement && event.target.dataset.answer) {
     const answer = event.target.dataset.answer === String(wordValues[i].answer);
@@ -40,10 +41,12 @@ export const answerAdd = (
     if (answer) {
       blockQuestinWrap?.classList.add('questin__true');
       addPoints(storeSprint, blockScore);
+      addClass(storeSprint, blockArr);
       storeSprint.correctAnswers++;
     } else {
       blockQuestinWrap?.classList.add('questin__false');
       storeSprint.correctAnswers = 0;
+      blockArr.forEach((li) => li.classList.remove('activ__round'));
     }
     setTimeout(
       () =>
@@ -71,8 +74,24 @@ export const timerSprint = (block: HTMLElement) => {
 //Функция добавления баллов
 
 export const addPoints = (storeSprint: storeSprintInterface, block: HTMLElement) => {
-  if (storeSprint.correctAnswers > 2) {
-    storeSprint.points += 20;
-  } else storeSprint.points += 10;
+  if (storeSprint.correctAnswers > 2) storeSprint.points += 20;
+  if (storeSprint.correctAnswers > 3) storeSprint.points += 40;
+  else storeSprint.points += 10;
   block.innerHTML = String(storeSprint.points);
+}
+
+//Функция добавления класса
+
+export const addClass = (storeSprint: storeSprintInterface, blockArr: NodeListOf<HTMLElement>) => {
+  
+  if (storeSprint.correctAnswers % 3 === 0) {
+    blockArr[0].classList.add('activ__round');
+  }
+  if (storeSprint.correctAnswers % 3 === 1) {
+    blockArr[1].classList.add('activ__round');
+  }
+  if (storeSprint.correctAnswers % 3 === 2) {
+    blockArr[2].classList.add('activ__round');
+  }
+
 }
