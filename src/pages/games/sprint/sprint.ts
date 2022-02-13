@@ -1,6 +1,11 @@
 import { getWords } from '../../../utils/api';
 import { wordInterface } from '../../../utils/instance';
-import { answerAdd, randomFalseWordSprint, renderSprintQuestion, timerSprint } from '../../../utils/listener';
+import {
+  answerAdd,
+  randomFalseWordSprint,
+  renderSprintQuestion,
+  timerSprint,
+} from '../../../utils/listener';
 import { Question } from './qustion';
 import { sprintElement } from './sprint-html';
 import './sprint.scss';
@@ -23,6 +28,8 @@ export class Sprint {
     const blockTimer: HTMLElement | null = document.querySelector('.timer__sprint');
     const blockScore: HTMLElement | null = document.querySelector('.score__sprint');
     const resultAnswerArr: NodeListOf<HTMLElement> = document.querySelectorAll('.result__answer-item');
+    const helpWord: HTMLElement | null = document.querySelector('.help__word');
+    const helpPrase: HTMLElement | null = document.querySelector('.help__phrase');
 
     let arrWords: wordInterface[] = [];
     let wordValues: {
@@ -80,5 +87,43 @@ export class Sprint {
       blockTimer!.innerHTML = `01:00`;
       clearInterval(storeSprint.timer!);
     });
+
+    document.addEventListener('keydown', async(event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        const btnKeybord = event.key === 'ArrowLeft' ? 'false' : 'true';
+        await answerAdd(
+          event,
+          wordValues,
+          storeSprint,
+          arrWords,
+          questionNumber,
+          blockQuestinWrap!,
+          blockScore!,
+          resultAnswerArr,
+          btnKeybord
+        );
+        questionNumber++;
+        const questionInstance = await new Question(
+          wordValues[questionNumber].img,
+          wordValues[questionNumber].nameEng,
+          wordValues[questionNumber].nameRus
+        );
+        blockQuestion!.innerHTML = await questionInstance.render();
+      }
+    });
+
+    helpWord?.addEventListener('click', () => {
+      const src = arrWords[questionNumber].audio;
+      const audio = new Audio();
+      audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
+      audio.play();
+    });
+
+    helpPrase?.addEventListener('click', (e) => {
+        const src = arrWords[questionNumber].audioExample;
+        const audio = new Audio();
+        audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
+        audio.play();
+    })
   }
 }

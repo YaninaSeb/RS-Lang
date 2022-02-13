@@ -161,3 +161,13 @@
 .activ__round {
   background-color: rgb(94, 216, 24);
 }
+#level__select {
+  border: 1px solid #000;
+  font-size: 18px;
+  background-color: rgb(13, 204, 211);
+}
+.help__word,
+.help__phrase {
+  cursor: pointer;
+  width: 15px;
+}
