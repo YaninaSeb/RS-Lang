@@ -48,15 +48,10 @@ export const bookElement = () => `
       <div class="next-page">></div>
     </div>
 
-    <select class="games" name="">
-      <option hidden>Мини-игры</option>
-      <option value="Спринт">Спринт</option>
-      <option value="Аудиовызов">Аудиовызов</option>
-    </select>
+    <div class="sprint-game">Спринт</div>
+    <div class="audio-game">Аудиовызов</div>
+
   </div>
-
-
-
 
   <div class="container-words">
   </div>
