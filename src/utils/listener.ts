@@ -1,6 +1,7 @@
 import { storeSprintInterface, wordInterface } from './instance';
 import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
+import { WordResult } from '../pages/games/sprint/word';
 
 export const renderSprintQuestion = async (
   id: number,
@@ -60,11 +61,16 @@ export const answerAdd = (
 
 //Функция таймер
 
-export const timerSprint = (block: HTMLElement) => {
-  let count = 60;
+export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, blockResult: HTMLElement) => {
+  let count = 10;
   storeSprint.timer = setInterval(() => {
     count--;
-    if (count === 0) clearInterval(storeSprint.timer!);
+    if (count === 0) {
+      clearInterval(storeSprint.timer!);
+      addWordsResult(blockTrue, blockFalse, answers);
+      sections.forEach((section) => section.classList.add('close'));
+      blockResult?.classList.remove('close');
+    }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;
     } else block.innerHTML = `00:${count}`;
@@ -113,3 +119,16 @@ const giveAnswer = (event: Event | KeyboardEvent) => {
     return btnKeybord;
   }
 };
+
+//Функция отрисовки результатов
+export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, answers: {word: wordInterface, answer: boolean}[]) => {
+  answers.forEach(async (answer) => {
+    const word = answer.word;
+    const wordResultInstance = new WordResult(word.transcription, word.word, word.wordTranslate, word.audio);
+    const wordElement = document.createElement('div');
+    wordElement.innerHTML = await wordResultInstance.render();
+    
+    await answer.answer ? blockTrue.append(wordElement) : blockFalse.append(wordElement);
+    await wordResultInstance.after_render();
+  })
+}
