@@ -1,8 +1,8 @@
 import { bookElement } from './book-html';
 import './book.scss';
 import { getWords, getUserWords  } from './book-api';
-import { infoBook } from './book-api';
 import { dataUser } from '../authorization/users-api';
+import { infoBook } from './book-api';
 
 export class Book {
   async render() {
@@ -59,7 +59,6 @@ export class Book {
         `
       }
     }
-
     createPageBook();
 
     

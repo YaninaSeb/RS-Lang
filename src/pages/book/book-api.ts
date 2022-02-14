@@ -19,10 +19,10 @@ export const getWords = async (numGroup: number, numPage: number) => {
     return content;
 };
 
+//запрос для получения сложных слов
 export const getUserWords = async (userId: number) => {
   const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words`, {
     method: 'GET',
-    // withCredentials: true,
     headers: {
       'Authorization': `Bearer ${dataUser.token}`,
       'Accept': 'application/json',
@@ -34,7 +34,6 @@ export const getUserWords = async (userId: number) => {
 
   return content;
 };
-
 
 
     // function setLocalStorageUser() {
