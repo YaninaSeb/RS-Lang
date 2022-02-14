@@ -34,6 +34,11 @@ export class Book {
               <div class="sentence-two-ru">${arrWords[i].textMeaningTranslate}</div>
               <div class="sentence-one-en">${arrWords[i].textExample}</div>
               <div class="sentence-one-ru">${arrWords[i].textExampleTranslate}</div>
+
+              <div class="hard_learned-word">
+                <div class="hard-word" data-hard=${arrWords[i].id}>Сложное слово</div>
+                <div class="learned-word" data-learned=${arrWords[i].id}>Изученное слово</div>
+              </div>
             </div>
           </div>
         `
@@ -99,24 +104,6 @@ export class Book {
       }
 
     });
-
-
-
-
-    // function setLocalStorageUser() {
-    //   localStorage.setItem('groupBook', (infoBook.group).toString());
-    //   localStorage.setItem('pageBook', (infoBook.page).toString());
-    // }
-    // window.addEventListener('beforeunload', setLocalStorageUser);
-    
-    // function getLocalStorageUser() {
-    //   infoBook.group = Number(localStorage.getItem('groupBook'));
-    //   infoBook.page = Number(localStorage.getItem('pageBook'));
-    // }
-    // window.addEventListener('load', () => {
-    //   getLocalStorageUser();
-    //   createPageBook();
-    // });
 
 
 
