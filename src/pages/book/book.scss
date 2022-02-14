@@ -106,7 +106,10 @@ select {
     width: 85%;
 }
 
-
+.description-word {
+    width: 55%;
+    height: 100%;
+}
 
 .word-en {
   font-size: 2vw;
@@ -171,4 +174,13 @@ select {
 .learned-word:hover {
     background-color: #455774;
     color: white;
+}
+
+.bookmark {
+    position: relative;
+    top: -13px;
+}
+.bookmark img {
+    width: 4vw;
+    height: 70%;
 }

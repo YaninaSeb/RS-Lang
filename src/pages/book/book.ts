@@ -40,6 +40,10 @@ export class Book {
                 <div class="learned-word" data-learned=${arrWords[i].id}>Изученное слово</div>
               </div>
             </div>
+
+            <div class="bookmark">
+              <img src="../../assets/svg/group.png" alt="bookmark">
+            </div>
           </div>
         `
       }
