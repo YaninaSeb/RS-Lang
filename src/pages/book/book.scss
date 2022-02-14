@@ -107,7 +107,7 @@ select {
 }
 
 .description-word {
-    width: 55%;
+    width: 57%;
     height: 100%;
 }
 
@@ -154,8 +154,9 @@ select {
     margin-top: 10px;
 }
 
-.hard-word,
-.learned-word {
+.btn-hard_word,
+.btn-learned_word,
+.btn-statistics_word {
     width: 12vw;
     height: 2vw;
     margin-right: 1.5vw;
@@ -169,18 +170,20 @@ select {
     color: #455774;
     cursor: pointer;
 }
-
-.hard-word:hover,
-.learned-word:hover {
+.btn-hard_word:hover,
+.btn-learned_word:hover,
+.btn-statistics_word:hover {
     background-color: #455774;
     color: white;
 }
 
+
+
 .bookmark {
     position: relative;
-    top: -13px;
+    top: -15px;
 }
 .bookmark img {
-    width: 4vw;
-    height: 70%;
+    width: 3vw;
+    height: 30%;
 }

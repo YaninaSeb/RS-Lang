@@ -1,7 +1,8 @@
 import { bookElement } from './book-html';
 import './book.scss';
-import { getWords } from './book-api';
+import { getWords, getUserWords  } from './book-api';
 import { infoBook } from './book-api';
+import { dataUser } from '../authorization/users-api';
 
 export class Book {
   async render() {
@@ -11,8 +12,16 @@ export class Book {
   async after_render() {
     const containerWords = <HTMLElement>document.querySelector('.container-words');
 
+
     async function createPageBook() {
-      const arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
+      let arrWords;
+
+      if (dataUser.token == '') {
+        arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
+      } else {
+        console.log(dataUser.userId);
+        arrWords = await getUserWords(dataUser.userId);
+      }
 
       containerWords.innerHTML = '';
       for (let i = 0; i < arrWords.length; i++) {
@@ -36,18 +45,21 @@ export class Book {
               <div class="sentence-one-ru">${arrWords[i].textExampleTranslate}</div>
 
               <div class="hard_learned-word">
-                <div class="hard-word" data-hard=${arrWords[i].id}>Сложное слово</div>
-                <div class="learned-word" data-learned=${arrWords[i].id}>Изученное слово</div>
+                <div class="btn-hard_word" data-hard=${arrWords[i].id}>Сложное слово</div>
+                <div class="btn-learned_word" data-learned=${arrWords[i].id}>Изученное слово</div>
+                <div class="btn-statistics_word" data-learned=${arrWords[i].id}>Статистика</div>
+
               </div>
             </div>
 
             <div class="bookmark">
-              <img src="../../assets/svg/group.png" alt="bookmark">
+              <img src="../../assets/img/bookmark/group${arrWords[i].group + 1}.png" alt="bookmark">
             </div>
           </div>
         `
       }
     }
+
     createPageBook();
 
     
