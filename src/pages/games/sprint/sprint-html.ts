@@ -77,6 +77,7 @@ export const sprintElement = () => `<div class="wrap__game">
   </div>
 </section>
 <section class="result__sprint section close">
+<div class="result__wrap">
   <div class="result__sprint-true result__block">
     <div class="name__result">Вы ответили правильно</div>
   </div>
@@ -85,6 +86,7 @@ export const sprintElement = () => `<div class="wrap__game">
    
   </div>
   <div class="btn__play-again">Повторить</div>
+  </div>
 </section>
 
 </div>`;

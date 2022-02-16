@@ -171,6 +171,8 @@
   width: 15px;
 }
 .result__sprint {
+  .result__wrap {
+
   border: 1px solid transparent;
   border-radius: 10px;
   background-color: rgba($color: #05a3be, $alpha: 0.8);
@@ -196,6 +198,7 @@
     }
   }
 }
+}
 .btn__play-again {
   margin: 0 auto;
   border: 1px solid #000;
@@ -211,5 +214,8 @@
   transform: scale(1.03);
 }
 .section {
-  height: 80vh;
+  min-height: 80vh;
+}
+.word__rus-sound {
+  width: 20px;
 }
