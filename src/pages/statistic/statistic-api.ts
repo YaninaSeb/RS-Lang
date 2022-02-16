@@ -1,16 +1,24 @@
 import { dataUser } from "../authorization/users-api";
  
-
 export const userStatistic: any =  {
-  learnedWords: 0,
-  audiocallLearnedWords: 0,
-  sprintLearnedWords: 0
+  wordsPerDay: 0,
+  audiocallwordsPerDay: 0,
+  sprintwordsPerDay: 0,
+  wordsInQuiestions: [],
+  totalPercent: 0,
+  audiocallPercent: 0,
+  sprintPercent: 0,
+  allRounds: 0,
+  audiocallRounds: 0,
+  sprintRounds: 0,
+  audiocallSeries: 0,
+  sprintSeries: 0
 }
+
 export type DayStatistic = {
-  learnedWords: number,
+  wordsPerDay: number,
   optional: {},
 }
-
 
 export async function getWords(page: number, group: number) {
   const response = await fetch(`https://rs-lang25.herokuapp.com/words?page=${page}&group=${group}`);
@@ -20,7 +28,7 @@ export async function getWords(page: number, group: number) {
 
 
 export const getUserStatistic = async(id = dataUser.userId) => {
-  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/statistics`, {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/settings`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${dataUser.token}`,
@@ -32,7 +40,7 @@ export const getUserStatistic = async(id = dataUser.userId) => {
 }
 
 export const updateUserStatistic = async(id = dataUser.userId, body: DayStatistic) => {
-  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/statistics`, {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/settings`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${dataUser.token}`,
@@ -44,26 +52,19 @@ export const updateUserStatistic = async(id = dataUser.userId, body: DayStatisti
   const setting = await rawResponse.json();
 }
 
-function setLocalStorageUser() {
-  localStorage.setItem('learnedWords', userStatistic.learnedWords);
-  localStorage.setItem('audiocallLearnedWords', userStatistic.audiocallLearnedWords);
-  localStorage.setItem('sprintLearnedWords', userStatistic.sprintLearnedWords);
+export function setCookie(name: string, value: string, path = '/', expires = 0) {
+ 
+  let updatedCookie = encodeURIComponent(name) + "=" + value + 
+  ((expires)  ?  "; max-age=" + expires:   "");
+  document.cookie = updatedCookie;
 }
-window.addEventListener('beforeunload', setLocalStorageUser);
 
-async function getLocalStorageUser() {
-  
-  userStatistic.learnedWords = localStorage.getItem('learnedWords');
-  userStatistic.audiocallLearnedWords = localStorage.getItem('audiocallLearnedWords');
-  userStatistic.sprintLearnedWords = localStorage.getItem('sprintLearnedWords');
-
-  let words = {
-    learnedWords: userStatistic.allLearnedWords,
-    optional: {}
-  }
-  await updateUserStatistic(dataUser.userId, words);
+export function getCookie(name: string) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
-window.addEventListener('load', getLocalStorageUser);
 
 
 

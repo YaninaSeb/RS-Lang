@@ -11,30 +11,30 @@ export const statisticElement = () => `
             <h3 class="game-title">Аудиовызов</h3>
             <div class="statistic__container">
               <div class="game-text">Изучено слов:</div>
-              <div class="words-learned">${userStatistic.audiocallLearnedWords}</div>
+              <div class="words-learned">${userStatistic.audiocallwordsPerDay}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Правильно %:</div>
-              <div class="percent-game">0</div>
+              <div class="percent-game">${userStatistic.audiocallPercent}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Самая длинная серия:</div>
-              <div class="game-series">0</div>
+              <div class="game-series">${userStatistic.audiocallSeries}</div>
             </div>
           </div>
           <div class="sprint-game game-statistic blur">
             <h3 class="game-title">Спринт</h3>
             <div class="statistic__container">
               <div class="game-text">Изучено слов:</div>
-              <div class="words-learned">${userStatistic.sprintLearnedWords}</div>
+              <div class="words-learned">${userStatistic.sprintwordsPerDay}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Правильно %:</div>
-              <div class="percent-game">0</div>
+              <div class="percent-game">${userStatistic.sprintPercent}</div>
             </div>
             <div class="statistic__container">
               <div class="game-text">Самая длинная серия:</div>
-              <div class="game-series">0</div>
+              <div class="game-series">${userStatistic.sprintSeries}</div>
             </div>
           </div>
         </div>
@@ -42,11 +42,11 @@ export const statisticElement = () => `
           <h2 class="statistic-title">Общая статистика</h2>
           <div class="statistic__container">
             <div class="game-text">Изучено слов:</div>
-            <div class="words-learned">${userStatistic.learnedWords}</div>
+            <div class="words-learned">${userStatistic.wordsPerDay}</div>
           </div>
           <div class="statistic__container">
             <div class="game-text">Правильно %:</div>
-            <div class="percent-game">0</div>
+            <div class="percent-game">${userStatistic.totalPercent}</div>
           </div>
         </div>
       </div>
