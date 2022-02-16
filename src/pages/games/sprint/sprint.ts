@@ -48,6 +48,7 @@ export class Sprint {
       nameEng: string;
       nameRus: string;
       answer: boolean;
+      word: wordInterface
     }[] = [];
     let questionNumber = 0;
 

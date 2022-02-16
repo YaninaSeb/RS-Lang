@@ -13,7 +13,7 @@ export const renderSprintQuestion = async (
   const randomId = randomFalseWordSprint(id, arrWords);
   const nameRus = arrWords[randomId].wordTranslate;
   const answer = randomId === id;
-  return { img, nameEng, nameRus, answer };
+  return { img, nameEng, nameRus, answer, word };
 };
 
 export const randomFalseWordSprint = (id: number, arrWords: wordInterface[]) => {
@@ -28,7 +28,7 @@ export const randomFalseWordSprint = (id: number, arrWords: wordInterface[]) => 
 
 export const answerAdd = (
   event: Event,
-  wordValues: { img: string; nameEng: string; nameRus: string; answer: boolean }[],
+  wordValues: { img: string; nameEng: string; nameRus: string; answer: boolean, word: wordInterface }[],
   storeSprint: storeSprintInterface,
   arrWords: wordInterface[],
   i: number,
@@ -38,7 +38,7 @@ export const answerAdd = (
   btnKeybord: string | null = null
 ) => {
   const answer = giveAnswer(event) === String(wordValues[i].answer);
-  storeSprint.answers.push({ word: arrWords[i], answer: answer });
+  storeSprint.answers.push({ word: wordValues[i].word, answer: answer });
   if (answer) {
     blockQuestinWrap?.classList.add('questin__true');
     addPoints(storeSprint, blockScore);
@@ -70,7 +70,7 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
       addWordsResult(blockTrue, blockFalse, answers);
       addRemoveWindow(sections, blockResult!);
       console.log(answers);
-      answers.splice(0, answers.length);
+      //answers.splice(0, answers.length);
     }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;
