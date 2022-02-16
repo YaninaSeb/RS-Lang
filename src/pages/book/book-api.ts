@@ -4,6 +4,7 @@ export const infoBook = {
   page: 1
 }
 
+
 export const getWords = async (numGroup: number, numPage: number) => {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/words?page=${numPage}&group=${numGroup}`, {
       method: 'GET',
@@ -15,6 +16,20 @@ export const getWords = async (numGroup: number, numPage: number) => {
     const content = await rawResponse.json();
   
     return content;
+};
+
+//получить одно слово
+export const getWord = async (wordId: string) => {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/words/${wordId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+  const content = await rawResponse.json();
+
+  return content;
 };
 
 //запрос для получения сложных и изученных слов
@@ -44,8 +59,6 @@ export const createUserWord = async (userId: string, wordId: string, word: objec
     body: JSON.stringify(word)
   });
   const content = await rawResponse.json();
-
-  console.log(content);
 };
 
 //запрос для обновления слова
@@ -60,8 +73,6 @@ export const updateUserWord = async (userId: string, wordId: string, word: objec
     body: JSON.stringify(word)
   });
   const content = await rawResponse.json();
-
-  console.log(content);
 };
 
 //запрос для удаления слова

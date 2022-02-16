@@ -1,6 +1,6 @@
 import { bookElement } from './book-html';
 import './book.scss';
-import { getWords, getUserWords, createUserWord, updateUserWord, deleteUserWord } from './book-api';
+import { getWords, getUserWords, createUserWord, updateUserWord, deleteUserWord, getWord } from './book-api';
 import { dataUser } from '../authorization/users-api';
 import { infoBook } from './book-api';
 
@@ -14,7 +14,14 @@ export class Book {
 
     //отрисовка слов учебника
     async function createPageBook() {
-      const arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
+      let arrWords;
+      if (infoBook.group == 7 && dataUser.userId != '') {
+        arrWords = getArrHardWords();
+        console.log(arrWords);
+      } else {
+        arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
+      }
+
       containerWords.innerHTML = '';
       for (let i = 0; i < arrWords.length; i++) {
         containerWords.innerHTML += `
@@ -184,5 +191,22 @@ export class Book {
 
 
 
+    //отрисовка  страницы со сложными словами учебника
+    function getArrHardWords() {
+      const arrHardWords: object[] = [];
+
+      getUserWords(dataUser.userId).then((arrHardAndLearnedWords: any) => {
+        arrHardAndLearnedWords.forEach(async (oneWord: any) => {
+          if (oneWord.difficulty == 'hard') {
+            const hardWord = (await getWord(oneWord.wordId)) as object;
+            arrHardWords.push(hardWord);
+          }
+        });
+      });
+      console.log(arrHardWords);
+      return arrHardWords;
+    }
+
   }
 }
+
