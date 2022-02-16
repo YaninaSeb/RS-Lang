@@ -68,8 +68,9 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
     if (count === 0) {
       clearInterval(storeSprint.timer!);
       addWordsResult(blockTrue, blockFalse, answers);
-      sections.forEach((section) => section.classList.add('close'));
-      blockResult?.classList.remove('close');
+      addRemoveWindow(sections, blockResult!);
+      console.log(answers);
+      answers.splice(0, answers.length);
     }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;
@@ -131,4 +132,18 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
     await answer.answer ? blockTrue.append(wordElement) : blockFalse.append(wordElement);
     await wordResultInstance.after_render();
   })
+}
+
+//Перемешивание массива
+export const shuffle = (array: wordInterface[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+//Скрытие окон
+export const addRemoveWindow = (sections: NodeListOf<HTMLElement>, vievSection: HTMLElement) => {
+  sections.forEach((section) => section.classList.add('close'));
+  vievSection?.classList.remove('close');
 }

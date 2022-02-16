@@ -17,8 +17,5 @@ export class WordResult {
   }
 
   async after_render() {
-    const btn: HTMLElement | null = document.querySelector('.word__rus-sound');
-    btn?.addEventListener('click', () => console.log('yes'));
-    console.log('sfsd')
   }
 }
