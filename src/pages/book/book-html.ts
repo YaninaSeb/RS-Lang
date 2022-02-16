@@ -9,6 +9,8 @@ export const bookElement = () => `
       <option value="4">Раздел 4</option>
       <option value="5">Раздел 5</option>
       <option value="6">Раздел 6</option>
+      <option value="7">Раздел 7</option>
+
     </select>
 
     <div class="pages-book">

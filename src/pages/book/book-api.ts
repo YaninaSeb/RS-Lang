@@ -14,12 +14,10 @@ export const getWords = async (numGroup: number, numPage: number) => {
     });
     const content = await rawResponse.json();
   
-    console.log(content);
-
     return content;
 };
 
-//запрос для получения сложных слов
+//запрос для получения сложных и изученных слов
 export const getUserWords = async (userId: number) => {
   const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words`, {
     method: 'GET',
@@ -30,10 +28,61 @@ export const getUserWords = async (userId: number) => {
   });
   const content = await rawResponse.json();
 
-  console.log(content);
-
   return content;
 };
+
+
+//запрос для создания сложного и изученного слова
+export const createUserWord = async (userId: string, wordId: string, word: object) => {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words/${wordId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${dataUser.token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(word)
+  });
+  const content = await rawResponse.json();
+
+  console.log(content);
+};
+
+//запрос для обновления слова
+export const updateUserWord = async (userId: string, wordId: string, word: object) => {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words/${wordId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${dataUser.token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(word)
+  });
+  const content = await rawResponse.json();
+
+  console.log(content);
+};
+
+//запрос для удаления слова
+export const deleteUserWord = async (userId: string, wordId: string) => {
+  await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words/${wordId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${dataUser.token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+};
+
+
+
+
+
+
+
+
 
 
     // function setLocalStorageUser() {

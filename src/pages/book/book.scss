@@ -148,7 +148,7 @@ select {
   word-wrap: break-word;
 }
 
-.hard_learned-word {
+.btns-extra_fuctional {
     display: flex;
     flex-direction: row;
     margin-top: 10px;
@@ -168,11 +168,17 @@ select {
     text-align: center;
     font-size: 1.3vw;
     color: #455774;
-    cursor: pointer;
 }
 .btn-hard_word:hover,
 .btn-learned_word:hover,
 .btn-statistics_word:hover {
+    background-color: #455774;
+    color: white;
+    cursor: pointer;
+}
+
+.hard_word-select,
+.learned_word-select {
     background-color: #455774;
     color: white;
 }

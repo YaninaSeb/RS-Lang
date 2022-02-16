@@ -18,7 +18,7 @@ export class Header {
       imgLogOut.style.display = 'block';
     }
 
-    //кнопка удаления пользователя
+    //кнопка выхода пользователя
     imgLogOut.addEventListener('click', () => {
           dataUser.name = '';
           dataUser.token = '';

@@ -1,6 +1,6 @@
 import { bookElement } from './book-html';
 import './book.scss';
-import { getWords, getUserWords  } from './book-api';
+import { getWords, getUserWords, createUserWord, updateUserWord, deleteUserWord } from './book-api';
 import { dataUser } from '../authorization/users-api';
 import { infoBook } from './book-api';
 
@@ -12,17 +12,9 @@ export class Book {
   async after_render() {
     const containerWords = <HTMLElement>document.querySelector('.container-words');
 
-
+    //отрисовка слов учебника
     async function createPageBook() {
-      let arrWords;
-
-      if (dataUser.token == '') {
-        arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
-      } else {
-        console.log(dataUser.userId);
-        arrWords = await getUserWords(dataUser.userId);
-      }
-
+      const arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
       containerWords.innerHTML = '';
       for (let i = 0; i < arrWords.length; i++) {
         containerWords.innerHTML += `
@@ -44,25 +36,49 @@ export class Book {
               <div class="sentence-one-en">${arrWords[i].textExample}</div>
               <div class="sentence-one-ru">${arrWords[i].textExampleTranslate}</div>
 
-              <div class="hard_learned-word">
-                <div class="btn-hard_word" data-hard=${arrWords[i].id}>Сложное слово</div>
-                <div class="btn-learned_word" data-learned=${arrWords[i].id}>Изученное слово</div>
-                <div class="btn-statistics_word" data-learned=${arrWords[i].id}>Статистика</div>
-
-              </div>
+              <div class="btns-extra_fuctional" id="extra-${arrWords[i].id}"></div>
             </div>
 
             <div class="bookmark">
               <img src="../../assets/img/bookmark/group${arrWords[i].group + 1}.png" alt="bookmark">
             </div>
           </div>
-        `
+        `;
+
+        if (dataUser.token !== '') {
+          const btnsExtraFuctional = <HTMLDivElement>document.getElementById(`extra-${arrWords[i].id}`);
+          btnsExtraFuctional.innerHTML = `
+            <button class="btn-hard_word" data-hard=${arrWords[i].id}>Сложное слово</button>
+            <button class="btn-learned_word" data-learned=${arrWords[i].id}>Изученное слово</button>
+            <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
+            `;
+          checkHardLearnedWord(arrWords[i].id);
+        }
       }
     }
     createPageBook();
 
-    
+    //проверяем, является ли слово сложным или изученным
+    async function checkHardLearnedWord(idCurrentWord: string) {
+      const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
+      arrHardAndLearnedWords.forEach((oneWord: any) => {
+          if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
+              const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
+              btnHard.classList.add('hard_word-select');
+              btnHard.setAttribute('disabled', 'true');
+          }
+          if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'learned') {
+            const btnLearned = <HTMLElement>document.querySelector(`button[data-learned='${idCurrentWord}']`);
+            const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
+            btnLearned.classList.add('learned_word-select');
+            btnHard.setAttribute('disabled', 'true');
+            btnLearned.setAttribute('disabled', 'true');
+          }
+        });
+    }
 
+
+    //переход по страницам учебника
     const btnNumGroupBook = <HTMLSelectElement>document.querySelector('.num-group');
     btnNumGroupBook.addEventListener('change', (e) => {
       const num = btnNumGroupBook.value;
@@ -74,7 +90,6 @@ export class Book {
     btnNumPageBook.addEventListener('change', (e) => {
       const num = btnNumPageBook.value;
       infoBook.page = Number(num);
-      console.log(infoBook.page);
       createPageBook();
     });
 
@@ -97,8 +112,7 @@ export class Book {
     });
 
 
-
-
+    //возможность прослушивать аудио к словам
     containerWords.addEventListener('click', (e) => {
       const elem = e.target as HTMLElement;
 
@@ -117,6 +131,54 @@ export class Book {
           });
         }
       }
+    });
+
+
+
+    document.addEventListener('click', async (e) => {
+      const elem = e.target as HTMLElement;
+      
+      //добавление сложных слов
+      if (elem.classList.contains('btn-hard_word')) {
+        const idCurrentWord = <string>elem.dataset.hard;
+        const idCurrentUser = dataUser.userId;
+        const currentWord = { "difficulty": "hard" };
+        const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
+        btnHard.classList.add('hard_word-select');
+
+        createUserWord(idCurrentUser, idCurrentWord, currentWord);
+      }
+
+      //добавление изученных слов
+      if (elem.classList.contains('btn-learned_word')) {
+        const idCurrentWord = <string>elem.dataset.learned;
+        const idCurrentUser = dataUser.userId;
+        const currentWord = { "difficulty": "learned" };
+        const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
+        const btnLearned = <HTMLElement>document.querySelector(`button[data-learned='${idCurrentWord}']`);
+        let mark = true;
+
+        const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
+        arrHardAndLearnedWords.forEach((oneWord: any) => {
+          if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
+            btnLearned.classList.add('learned_word-select');
+            btnHard.classList.remove('hard_word-select');
+            btnHard.setAttribute('disabled', 'true');
+            btnLearned.setAttribute('disabled', 'true');
+            mark = false;
+
+            updateUserWord(idCurrentUser, idCurrentWord, currentWord);
+          }
+        });
+        if (mark) {
+          btnLearned.classList.add('learned_word-select');
+          btnHard.setAttribute('disabled', 'true');
+          btnLearned.setAttribute('disabled', 'true');
+
+          createUserWord(idCurrentUser, idCurrentWord, currentWord);
+        }
+      }
+
 
     });
 
