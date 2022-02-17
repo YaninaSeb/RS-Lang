@@ -39,12 +39,16 @@ export const answerAdd = (
 ) => {
   const answer = giveAnswer(event) === String(wordValues[i].answer);
   storeSprint.answers.push({ word: wordValues[i].word, answer: answer });
+  const idAllAnswer: string = wordValues[i].word.id;
   if (answer) {
+    storeSprint.allAnswersSprint[idAllAnswer] = storeSprint.allAnswersSprint[idAllAnswer] ?  
+    storeSprint.allAnswersSprint[idAllAnswer] += 1 : storeSprint.allAnswersSprint[idAllAnswer] = 1;
     blockQuestinWrap?.classList.add('questin__true');
     addPoints(storeSprint, blockScore);
     addClass(storeSprint, blockArr);
     storeSprint.correctAnswers++;
   } else {
+    storeSprint.allAnswersSprint[idAllAnswer] = 0;
     blockQuestinWrap?.classList.add('questin__false');
     storeSprint.correctAnswers = 0;
     blockArr.forEach((li) => li.classList.remove('activ__round'));
@@ -70,7 +74,7 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
       addWordsResult(blockTrue, blockFalse, answers);
       addRemoveWindow(sections, blockResult!);
       console.log(answers);
-      //answers.splice(0, answers.length);
+      answers.splice(0, answers.length);
     }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;
@@ -123,6 +127,16 @@ const giveAnswer = (event: Event | KeyboardEvent) => {
 
 //Функция отрисовки результатов
 export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, answers: {word: wordInterface, answer: boolean}[]) => {
+  blockTrue.innerHTML = '';
+  blockFalse.innerHTML = '';
+  const nameBlockTrue = document.createElement('div');
+  nameBlockTrue.classList.add('name__result');
+  nameBlockTrue.innerHTML = 'Вы ответили правильно';
+  const nameBlockFalse = document.createElement('div');
+  nameBlockFalse.classList.add('name__result');
+  nameBlockFalse.innerHTML = 'Вы ответили правильно';
+  blockTrue.append(nameBlockTrue);
+  blockFalse.append(nameBlockFalse);
   answers.forEach(async (answer) => {
     const word = answer.word;
     const wordResultInstance = new WordResult(word.transcription, word.word, word.wordTranslate, word.audio);

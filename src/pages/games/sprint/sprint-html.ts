@@ -79,11 +79,8 @@ export const sprintElement = () => `<div class="wrap__game">
 <section class="result__sprint section close">
 <div class="result__wrap">
   <div class="result__sprint-true result__block">
-    <div class="name__result">Вы ответили правильно</div>
   </div>
-  <div class="result__sprint-false result__block">
-    <div class="name__result">Вы ответили неправильно</div>
-   
+  <div class="result__sprint-false result__block"> 
   </div>
   <div class="btn__play-again">Повторить</div>
   </div>

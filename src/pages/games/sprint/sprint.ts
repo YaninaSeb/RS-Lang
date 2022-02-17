@@ -35,14 +35,25 @@ export class Sprint {
     const blockResultFalse: HTMLElement | null = document.querySelector('.result__sprint-false');
     const blockResultWrap: HTMLElement | null = document.querySelector('.result__sprint');
     const btnPlayAgain: HTMLElement | null = document.querySelector('.btn__play-again');
-
-    const groupNumber = 1;
+    const selectGroup = document.getElementById('level__select') as HTMLSelectElement;
+    
+    let groupNumber = selectGroup.selectedIndex;
     let arrWords: wordInterface[] = [];
-
-    for (let i = 1; i < 20; i++) {
+    for (let i = 1; i < 4; i++) {
       let arrWords1: wordInterface[] = await getWords(i, groupNumber);
       arrWords1.forEach(word => arrWords.push(word));
     }
+    console.log(arrWords)
+    //Выбор уровня
+    selectGroup?.addEventListener('change', async() => {
+      arrWords.splice(0, arrWords.length)
+      groupNumber = selectGroup.selectedIndex;
+      for (let i = 1; i < 4; i++) {
+        let arrWords1: wordInterface[] = await getWords(i, groupNumber);
+        arrWords1.forEach(word => arrWords.push(word));
+      }
+    })
+
     let wordValues: {
       img: string;
       nameEng: string;
@@ -51,7 +62,7 @@ export class Sprint {
       word: wordInterface
     }[] = [];
     let questionNumber = 0;
-
+//Старт
     btnStart?.addEventListener('click', async () => {
       await timerSprint(blockTimer!, blockResultTrue!, blockResultFalse!, storeSprint.answers, sections, blockResultWrap!);
       wordValues = await Promise.all(
@@ -67,7 +78,7 @@ export class Sprint {
       );
       blockQuestion!.innerHTML = await questionInstance.render();
     });
-
+//Выбор ответов
     blockAnswer!.addEventListener('click', async (event) => {
       if (event.target instanceof HTMLElement && event.target.dataset.answer) {
         await answerAdd(
@@ -89,16 +100,15 @@ export class Sprint {
         blockQuestion!.innerHTML = await questionInstance.render();
       }
     });
-
+//Кнопка назад
     btnBack?.addEventListener('click', async () => {
-
       addRemoveWindow(sections, sectionMain!);
       storeSprint.answers.splice(0, storeSprint.answers.length);
       questionNumber = 0;
       blockTimer!.innerHTML = `01:00`;
       clearInterval(storeSprint.timer!);
     });
-
+//Нажатие с помощью клавиатуры
     document.addEventListener('keydown', async (event) => {
       if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
         const btnKeybord = event.key === 'ArrowLeft' ? 'false' : 'true';
@@ -122,25 +132,24 @@ export class Sprint {
         blockQuestion!.innerHTML = await questionInstance.render();
       }
     });
-
+//Произношение слова в самом вопросе
     helpWord?.addEventListener('click', () => {
       const src = wordValues[questionNumber].word.audio;
       const audio = new Audio();
       audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
       audio.play();
     });
-
+//Пример фразы в вопросе
     helpPrase?.addEventListener('click', (e) => {
       const src = wordValues[questionNumber].word.audioExample;
       const audio = new Audio();
       audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
       audio.play();
     })
-
+//Произношение слова в результате игры
     blockResultWrap?.addEventListener('click', (e) => {
       if (e.target instanceof HTMLElement && e.target.dataset.sound) {  
         const src = e.target.dataset.sound;
-        console.log(src);
         const audio = new Audio;
         audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
         audio.play();
@@ -149,7 +158,7 @@ export class Sprint {
     //Повтор игры
     btnPlayAgain?.addEventListener('click', () => {
       addRemoveWindow(sections, sectionMain!);
-      storeSprint.answers.splice(0, storeSprint.answers.length);
+      console.log(storeSprint.allAnswersSprint);
     });
   }
 }
