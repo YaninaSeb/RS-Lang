@@ -11,13 +11,13 @@ export class Book {
 
   async after_render() {
     const containerWords = <HTMLElement>document.querySelector('.container-words');
+    const arrHardWords: object[] = [];
 
     //отрисовка слов учебника
     async function createPageBook() {
       let arrWords;
       if (infoBook.group == 7 && dataUser.userId != '') {
-        arrWords = getArrHardWords();
-        console.log(arrWords);
+        arrWords = await getArrHardWords();
       } else {
         arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
       }
@@ -52,7 +52,7 @@ export class Book {
           </div>
         `;
 
-        if (dataUser.token !== '') {
+        if (dataUser.token !== '' && infoBook.group < 7) {
           const btnsExtraFuctional = <HTMLDivElement>document.getElementById(`extra-${arrWords[i].id}`);
           btnsExtraFuctional.innerHTML = `
             <button class="btn-hard_word" data-hard=${arrWords[i].id}>Сложное слово</button>
@@ -60,6 +60,13 @@ export class Book {
             <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
             `;
           checkHardLearnedWord(arrWords[i].id);
+        }
+        if (dataUser.token !== '' && infoBook.group == 7) {
+          const btnsExtraFuctional = <HTMLDivElement>document.getElementById(`extra-${arrWords[i].id}`);
+          btnsExtraFuctional.innerHTML = `
+            <button class="btn-hard-restore" data-restore=${arrWords[i].id}>Восстановить</button>
+            <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
+            `;
         }
       }
     }
@@ -141,10 +148,9 @@ export class Book {
     });
 
 
-
-    document.addEventListener('click', async (e) => {
+    containerWords.addEventListener('click', async (e) => {
       const elem = e.target as HTMLElement;
-      
+
       //добавление сложных слов
       if (elem.classList.contains('btn-hard_word')) {
         const idCurrentWord = <string>elem.dataset.hard;
@@ -152,6 +158,7 @@ export class Book {
         const currentWord = { "difficulty": "hard" };
         const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
         btnHard.classList.add('hard_word-select');
+        btnHard.setAttribute('disabled', 'true');
 
         createUserWord(idCurrentUser, idCurrentWord, currentWord);
       }
@@ -166,6 +173,7 @@ export class Book {
         let mark = true;
 
         const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
+        
         arrHardAndLearnedWords.forEach((oneWord: any) => {
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
             btnLearned.classList.add('learned_word-select');
@@ -186,24 +194,36 @@ export class Book {
         }
       }
 
+      //удаление из категории сложных слов
+      if (elem.classList.contains('btn-hard-restore')) {
+        console.log('entry');
+            const idCurrentWord = <string>elem.dataset.restore;
+            const idCurrentUser = dataUser.userId;
+    
+            deleteUserWord(idCurrentUser, idCurrentWord);
+            createPageBook();
+      }
+
+
 
     });
+
+   
 
 
 
     //отрисовка  страницы со сложными словами учебника
-    function getArrHardWords() {
-      const arrHardWords: object[] = [];
+    async function getArrHardWords() {
 
-      getUserWords(dataUser.userId).then((arrHardAndLearnedWords: any) => {
-        arrHardAndLearnedWords.forEach(async (oneWord: any) => {
-          if (oneWord.difficulty == 'hard') {
-            const hardWord = (await getWord(oneWord.wordId)) as object;
-            arrHardWords.push(hardWord);
+      await getUserWords(dataUser.userId).then(async (arrHardAndLearnedWords) => {
+        for (let oneWord of arrHardAndLearnedWords) {
+           if (oneWord.difficulty == 'hard') {
+            await getWord(oneWord.wordId).then( (elem) => {
+              arrHardWords.push(elem);
+            });
           }
-        });
+        }
       });
-      console.log(arrHardWords);
       return arrHardWords;
     }
 

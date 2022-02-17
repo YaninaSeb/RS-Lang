@@ -28,7 +28,6 @@ export const getWord = async (wordId: string) => {
     }
   });
   const content = await rawResponse.json();
-
   return content;
 };
 

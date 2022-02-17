@@ -10,7 +10,7 @@
 
 .book-navigation {
     position: fixed;
-    left: 25%;
+    left: 20vw;
     top: 6.8vh;
 
     display:flex;
@@ -30,7 +30,7 @@ select {
 .num-group,
 .sprint-game,
 .audio-game {
-    width: 10vw;
+    // width: 10vw;
     margin: 0 10px;
     padding: 5px;
     text-align: center;
@@ -41,25 +41,21 @@ select {
     //transition: 0.4s;
 }
 .num-pages {
-    width: 15vw;
     margin: 0;
     padding: 5px 10px;
     text-align: center;
     border-color: #455774;
     color: #455774;
     cursor: pointer;
-    //transition: 0.4s;
 }
 .prev-page,
 .next-page {
     border: 1px solid black;
-    width: 3vw;
     text-align: center;
     border-color: #455774;
     color: #455774;
     padding: 5px;
     cursor: pointer;
-    //transition: 0.4s;
 }
 .prev-page {
     border-radius: 5px 0 0 5px;
@@ -67,16 +63,6 @@ select {
 .next-page {
     border-radius: 0 5px 5px 0;
 }
-
-// .num-group:hover,
-// .num-pages:hover,
-// .prev-page:hover,
-// .next-page:hover,
-// .sprint-game:hover,
-// .audio-game:hover {
-//     // transform: scale(103%);
-//     //background-color: rgba(128, 128, 128, 0.5);
-// }
 
 
 .container-words {
@@ -156,7 +142,8 @@ select {
 
 .btn-hard_word,
 .btn-learned_word,
-.btn-statistics_word {
+.btn-statistics_word,
+.btn-hard-restore {
     width: 12vw;
     height: 2vw;
     margin-right: 1.5vw;
@@ -171,7 +158,8 @@ select {
 }
 .btn-hard_word:hover,
 .btn-learned_word:hover,
-.btn-statistics_word:hover {
+.btn-statistics_word:hover,
+.btn-hard-restore:hover {
     background-color: #455774;
     color: white;
     cursor: pointer;
