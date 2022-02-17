@@ -59,13 +59,15 @@ export const answerAdd = (
       answer
         ? blockQuestinWrap?.classList.remove('questin__true')
         : blockQuestinWrap?.classList.remove('questin__false'),
-    1000
+    500
   );
 };
 
 //Функция таймер
 
-export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, blockResult: HTMLElement) => {
+export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
+  answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
+  blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
   let count = 10;
   storeSprint.timer = setInterval(() => {
     count--;
@@ -73,7 +75,8 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
       clearInterval(storeSprint.timer!);
       addWordsResult(blockTrue, blockFalse, answers);
       addRemoveWindow(sections, blockResult!);
-      console.log(answers);
+      removeClassTotal(storeSprint, blockArr)
+      storeSprint.points = 0;
       answers.splice(0, answers.length);
     }
     if (count < 10) {
@@ -104,6 +107,11 @@ export const addClass = (storeSprint: storeSprintInterface, blockArr: NodeListOf
     blockArr[2].classList.add('activ__round');
   }
 };
+//Функция удаления класса у кружков правильных ответов и сброс на 0 баллы
+export const removeClassTotal = (storeSprint: storeSprintInterface, blockArr: NodeListOf<HTMLElement>) => {
+  storeSprint.correctAnswers = 0;
+  blockArr.forEach((li) => li.classList.remove('activ__round'));
+}
 
 //Функция звука ответа
 const soundAnswer = (flag: boolean) => {

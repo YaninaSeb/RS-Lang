@@ -64,7 +64,9 @@ export class Sprint {
     let questionNumber = 0;
 //Старт
     btnStart?.addEventListener('click', async () => {
-      await timerSprint(blockTimer!, blockResultTrue!, blockResultFalse!, storeSprint.answers, sections, blockResultWrap!);
+      blockScore!.innerHTML = '0';
+      await timerSprint(blockTimer!, blockResultTrue!, blockResultFalse!, storeSprint.answers, 
+        sections, blockResultWrap!, resultAnswerArr);
       wordValues = await Promise.all(
         arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word))
       );
