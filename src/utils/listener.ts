@@ -3,7 +3,7 @@ import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
 import { WordResult } from '../pages/games/sprint/word';
 
-export const renderSprintQuestion = async (
+export const renderSprintQuestion = (
   id: number,
   arrWords: wordInterface[],
   word: wordInterface
@@ -68,7 +68,7 @@ export const answerAdd = (
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
   blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
-  let count = 10;
+  let count = 60;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {
