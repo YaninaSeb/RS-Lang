@@ -85,5 +85,6 @@ export const sprintElement = () => `<div class="wrap__game">
   <div class="btn__play-again">Повторить</div>
   </div>
 </section>
+<section class="timer__start-section section close"><div class="timer__start">1</div></section>
 
 </div>`;

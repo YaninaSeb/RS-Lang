@@ -2,6 +2,7 @@ import { storeSprintInterface, wordInterface } from './instance';
 import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
 import { WordResult } from '../pages/games/sprint/word';
+import { getWords } from './api';
 
 export const renderSprintQuestion = (
   id: number,
@@ -88,9 +89,11 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
 //Функция добавления баллов
 
 export const addPoints = (storeSprint: storeSprintInterface, block: HTMLElement) => {
-  if (storeSprint.correctAnswers > 2) storeSprint.points += 20;
-  if (storeSprint.correctAnswers > 3) storeSprint.points += 40;
-  else storeSprint.points += 10;
+  if (storeSprint.correctAnswers > 2){
+    storeSprint.points += 20;
+  } else if (storeSprint.correctAnswers > 5) {
+    storeSprint.points += 40;
+  } else storeSprint.points += 10;
   block.innerHTML = String(storeSprint.points);
 };
 
@@ -142,7 +145,7 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
   nameBlockTrue.innerHTML = 'Вы ответили правильно';
   const nameBlockFalse = document.createElement('div');
   nameBlockFalse.classList.add('name__result');
-  nameBlockFalse.innerHTML = 'Вы ответили правильно';
+  nameBlockFalse.innerHTML = 'Вы ответили неправильно';
   blockTrue.append(nameBlockTrue);
   blockFalse.append(nameBlockFalse);
   answers.forEach(async (answer) => {
@@ -168,4 +171,13 @@ export const shuffle = (array: wordInterface[]) => {
 export const addRemoveWindow = (sections: NodeListOf<HTMLElement>, vievSection: HTMLElement) => {
   sections.forEach((section) => section.classList.add('close'));
   vievSection?.classList.remove('close');
+}
+//Функция добавить слова
+export const addAllWordsGroup = async (groupNumber: number) => {
+  const arrWords:  wordInterface[] = [];
+  for (let i = 1; i < 20; i++) {
+    let arrWords1: wordInterface[] = await getWords(i, groupNumber);
+    await arrWords1.forEach((word) => arrWords.push(word));
+  }
+  return arrWords;
 }

@@ -2,6 +2,7 @@ import { shuffle } from 'lodash';
 import { getWords } from '../../../utils/api';
 import { wordInterface } from '../../../utils/instance';
 import {
+  addAllWordsGroup,
   addRemoveWindow,
   addWordsResult,
   answerAdd,
@@ -39,12 +40,15 @@ export class Sprint {
     const blockResultWrap: HTMLElement | null = document.querySelector('.result__sprint');
     const btnPlayAgain: HTMLElement | null = document.querySelector('.btn__play-again');
     const selectGroup = document.getElementById('level__select') as HTMLSelectElement;
+    const timerStart: HTMLElement | null = document.querySelector('.timer__start');
+    const timerStartWrap: HTMLElement | null = document.querySelector('.timer__start-section');
 
     let groupNumber = selectGroup.selectedIndex;
-    let arrWords: wordInterface[] = [];
+    console.log(groupNumber)
+    let arrWords: wordInterface[] = []// = await addAllWordsGroup(groupNumber);
     for (let i = 1; i < 20; i++) {
       let arrWords1: wordInterface[] = await getWords(i, groupNumber);
-      arrWords1.forEach((word) => arrWords.push(word));
+      await arrWords1.forEach((word) => arrWords.push(word));
     }
 
     //Выбор уровня
@@ -66,31 +70,40 @@ export class Sprint {
     }[] = [];
     let questionNumber = 0;
     //Старт
-    btnStart?.addEventListener('click', async () => {
-      blockScore!.innerHTML = '0';
-      await timerSprint(
-        blockTimer!,
-        blockResultTrue!,
-        blockResultFalse!,
-        storeSprint.answers,
-        sections,
-        blockResultWrap!,
-        resultAnswerArr
-      );
-      console.log(arrWords);
-      // wordValues = await Promise.all(
-      //   arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word))
-      // );
-      wordValues = arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
-      wordValues = shuffle(wordValues);
-      addRemoveWindow(sections, sectionQuestion!);
-
-      const questionInstance = new Question(
-        wordValues[questionNumber].img,
-        wordValues[questionNumber].nameEng,
-        wordValues[questionNumber].nameRus
-      );
-      blockQuestion!.innerHTML = await questionInstance.render();
+    btnStart?.addEventListener('click', () => {
+      console.log(1);
+      let count = 5;
+      addRemoveWindow(sections, timerStartWrap!);
+        timerStart!.innerHTML = String(count);
+      const timer = setInterval(async() => {
+        count--;
+        addRemoveWindow(sections, timerStartWrap!);
+        timerStart!.innerHTML = String(count);
+        if (count === 0) {
+          clearInterval(timer);
+          blockScore!.innerHTML = '0';
+          await timerSprint(
+            blockTimer!,
+            blockResultTrue!,
+            blockResultFalse!,
+            storeSprint.answers,
+            sections,
+            blockResultWrap!,
+            resultAnswerArr
+          );
+          wordValues = arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
+          wordValues = shuffle(wordValues);
+          addRemoveWindow(sections, sectionQuestion!);
+    
+          const questionInstance = new Question(
+            wordValues[questionNumber].img,
+            wordValues[questionNumber].nameEng,
+            wordValues[questionNumber].nameRus
+          );
+          blockQuestion!.innerHTML = await questionInstance.render();
+        }
+      }, 1000)
+      
     });
     //Выбор ответов
     blockAnswer!.addEventListener('click', async (event) => {
