@@ -38,18 +38,39 @@ a:hover {
   margin-right: 1vw;
   color: #8899b4;
 }
-
-.link-authorization a {
-  text-decoration: none;
-  color: #8899b4;
-}
-
-.nav-link_to_pages a:hover,
-.link-authorization a:hover {
+.nav-link_to_pages a:hover {
   border-bottom: 1px solid white;
   color: white;
 }
 
+.link-authorization {
+  text-decoration: none;
+  color: #8899b4;
+  display: flex;
+  flex-direction: row;
+}
+
+.img-login {
+  width: 4vw;
+  height: 6vh;
+  background: url('../assets/img/log_in.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: -1.2vh;
+  margin-left: 1.5vw;
+  cursor: pointer;
+}
+.img-logout {
+  display: none;
+  width: 4vw;
+  height: 6vh;
+  background: url('../assets/img/log_out.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-top: -1.2vh;
+  margin-left: 1.5vw;
+  cursor: pointer;
+}
 
 /* HOME PAGE -> MAIN*/
 
@@ -220,7 +241,7 @@ a:hover {
 
 /* HOME PAGE -> FOOTER*/
 footer {
-  margin-top: 1vh;
+  margin-top: 0.5vh;
   width: 100vw;
   height: 7vh;
   display: flex;
