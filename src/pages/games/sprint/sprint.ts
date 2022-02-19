@@ -42,6 +42,10 @@ export class Sprint {
     const selectGroup = document.getElementById('level__select') as HTMLSelectElement;
     const timerStart: HTMLElement | null = document.querySelector('.timer__start');
     const timerStartWrap: HTMLElement | null = document.querySelector('.timer__start-section');
+    const soundOn: HTMLElement | null = document.querySelector('.sound__on');
+    const soundOff: HTMLElement | null = document.querySelector('.sound__off');
+    const wrapContener: HTMLElement | null = document.querySelector('.wrap__game');
+    const btnFullScreen: HTMLElement | null = document.querySelector('.button__full');
 
     let groupNumber = selectGroup.selectedIndex;
     let arrWords: wordInterface[] = [];
@@ -60,16 +64,22 @@ export class Sprint {
     let questionNumber = 0;
 
     //Старт
-    btnStart?.addEventListener('click', async() => {
+    btnStart?.addEventListener('click', async () => {
       let count = 5;
       addRemoveWindow(sections, timerStartWrap!);
-        timerStart!.innerHTML = String(count);
-        
-      const timer = setInterval(async() => {
+      timerStart!.innerHTML = String(count);
+
+      const timer = setInterval(async () => {
         count--;
         addRemoveWindow(sections, timerStartWrap!);
         timerStart!.innerHTML = String(count);
-        if (count === 0) {
+        if (count > 0) {
+          const audio = new Audio();
+          audio.src =
+            './../assets/sound-sprint/zvuk-otvet-zaschitan-galochka-5193-1-1.mp3';
+          audio.autoplay = true;
+        }
+        if (count < 0) {
           clearInterval(timer);
           blockScore!.innerHTML = '0';
           await timerSprint(
@@ -84,7 +94,7 @@ export class Sprint {
           wordValues = arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
           wordValues = shuffle(wordValues);
           addRemoveWindow(sections, sectionQuestion!);
-    
+
           const questionInstance = new Question(
             wordValues[questionNumber].img,
             wordValues[questionNumber].nameEng,
@@ -92,19 +102,34 @@ export class Sprint {
           );
           blockQuestion!.innerHTML = await questionInstance.render();
         }
-      }, 1000)
-      arrWords = await Promise.all([await getWords(1, groupNumber), await getWords(2, groupNumber), await getWords(3, groupNumber),
-        await getWords(4, groupNumber), await getWords(5, groupNumber), await getWords(6, groupNumber),
-        await getWords(7, groupNumber), await getWords(8, groupNumber), await getWords(9, groupNumber),
-        await getWords(10, groupNumber), await getWords(11, groupNumber), await getWords(12, groupNumber),
-        await getWords(13, groupNumber), await getWords(4, groupNumber), await getWords(15, groupNumber),
-        await getWords(16, groupNumber), await getWords(17, groupNumber), await getWords(18, groupNumber),
-        await getWords(19, groupNumber), await getWords(20, groupNumber),]).then(response => response.flat());
-        console.log(arrWords);
+      }, 1000);
+      arrWords = await Promise.all([
+        await getWords(1, groupNumber),
+        await getWords(2, groupNumber),
+        await getWords(3, groupNumber),
+        await getWords(4, groupNumber),
+        await getWords(5, groupNumber),
+        await getWords(6, groupNumber),
+        await getWords(7, groupNumber),
+        await getWords(8, groupNumber),
+        await getWords(9, groupNumber),
+        await getWords(10, groupNumber),
+        await getWords(11, groupNumber),
+        await getWords(12, groupNumber),
+        await getWords(13, groupNumber),
+        await getWords(4, groupNumber),
+        await getWords(15, groupNumber),
+        await getWords(16, groupNumber),
+        await getWords(17, groupNumber),
+        await getWords(18, groupNumber),
+        await getWords(19, groupNumber),
+        await getWords(20, groupNumber),
+      ]).then((response) => response.flat());
+      console.log(arrWords);
     });
     //Выбор ответов
     blockAnswer!.addEventListener('click', async (event) => {
-      if (event.target instanceof HTMLElement && event.target.dataset.answer) {  
+      if (event.target instanceof HTMLElement && event.target.dataset.answer) {
         await answerAdd(
           event,
           wordValues,
@@ -136,12 +161,12 @@ export class Sprint {
       if (event.target instanceof HTMLElement && event.target.dataset.answer) {
         event.target.classList.add('activ__btn');
       }
-    })
+    });
     blockAnswer!.addEventListener('mouseup', async (event) => {
       if (event.target instanceof HTMLElement && event.target.dataset.answer) {
         event.target.classList.remove('activ__btn');
       }
-    })
+    });
     //Кнопка назад
     btnBack?.addEventListener('click', async () => {
       addRemoveWindow(sections, sectionMain!);
@@ -152,9 +177,14 @@ export class Sprint {
     });
     //Нажатие с помощью клавиатуры
     document.addEventListener('keydown', async (event) => {
-      if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && !sectionQuestion?.classList.contains('close')) {
-        if(event.key === 'ArrowRight') document.querySelector('.btn__true')?.classList.add('activ__btn');
-        if(event.key === 'ArrowLeft') document.querySelector('.btn__false')?.classList.add('activ__btn');
+      if (
+        (event.key === 'ArrowRight' || event.key === 'ArrowLeft') &&
+        !sectionQuestion?.classList.contains('close')
+      ) {
+        if (event.key === 'ArrowRight')
+          document.querySelector('.btn__true')?.classList.add('activ__btn');
+        if (event.key === 'ArrowLeft')
+          document.querySelector('.btn__false')?.classList.add('activ__btn');
         const btnKeybord = event.key === 'ArrowLeft' ? 'false' : 'true';
         await answerAdd(
           event,
@@ -178,8 +208,10 @@ export class Sprint {
     });
     document.addEventListener('keyup', async (event) => {
       if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-        if(event.key === 'ArrowRight') document.querySelector('.btn__true')?.classList.remove('activ__btn');
-        if(event.key === 'ArrowLeft') document.querySelector('.btn__false')?.classList.remove('activ__btn');
+        if (event.key === 'ArrowRight')
+          document.querySelector('.btn__true')?.classList.remove('activ__btn');
+        if (event.key === 'ArrowLeft')
+          document.querySelector('.btn__false')?.classList.remove('activ__btn');
       }
     });
     //Произношение слова в самом вопросе
@@ -209,5 +241,30 @@ export class Sprint {
     btnPlayAgain?.addEventListener('click', () => {
       addRemoveWindow(sections, sectionMain!);
     });
+
+    //Отлючить звук
+    soundOn?.addEventListener('click', () => {
+      soundOn.classList.remove('activ__music');
+      soundOff?.classList.add('activ__music');
+      storeSprint.audioSprint = false;
+    });
+    soundOff?.addEventListener('click', () => {
+      soundOn!.classList.add('activ__music');
+      soundOff?.classList.remove('activ__music');
+      storeSprint.audioSprint = true;
+    });
+
+    //Полный экран
+    btnFullScreen!.addEventListener(
+      'click',
+      (event) => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          wrapContener!.requestFullscreen();
+        }
+      },
+      false
+    );
   }
 }
