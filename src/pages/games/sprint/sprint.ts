@@ -1,5 +1,19 @@
+import { shuffle } from 'lodash';
+import { getWords } from '../../../utils/api';
+import { wordInterface } from '../../../utils/instance';
+import {
+  addAllWordsGroup,
+  addRemoveWindow,
+  addWordsResult,
+  answerAdd,
+  removeClassTotal,
+  renderSprintQuestion,
+  timerSprint,
+} from '../../../utils/listener';
+import { Question } from './qustion';
 import { sprintElement } from './sprint-html';
 import './sprint.scss';
+import { storeSprint } from './storeSprint';
 
 export class Sprint {
   async render() {
@@ -12,15 +26,173 @@ export class Sprint {
     const sectionQuestion: HTMLElement | null = document.querySelector('.questions');
     const sectionMain: HTMLElement | null = document.querySelector('.main');
     const btnBack: HTMLElement | null = document.querySelector('.button__prev');
+    const blockQuestion: HTMLElement | null = document.querySelector('.sprint__block-question');
+    const blockAnswer: HTMLElement | null = document.querySelector('.wrap__answer-btn');
+    const blockQuestinWrap: HTMLElement | null = document.querySelector('.wrap__question');
+    const blockTimer: HTMLElement | null = document.querySelector('.timer__sprint');
+    const blockScore: HTMLElement | null = document.querySelector('.score__sprint');
+    const resultAnswerArr: NodeListOf<HTMLElement> =
+      document.querySelectorAll('.result__answer-item');
+    const helpWord: HTMLElement | null = document.querySelector('.help__word');
+    const helpPrase: HTMLElement | null = document.querySelector('.help__phrase');
+    const blockResultTrue: HTMLElement | null = document.querySelector('.result__sprint-true');
+    const blockResultFalse: HTMLElement | null = document.querySelector('.result__sprint-false');
+    const blockResultWrap: HTMLElement | null = document.querySelector('.result__sprint');
+    const btnPlayAgain: HTMLElement | null = document.querySelector('.btn__play-again');
+    const selectGroup = document.getElementById('level__select') as HTMLSelectElement;
+    const timerStart: HTMLElement | null = document.querySelector('.timer__start');
+    const timerStartWrap: HTMLElement | null = document.querySelector('.timer__start-section');
 
-    btnStart?.addEventListener('click', () => {
-      sections.forEach((section) => section.classList.add('close'));
-      sectionQuestion?.classList.remove('close');
+    let groupNumber = selectGroup.selectedIndex;
+    console.log(groupNumber)
+    let arrWords: wordInterface[] = []// = await addAllWordsGroup(groupNumber);
+    for (let i = 1; i < 20; i++) {
+      let arrWords1: wordInterface[] = await getWords(i, groupNumber);
+      await arrWords1.forEach((word) => arrWords.push(word));
+    }
+
+    //Выбор уровня
+    selectGroup?.addEventListener('change', async () => {
+      arrWords.splice(0, arrWords.length);
+      groupNumber = selectGroup.selectedIndex;
+      for (let i = 1; i < 20; i++) {
+        let arrWords1: wordInterface[] = await getWords(i, groupNumber);
+        arrWords1.forEach((word) => arrWords.push(word));
+      }
     });
 
-    btnBack?.addEventListener('click', () => {
-      sections.forEach((section) => section.classList.add('close'));
-      sectionMain?.classList.remove('close');
+    let wordValues: {
+      img: string;
+      nameEng: string;
+      nameRus: string;
+      answer: boolean;
+      word: wordInterface;
+    }[] = [];
+    let questionNumber = 0;
+    //Старт
+    btnStart?.addEventListener('click', () => {
+      console.log(1);
+      let count = 5;
+      addRemoveWindow(sections, timerStartWrap!);
+        timerStart!.innerHTML = String(count);
+      const timer = setInterval(async() => {
+        count--;
+        addRemoveWindow(sections, timerStartWrap!);
+        timerStart!.innerHTML = String(count);
+        if (count === 0) {
+          clearInterval(timer);
+          blockScore!.innerHTML = '0';
+          await timerSprint(
+            blockTimer!,
+            blockResultTrue!,
+            blockResultFalse!,
+            storeSprint.answers,
+            sections,
+            blockResultWrap!,
+            resultAnswerArr
+          );
+          wordValues = arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
+          wordValues = shuffle(wordValues);
+          addRemoveWindow(sections, sectionQuestion!);
+    
+          const questionInstance = new Question(
+            wordValues[questionNumber].img,
+            wordValues[questionNumber].nameEng,
+            wordValues[questionNumber].nameRus
+          );
+          blockQuestion!.innerHTML = await questionInstance.render();
+        }
+      }, 1000)
+      
+    });
+    //Выбор ответов
+    blockAnswer!.addEventListener('click', async (event) => {
+      if (event.target instanceof HTMLElement && event.target.dataset.answer) {
+        await answerAdd(
+          event,
+          wordValues,
+          storeSprint,
+          arrWords,
+          questionNumber,
+          blockQuestinWrap!,
+          blockScore!,
+          resultAnswerArr
+        );
+        questionNumber++;
+        if (questionNumber === wordValues.length) {
+          clearInterval(storeSprint.timer!);
+          addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint.answers);
+          addRemoveWindow(sections, blockResultWrap!);
+          removeClassTotal(storeSprint, resultAnswerArr);
+          storeSprint.points = 0;
+          storeSprint.answers.splice(0, storeSprint.answers.length);
+        }
+        const questionInstance = await new Question(
+          wordValues[questionNumber].img,
+          wordValues[questionNumber].nameEng,
+          wordValues[questionNumber].nameRus
+        );
+        blockQuestion!.innerHTML = await questionInstance.render();
+      }
+    });
+    //Кнопка назад
+    btnBack?.addEventListener('click', async () => {
+      addRemoveWindow(sections, sectionMain!);
+      storeSprint.answers.splice(0, storeSprint.answers.length);
+      questionNumber = 0;
+      blockTimer!.innerHTML = `01:00`;
+      clearInterval(storeSprint.timer!);
+    });
+    //Нажатие с помощью клавиатуры
+    document.addEventListener('keydown', async (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        const btnKeybord = event.key === 'ArrowLeft' ? 'false' : 'true';
+        await answerAdd(
+          event,
+          wordValues,
+          storeSprint,
+          arrWords,
+          questionNumber,
+          blockQuestinWrap!,
+          blockScore!,
+          resultAnswerArr,
+          btnKeybord
+        );
+        questionNumber++;
+        const questionInstance = await new Question(
+          wordValues[questionNumber].img,
+          wordValues[questionNumber].nameEng,
+          wordValues[questionNumber].nameRus
+        );
+        blockQuestion!.innerHTML = await questionInstance.render();
+      }
+    });
+    //Произношение слова в самом вопросе
+    helpWord?.addEventListener('click', () => {
+      const src = wordValues[questionNumber].word.audio;
+      const audio = new Audio();
+      audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
+      audio.play();
+    });
+    //Пример фразы в вопросе
+    helpPrase?.addEventListener('click', (e) => {
+      const src = wordValues[questionNumber].word.audioExample;
+      const audio = new Audio();
+      audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
+      audio.play();
+    });
+    //Произношение слова в результате игры
+    blockResultWrap?.addEventListener('click', (e) => {
+      if (e.target instanceof HTMLElement && e.target.dataset.sound) {
+        const src = e.target.dataset.sound;
+        const audio = new Audio();
+        audio.src = `https://raw.githubusercontent.com/rolling-scopes-school/react-rslang-be/main/${src}`;
+        audio.play();
+      }
+    });
+    //Повтор игры
+    btnPlayAgain?.addEventListener('click', () => {
+      addRemoveWindow(sections, sectionMain!);
     });
   }
 }

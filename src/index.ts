@@ -6,6 +6,7 @@ import { AudioGame } from './pages/games/audiocall';
 import { Main } from './pages/main';
 import { Autorization } from './pages/authorization';
 import { Book } from './pages/book';
+import { Statistic } from './pages/statistic';
 import { Error404 } from './pages/Error404';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -14,6 +15,7 @@ import { Utils } from './utils/utils';
 const sprintInstance = new Sprint();
 const audioGameInstance = new AudioGame();
 const mainInstance = new Main();
+const statisticInstance = new Statistic();
 const autorizationInstance = new Autorization();
 const bookInstance = new Book();
 const error404Instance = new Error404();
@@ -25,7 +27,8 @@ const routes: { [selector: string]: Sprint } = {
   '/book': bookInstance,
   '/game-sprint': sprintInstance,
   '/game-audiocall': audioGameInstance,
-  '/autorization': autorizationInstance
+  '/autorization': autorizationInstance,
+  '/statistic': statisticInstance
 };
  
 const router = async () => {
