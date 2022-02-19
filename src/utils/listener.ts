@@ -41,6 +41,10 @@ export const answerAdd = (
   const answer = giveAnswer(event) === String(wordValues[i].answer);
   storeSprint.answers.push({ word: wordValues[i].word, answer: answer });
   const idAllAnswer: string = wordValues[i].word.id;
+  if (!storeSprint.statisticWord.idAllAnswer) {
+    storeSprint.statisticWord[idAllAnswer] = {trueUnswer: 0,
+    falseUnswer: 0}
+  }
   if (answer) {
     storeSprint.allAnswersSprint[idAllAnswer] = storeSprint.allAnswersSprint[idAllAnswer] ?  
     storeSprint.allAnswersSprint[idAllAnswer] += 1 : storeSprint.allAnswersSprint[idAllAnswer] = 1;
@@ -48,10 +52,12 @@ export const answerAdd = (
     addPoints(storeSprint, blockScore);
     addClass(storeSprint, blockArr);
     storeSprint.correctAnswers++;
+    storeSprint.statisticWord[idAllAnswer].trueUnswer++;
   } else {
     storeSprint.allAnswersSprint[idAllAnswer] = 0;
     blockQuestinWrap?.classList.add('questin__false');
     storeSprint.correctAnswers = 0;
+    storeSprint.statisticWord[idAllAnswer].falseUnswer++;
     blockArr.forEach((li) => li.classList.remove('activ__round'));
   }
   soundAnswer(answer);
@@ -69,7 +75,7 @@ export const answerAdd = (
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
   blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
-  let count = 60;
+  let count = 10;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {
@@ -79,6 +85,7 @@ export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFal
       removeClassTotal(storeSprint, blockArr)
       storeSprint.points = 0;
       answers.splice(0, answers.length);
+      console.log(storeSprint.statisticWord)
     }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;

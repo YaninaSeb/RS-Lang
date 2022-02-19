@@ -5,6 +5,7 @@ export const storeSprint: storeSprintInterface = {
     correctAnswers: 0,// подсчет правильных ответов подряд
     points: 0,
     timer: null,
-    allAnswersSprint: Object.create(null),// подсчет правильных ответов по id для добавления в изученные,
-    audioSprint: true
+    allAnswersSprint: {},// подсчет правильных ответов по id для добавления в изученные,
+    audioSprint: true,//Включение или отключение звука
+    statisticWord: {}
 }
