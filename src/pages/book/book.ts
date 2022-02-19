@@ -11,15 +11,27 @@ export class Book {
 
   async after_render() {
     const containerWords = <HTMLElement>document.querySelector('.container-words');
-    const arrHardWords: object[] = [];
+    const containerSelectGroup = <HTMLSelectElement>document.querySelector('.num-group');
+    const containerSelectPages = <HTMLSelectElement>document.querySelector('.num-pages');
+    const containerPages = <HTMLElement>document.querySelector('.pages-book');
+
+
+    if (dataUser.userId != '') {
+      const optionGroupHardWord = document.createElement('option');
+      optionGroupHardWord.textContent = 'Сложные слова';
+      optionGroupHardWord.setAttribute('value', '7');
+      containerSelectGroup.appendChild(optionGroupHardWord);
+    }
 
     //отрисовка слов учебника
     async function createPageBook() {
       let arrWords;
       if (infoBook.group == 7 && dataUser.userId != '') {
         arrWords = await getArrHardWords();
+        containerPages.style.display = 'none';
       } else {
         arrWords = await getWords(infoBook.group - 1, infoBook.page - 1);
+        containerPages.style.display = 'flex';
       }
 
       containerWords.innerHTML = '';
@@ -67,6 +79,7 @@ export class Book {
             <button class="btn-hard-restore" data-restore=${arrWords[i].id}>Восстановить</button>
             <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
             `;
+          
         }
       }
     }
@@ -101,7 +114,7 @@ export class Book {
     });
 
     const btnNumPageBook = <HTMLSelectElement>document.querySelector('.num-pages');
-    btnNumPageBook.addEventListener('change', (e) => {
+    btnNumPageBook.addEventListener('change', () => {
       const num = btnNumPageBook.value;
       infoBook.page = Number(num);
       createPageBook();
@@ -126,10 +139,11 @@ export class Book {
     });
 
 
-    //возможность прослушивать аудио к словам
-    containerWords.addEventListener('click', (e) => {
+
+    containerWords.addEventListener('click', async (e) => {
       const elem = e.target as HTMLElement;
 
+      //возможность прослушивать аудио к словам
       if (elem.classList.contains('audio')) {
         const numElem = elem.dataset.audio;
         var allAudio = document.querySelectorAll(`.audio-${numElem}`);
@@ -145,11 +159,6 @@ export class Book {
           });
         }
       }
-    });
-
-
-    containerWords.addEventListener('click', async (e) => {
-      const elem = e.target as HTMLElement;
 
       //добавление сложных слов
       if (elem.classList.contains('btn-hard_word')) {
@@ -196,37 +205,48 @@ export class Book {
 
       //удаление из категории сложных слов
       if (elem.classList.contains('btn-hard-restore')) {
-        console.log('entry');
-            const idCurrentWord = <string>elem.dataset.restore;
-            const idCurrentUser = dataUser.userId;
+        const idCurrentWord = <string>elem.dataset.restore;
+        const idCurrentUser = dataUser.userId;
     
-            deleteUserWord(idCurrentUser, idCurrentWord);
-            createPageBook();
+        await deleteUserWord(idCurrentUser, idCurrentWord);
+        createPageBook();
       }
-
-
 
     });
 
-   
+    //выход пользователя
+    const imgLogOut = <HTMLElement>document.querySelector('.img-logout');
+    imgLogOut.addEventListener('click', () => {
+      if (infoBook.group == 7) {
+        infoBook.group = 1;
+        infoBook.page = 1; 
+        containerSelectGroup.value = '1';
+        containerSelectPages.value = '1';
 
-
-
-    //отрисовка  страницы со сложными словами учебника
-    async function getArrHardWords() {
-
-      await getUserWords(dataUser.userId).then(async (arrHardAndLearnedWords) => {
-        for (let oneWord of arrHardAndLearnedWords) {
-           if (oneWord.difficulty == 'hard') {
-            await getWord(oneWord.wordId).then( (elem) => {
-              arrHardWords.push(elem);
-            });
-          }
-        }
-      });
-      return arrHardWords;
-    }
+        createPageBook(); 
+      } else {
+       createPageBook();
+      }
+    });
 
   }
 }
+
+//отрисовка  страницы со сложными словами учебника
+  async function getArrHardWords() {
+    const arrHardWords: object[] = [];
+
+    await getUserWords(dataUser.userId).then(async (arrHardAndLearnedWords) => {
+      for (let oneWord of arrHardAndLearnedWords) {
+         if (oneWord.difficulty == 'hard') {
+          await getWord(oneWord.wordId).then( (elem) => {
+            arrHardWords.push(elem);
+          });
+        }
+      }
+    });
+    return arrHardWords;
+  }
+
+  
 

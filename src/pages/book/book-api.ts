@@ -1,9 +1,9 @@
 import { dataUser } from '../authorization/users-api';
 export const infoBook = {
   group: 1,
-  page: 1
+  page: 1,
+  isFromBook: false
 }
-
 
 export const getWords = async (numGroup: number, numPage: number) => {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/words?page=${numPage}&group=${numGroup}`, {
@@ -41,6 +41,8 @@ export const getUserWords = async (userId: number) => {
     }
   });
   const content = await rawResponse.json();
+
+  console.log(content);
 
   return content;
 };
