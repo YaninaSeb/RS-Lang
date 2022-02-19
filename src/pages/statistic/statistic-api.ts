@@ -12,12 +12,35 @@ export const userStatistic: any =  {
   audiocallRounds: 0,
   sprintRounds: 0,
   audiocallSeries: 0,
-  sprintSeries: 0
+  sprintSeries: 0,
+  wordInGames: {}
 }
 
-export type DayStatistic = {
-  wordsPerDay: number,
-  optional: {},
+export type DayStatisticAudiocall = {
+  learnedWords: number,
+  optional: {
+    wordsPerDay: number,
+    audiocallwordsPerDay: number,
+    audiocallRounds: number,
+    audiocallPercent: number,
+    audiocallSeries: number,
+    allRounds: number,
+    totalPercent: number,
+    wordInGames: {},
+  }
+}
+export type DayStatisticSprint = {
+  learnedWords: number,
+  optional: {
+    wordsPerDay: number,
+    sprintwordsPerDay: number,
+    sprintRounds: number,
+    sprintPercent: number,
+    sprintSeries: number,
+    allRounds: number,
+    totalPercent: number,
+    wordInGames: {},
+  }
 }
 
 export async function getWords(page: number, group: number) {
@@ -28,19 +51,22 @@ export async function getWords(page: number, group: number) {
 
 
 export const getUserStatistic = async(id = dataUser.userId) => {
-  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/settings`, {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/statistics`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${dataUser.token}`,
       'Accept': 'application/json',
+      
     }
   });
+  console.log(rawResponse);
   const settings = await rawResponse.json();
+  console.log(settings);
   return settings;
 }
 
-export const updateUserStatistic = async(id = dataUser.userId, body: DayStatistic) => {
-  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/settings`, {
+export const updateUserStatistic = async(id = dataUser.userId, body: DayStatisticAudiocall | DayStatisticSprint) => {
+  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/statistics`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${dataUser.token}`,
@@ -50,21 +76,21 @@ export const updateUserStatistic = async(id = dataUser.userId, body: DayStatisti
     body: JSON.stringify(body)
   });
   const setting = await rawResponse.json();
+  return setting;
 }
 
-export function setCookie(name: string, value: string, path = '/', expires = 0) {
- 
-  let updatedCookie = encodeURIComponent(name) + "=" + value + 
-  ((expires)  ?  "; max-age=" + expires:   "");
-  document.cookie = updatedCookie;
-}
 
-export function getCookie(name: string) {
-  let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-  ));
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+
+function setLocalStorageStatistc() {
+  localStorage.setItem('words', userStatistic.wordsInQuiestions);
 }
+window.addEventListener('beforeunload', setLocalStorageStatistc);
+
+function getLocalStorageStatistic() {
+  userStatistic.wordsInQuiestions = localStorage.getItem('words')?.split(',');
+}
+window.addEventListener('load', getLocalStorageStatistic);
+
 
 
 

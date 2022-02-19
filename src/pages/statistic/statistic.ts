@@ -1,19 +1,30 @@
 import { dataUser } from '../authorization/users-api';
-import { getCookie, userStatistic } from './statistic-api';
+import { DayStatisticAudiocall, DayStatisticSprint, getUserStatistic, userStatistic } from './statistic-api';
 import { renderUnauthorized, statisticElement } from './statistic-html';
 import './statistic.scss';
 
 
 export class Statistic {
   async render() {
-    userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
-    userStatistic.wordsPerDay = getCookie('wordsPerDay');
-    userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
-    userStatistic.audiocallRounds = getCookie('audiocallRounds');
-    userStatistic.allRounds = getCookie('allRounds');
-    userStatistic.audiocallPercent = getCookie('audiocallPercent')?.substr(0, 5);
-    userStatistic.totalPercent = getCookie('totalPercent')?.substr(0, 5);
-    userStatistic.audiocallSeries = getCookie('audiocallSeries');
+    const statisticStorageaAudiocall: DayStatisticAudiocall = await getUserStatistic();
+    userStatistic.wordsPerDay = statisticStorageaAudiocall.optional.wordsPerDay;
+    userStatistic.audiocallwordsPerDay = statisticStorageaAudiocall.optional.audiocallwordsPerDay;
+    userStatistic.audiocallPercent = String(statisticStorageaAudiocall.optional.audiocallPercent).substr(0, 4);
+    userStatistic.audiocallRounds = statisticStorageaAudiocall.optional.audiocallRounds;
+    userStatistic.allRounds = statisticStorageaAudiocall.optional.allRounds;
+    userStatistic.totalPercent = String(statisticStorageaAudiocall.optional.totalPercent).substr(0, 4);
+    userStatistic.audiocallSeries = statisticStorageaAudiocall.optional.audiocallSeries;
+    userStatistic.wordInGames = statisticStorageaAudiocall.optional.wordInGames;
+
+    const statisticStorageaSprint: DayStatisticSprint = await getUserStatistic();
+    userStatistic.wordsPerDay = statisticStorageaSprint.optional.wordsPerDay;
+    userStatistic.sprintwordsPerDay = statisticStorageaSprint.optional.sprintwordsPerDay;
+    userStatistic.sprintPercent = String(statisticStorageaSprint.optional.sprintPercent).substr(0, 4);
+    userStatistic.sprintRounds = statisticStorageaSprint.optional.sprintRounds;
+    userStatistic.allRounds = statisticStorageaSprint.optional.allRounds;
+    userStatistic.totalPercent = String(statisticStorageaSprint.optional.totalPercent).substr(0, 4);
+    userStatistic.sprintSeries = statisticStorageaSprint.optional.sprintSeries;
+    userStatistic.wordInGames = statisticStorageaSprint.optional.wordInGames;
     return statisticElement();
   }
 
@@ -42,3 +53,4 @@ export class Statistic {
 
    }
 }
+
