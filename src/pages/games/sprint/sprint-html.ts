@@ -21,7 +21,7 @@ export const sprintElement = () => `<div class="wrap__game">
   <div class="wrap__start">
     <div class="text__name">Спринт</div>
     <div class="text__start">
-      Выберете соответствует ли перевод предложенному слову
+      Выберете соответствует ли перевод предложенному слову. Для выбора используйте клавиши влево(неверно) и вправо(верно), или сделайте выбор мышью.
     </div>
     <div class="button__start">Начать</div>
   </div>

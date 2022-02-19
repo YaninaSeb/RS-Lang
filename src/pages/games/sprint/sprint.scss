@@ -82,7 +82,7 @@
   cursor: pointer;
 }
 .answer__btn:hover {
-  transform: scale(1.03);
+  border: 1px solid #000;
 }
 .btn__false {
   background-color: rgb(230, 20, 20);
@@ -238,4 +238,7 @@
 .timer__start-section {
   margin: auto;
 }
-
+.activ__btn {
+  transform: scale(0.9);
+  border: 1px solid #000;
+}
