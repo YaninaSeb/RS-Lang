@@ -1,4 +1,5 @@
-export const footerHTML = `<footer>
+export const footerHTML = `
+<footer>
 <div class="link-school">
     <a href="https://rs.school/js/">
       <div class="img-rss"></div>

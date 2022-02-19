@@ -1,8 +1,13 @@
+@font-face {
+  font-family: 'Comfortaa';
+  src: url("../assets/fonts/Comfortaa/Comfortaa.ttf");
+}
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Comfortaa';
 }
 
 a {
@@ -25,7 +30,7 @@ a:hover {
   flex-direction: row;
   justify-content: space-between;
   background-color: #455774;
-  font-size: 22px;
+  font-size: 2.5vmin;
   padding: 1vw;
 }
 .nav-link_to_pages a {
@@ -79,12 +84,12 @@ a:hover {
 }
 .greeting-title {
   position: absolute;
-  top: 15%;
-  left: 10%;
-  width: 60vw;
+  top: 12%;
+  right: 10%;
+  width: 70vw;
   color: #455774;
-  font-weight: 800;
-  font-size: 50px;
+  font-weight: 900;
+  font-size: 7vmin;
   text-align: center;
 }
 
@@ -97,8 +102,8 @@ a:hover {
 .about_app-title {
   width: 100vw;
   color: #38465e;
-  font-weight: 800;
-  font-size: 40px;
+  font-weight: 100;
+  font-size: 6vmin;
   text-align: center;
   margin: 5vh 0;
 }
@@ -112,8 +117,8 @@ a:hover {
   justify-content: center;
 }
 .card-privilege_text {
-  width: 40%;
-  font-size: 20px;
+  width: 50%;
+  font-size: 3vmin;
   color: #455774;
   line-height: 1.5;
   text-align: center;
@@ -158,15 +163,14 @@ a:hover {
 .about_team-title {
   width: 100vw;
   color: white;
-  font-weight: 800;
-  font-size: 46px;
+  font-weight: 100;
+  font-size: 6vmin;
   text-align: center;
 }
 .card-team {
   width: 75vw;
-  height: 30vh;
   margin: 5vh auto;
-  padding-top: 2vh;
+  padding: 2vh 0;
 
   display: flex;
   flex-direction: row;
@@ -187,7 +191,7 @@ a:hover {
   flex-direction: column;
 }
 .team-person {
-  font-size: 24px;
+  font-size: 4vmin;
   color: #455774;
   text-align: center;
   font-weight: bolder;
@@ -206,7 +210,7 @@ a:hover {
   background-repeat: no-repeat;
 }
 .team-about_person {
-  font-size: 20px;
+  font-size: 3vmin;
   color: #455774;
   text-align: center;
   line-height: 1.2;
@@ -214,7 +218,6 @@ a:hover {
 
 .card-team_img {
   width: 40%;
-  height: 90%;
 }
 #img-team-1 {
   background: url('./../assets/img/team-2.png');
@@ -248,7 +251,10 @@ footer {
   text-align: center;
   background-color: #455774;
   color: white;
-  padding: 0 10px;
+  padding: 0 1vw;
+
+  // position:fixed;
+  // bottom: 0;
 }
 .link-github a {
   text-decoration: none;
@@ -261,7 +267,7 @@ footer {
   background: url('./../assets/svg/rss.svg');
   background-repeat: no-repeat;
   background-size: contain;
-  margin-top: 3vh;
+  margin-top: 2vh;
 }
 .link-github:hover,
 .img-rss {
