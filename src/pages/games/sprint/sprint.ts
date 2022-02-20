@@ -101,7 +101,7 @@ export class Sprint {
             storeSprint.answers,
             sections,
             blockResultWrap!,
-            resultAnswerArr
+            resultAnswerArr,arrWords
           );
           wordValues = await arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
           
@@ -125,7 +125,6 @@ export class Sprint {
       if (dataUser.userId != '') {
         learnedWords = await getUserWords(dataUser.userId).then((response) => response.filter((word: userWordSprint) => word.difficulty === "learned"));
       }
-      
       if (!infoBook.isFromBook) {
         arrWords = await Promise.all([
           await getWords(1, groupNumber),
@@ -147,11 +146,11 @@ export class Sprint {
           await getWords(17, groupNumber),
           await getWords(18, groupNumber),
           await getWords(19, groupNumber),
-          await getWords(20, groupNumber),
+          await getWords(0, groupNumber),
         ]).then((response) => response.flat());
       } else {
-        let group = infoBook.group;
-        let page = infoBook.page;
+        let group = infoBook.group - 1;
+        let page = infoBook.page - 1;
         arrWords = await getWords(page, group);
         for (let i = 0; i < page; i++) {
           let arrWordAdition = await getWords(i, group);
@@ -200,7 +199,7 @@ export class Sprint {
           questionNumberAddition++;
           if (questionNumberAddition === additionWordValues.length) {
             clearInterval(storeSprint.timer!);
-            addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint.answers);
+            addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint, arrWords);
             addRemoveWindow(sections, blockResultWrap!);
             removeClassTotal(storeSprint, resultAnswerArr);
             storeSprint.points = 0;
@@ -215,7 +214,7 @@ export class Sprint {
           blockQuestion!.innerHTML = await questionInstance.render();
         } else {
           clearInterval(storeSprint.timer!);
-          addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint.answers);
+          addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint, arrWords);
           addRemoveWindow(sections, blockResultWrap!);
           removeClassTotal(storeSprint, resultAnswerArr);
           storeSprint.points = 0;
@@ -291,7 +290,7 @@ export class Sprint {
           questionNumberAddition++;
           if (questionNumberAddition === additionWordValues.length) {
             clearInterval(storeSprint.timer!);
-            addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint.answers);
+            addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint, arrWords);
             addRemoveWindow(sections, blockResultWrap!);
             removeClassTotal(storeSprint, resultAnswerArr);
             storeSprint.points = 0;
@@ -306,7 +305,7 @@ export class Sprint {
           blockQuestion!.innerHTML = await questionInstance.render();
         } else {
           clearInterval(storeSprint.timer!);
-          addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint.answers);
+          addWordsResult(blockResultTrue!, blockResultFalse!, storeSprint, arrWords);
           addRemoveWindow(sections, blockResultWrap!);
           removeClassTotal(storeSprint, resultAnswerArr);
           storeSprint.points = 0;

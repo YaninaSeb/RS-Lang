@@ -73,18 +73,17 @@ export const answerAdd = (
 
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
-  blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
-  let count = 160;
+  blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement>, arrWords: wordInterface[]) => {
+  let count = 10;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {
       clearInterval(storeSprint.timer!);
-      addWordsResult(blockTrue, blockFalse, answers);
+      addWordsResult(blockTrue, blockFalse, storeSprint, arrWords);
       addRemoveWindow(sections, blockResult!);
       removeClassTotal(storeSprint, blockArr)
       storeSprint.points = 0;
       answers.splice(0, answers.length);
-      console.log(storeSprint.statisticWord)
     }
     if (count < 10) {
       block.innerHTML = `00:0${count}`;
@@ -145,7 +144,7 @@ const giveAnswer = (event: Event | KeyboardEvent) => {
 };
 
 //Функция отрисовки результатов
-export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, answers: {word: wordInterface, answer: boolean}[]) => {
+export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, storeSprint: storeSprintInterface, arrWords: wordInterface[]) => {
   blockTrue.innerHTML = '';
   blockFalse.innerHTML = '';
   const nameBlockTrue = document.createElement('div');
@@ -156,7 +155,7 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
   nameBlockFalse.innerHTML = 'Вы ответили неправильно';
   blockTrue.append(nameBlockTrue);
   blockFalse.append(nameBlockFalse);
-  answers.forEach(async (answer) => {
+  storeSprint.answers.forEach(async (answer) => {
     const word = answer.word;
     const wordResultInstance = new WordResult(word.transcription, word.word, word.wordTranslate, word.audio);
     const wordElement = document.createElement('div');
@@ -164,7 +163,16 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
     
     await answer.answer ? blockTrue.append(wordElement) : blockFalse.append(wordElement);
     await wordResultInstance.after_render();
+  });
+
+  
+  arrWords.forEach((word: wordInterface) => {
+    console.log(storeSprint.allAnswersSprint);
+    if (storeSprint.allAnswersSprint[word.id] && storeSprint.allAnswersSprint[word.id] > 2) {
+      console.log(storeSprint.allAnswersSprint);
+    }
   })
+
 }
 
 //Перемешивание массива
