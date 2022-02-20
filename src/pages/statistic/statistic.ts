@@ -1,19 +1,24 @@
 import { dataUser } from '../authorization/users-api';
-import { getCookie, userStatistic } from './statistic-api';
+import { DayStatistic, getUserStatistic, userStatistic } from './statistic-api';
 import { renderUnauthorized, statisticElement } from './statistic-html';
 import './statistic.scss';
 
 
 export class Statistic {
   async render() {
-    userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
-    userStatistic.wordsPerDay = getCookie('wordsPerDay');
-    userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
-    userStatistic.audiocallRounds = getCookie('audiocallRounds');
-    userStatistic.allRounds = getCookie('allRounds');
-    userStatistic.audiocallPercent = getCookie('audiocallPercent')?.substr(0, 5);
-    userStatistic.totalPercent = getCookie('totalPercent')?.substr(0, 5);
-    userStatistic.audiocallSeries = getCookie('audiocallSeries');
+    const statisticStorage: DayStatistic = await getUserStatistic();
+    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+    userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
+    userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
+    userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
+    userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+    userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+    userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+    userStatistic.allRounds = statisticStorage.optional.allRounds;
+    userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+    userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
     return statisticElement();
   }
 
@@ -42,3 +47,4 @@ export class Statistic {
 
    }
 }
+
