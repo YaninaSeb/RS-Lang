@@ -31,7 +31,6 @@ export const answerAdd = (
   event: Event,
   wordValues: { img: string; nameEng: string; nameRus: string; answer: boolean, word: wordInterface }[],
   storeSprint: storeSprintInterface,
-  arrWords: wordInterface[],
   i: number,
   blockQuestinWrap: HTMLElement,
   blockScore: HTMLElement,
@@ -75,7 +74,7 @@ export const answerAdd = (
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
   blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
-  let count = 10;
+  let count = 160;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {

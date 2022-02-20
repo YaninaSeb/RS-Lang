@@ -28,3 +28,14 @@ interface statisticWord {
   trueUnswer: number,
   falseUnswer: number
 }
+export interface userWordSprint {
+  id: string, difficulty: string, wordId: string
+}
+
+export interface wordValuesInterface {
+  img: string,
+  nameEng: string,
+  nameRus: string,
+  answer: boolean,
+  word: wordInterface,
+}
