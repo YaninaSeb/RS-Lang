@@ -109,9 +109,11 @@ export class Sprint {
           additionWordValues = additionWords.map((word, id) =>
           renderSprintQuestion(id, additionWords, word)
         );
-        for (let i = 0; i < learnedWords.length; i++) {
-          wordValues = wordValues.filter((word: wordValuesInterface) => word.word.id !== learnedWords[i].wordId);
-          additionWordValues = additionWordValues.filter((word: wordValuesInterface) => word.word.id !== learnedWords[i].wordId);
+        if (infoBook.isFromBook) {
+          for (let i = 0; i < learnedWords.length; i++) {
+            wordValues = wordValues.filter((word: wordValuesInterface) => word.word.id !== learnedWords[i].wordId);
+            additionWordValues = additionWordValues.filter((word: wordValuesInterface) => word.word.id !== learnedWords[i].wordId);
+          }
         }
         additionWordValues = shuffle(additionWordValues);
         wordValues = shuffle(wordValues);
