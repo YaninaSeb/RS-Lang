@@ -16,7 +16,7 @@ export const userStatistic: any =  {
   wordInGames: {}
 }
 
-export type DayStatisticAudiocall = {
+export type DayStatistic = {
   learnedWords: number,
   optional: {
     wordsPerDay: number,
@@ -24,15 +24,6 @@ export type DayStatisticAudiocall = {
     audiocallRounds: number,
     audiocallPercent: number,
     audiocallSeries: number,
-    allRounds: number,
-    totalPercent: number,
-    wordInGames: {},
-  }
-}
-export type DayStatisticSprint = {
-  learnedWords: number,
-  optional: {
-    wordsPerDay: number,
     sprintwordsPerDay: number,
     sprintRounds: number,
     sprintPercent: number,
@@ -42,6 +33,7 @@ export type DayStatisticSprint = {
     wordInGames: {},
   }
 }
+
 
 export async function getWords(page: number, group: number) {
   const response = await fetch(`https://rs-lang25.herokuapp.com/words?page=${page}&group=${group}`);
@@ -65,7 +57,7 @@ export const getUserStatistic = async(id = dataUser.userId) => {
   return settings;
 }
 
-export const updateUserStatistic = async(id = dataUser.userId, body: DayStatisticAudiocall | DayStatisticSprint) => {
+export const updateUserStatistic = async(id = dataUser.userId, body: DayStatistic) => {
   const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/statistics`, {
     method: 'PUT',
     headers: {

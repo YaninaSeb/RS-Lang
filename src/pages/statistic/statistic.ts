@@ -1,30 +1,24 @@
 import { dataUser } from '../authorization/users-api';
-import { DayStatisticAudiocall, DayStatisticSprint, getUserStatistic, userStatistic } from './statistic-api';
+import { DayStatistic, getUserStatistic, userStatistic } from './statistic-api';
 import { renderUnauthorized, statisticElement } from './statistic-html';
 import './statistic.scss';
 
 
 export class Statistic {
   async render() {
-    const statisticStorageaAudiocall: DayStatisticAudiocall = await getUserStatistic();
-    userStatistic.wordsPerDay = statisticStorageaAudiocall.optional.wordsPerDay;
-    userStatistic.audiocallwordsPerDay = statisticStorageaAudiocall.optional.audiocallwordsPerDay;
-    userStatistic.audiocallPercent = String(statisticStorageaAudiocall.optional.audiocallPercent).substr(0, 4);
-    userStatistic.audiocallRounds = statisticStorageaAudiocall.optional.audiocallRounds;
-    userStatistic.allRounds = statisticStorageaAudiocall.optional.allRounds;
-    userStatistic.totalPercent = String(statisticStorageaAudiocall.optional.totalPercent).substr(0, 4);
-    userStatistic.audiocallSeries = statisticStorageaAudiocall.optional.audiocallSeries;
-    userStatistic.wordInGames = statisticStorageaAudiocall.optional.wordInGames;
-
-    const statisticStorageaSprint: DayStatisticSprint = await getUserStatistic();
-    userStatistic.wordsPerDay = statisticStorageaSprint.optional.wordsPerDay;
-    userStatistic.sprintwordsPerDay = statisticStorageaSprint.optional.sprintwordsPerDay;
-    userStatistic.sprintPercent = String(statisticStorageaSprint.optional.sprintPercent).substr(0, 4);
-    userStatistic.sprintRounds = statisticStorageaSprint.optional.sprintRounds;
-    userStatistic.allRounds = statisticStorageaSprint.optional.allRounds;
-    userStatistic.totalPercent = String(statisticStorageaSprint.optional.totalPercent).substr(0, 4);
-    userStatistic.sprintSeries = statisticStorageaSprint.optional.sprintSeries;
-    userStatistic.wordInGames = statisticStorageaSprint.optional.wordInGames;
+    const statisticStorage: DayStatistic = await getUserStatistic();
+    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+    userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
+    userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
+    userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
+    userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+    userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+    userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+    userStatistic.allRounds = statisticStorage.optional.allRounds;
+    userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+    userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
     return statisticElement();
   }
 
