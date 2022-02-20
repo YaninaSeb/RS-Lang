@@ -14,7 +14,6 @@ export const getWords = async (numGroup: number, numPage: number) => {
       }
     });
     const content = await rawResponse.json();
-  
     return content;
 };
 
@@ -33,18 +32,23 @@ export const getWord = async (wordId: string) => {
 
 //запрос для получения сложных и изученных слов
 export const getUserWords = async (userId: number) => {
-  const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${dataUser.token}`,
-      'Accept': 'application/json',
+  try {
+    const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${dataUser.token}`,
+        'Accept': 'application/json',
+      }
+    });
+    if (!rawResponse.ok) {
+      throw new Error(`${rawResponse.status}`);
     }
-  });
-  const content = await rawResponse.json();
+    const content = await rawResponse.json();
+    return content;
 
-  console.log(content);
-
-  return content;
+  } catch (err: any) {
+    dataUser.errCode = err.message;
+  }
 };
 
 
@@ -78,6 +82,7 @@ export const updateUserWord = async (userId: string, wordId: string, word: objec
 
 //запрос для удаления слова
 export const deleteUserWord = async (userId: string, wordId: string) => {
+  
   await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'DELETE',
     headers: {
@@ -91,23 +96,14 @@ export const deleteUserWord = async (userId: string, wordId: string) => {
 
 
 
+function setLocalStorageUser() {
+  localStorage.setItem('groupBook', (infoBook.group).toString());
+  localStorage.setItem('pageBook', (infoBook.page).toString());
+}
+window.addEventListener('beforeunload', setLocalStorageUser);
 
-
-
-
-
-
-    // function setLocalStorageUser() {
-    //   localStorage.setItem('groupBook', (infoBook.group).toString());
-    //   localStorage.setItem('pageBook', (infoBook.page).toString());
-    // }
-    // window.addEventListener('beforeunload', setLocalStorageUser);
-    
-    // function getLocalStorageUser() {
-    //   infoBook.group = Number(localStorage.getItem('groupBook'));
-    //   infoBook.page = Number(localStorage.getItem('pageBook'));
-    // }
-    // window.addEventListener('load', () => {
-    //   getLocalStorageUser();
-    //   createPageBook();
-    // });
+function getLocalStorageUser() {
+  infoBook.group = Number(localStorage.getItem('groupBook'));
+  infoBook.page = Number(localStorage.getItem('pageBook'));
+}
+window.addEventListener('load', getLocalStorageUser);

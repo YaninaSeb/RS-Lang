@@ -9,13 +9,16 @@
 }
 
 .book-navigation {
+    width: 100vw;
     position: fixed;
-    left: 20vw;
-    top: 6.8vh;
+    top: 9vh;
+    text-align: center;
 
     display:flex;
     flex-direction: row;
+    justify-content: center;
     padding: 10px;
+    background-color: white;
 }
  
 select {
@@ -30,7 +33,6 @@ select {
 .num-group,
 .sprint-game,
 .audio-game {
-    // width: 10vw;
     margin: 0 10px;
     padding: 5px;
     text-align: center;
@@ -38,7 +40,6 @@ select {
     border:1px solid #455774;
     color: #455774;
     cursor: pointer;
-    //transition: 0.4s;
 }
 .num-pages {
     margin: 0;
@@ -74,7 +75,7 @@ select {
     width: 80vw;
     height: auto;
     margin: 10px auto;
-    padding: 10px;
+    padding: 20px;
     border-radius: 10px;
 
     background-color: rgba(136, 153, 180, 0.2);
@@ -98,7 +99,7 @@ select {
 }
 
 .word-en {
-  font-size: 2vw;
+  font-size: 1.8vw;
   padding-bottom: 25px;
   font-weight: 600;
 
@@ -122,14 +123,14 @@ select {
 
 .sentence-one-en,
 .sentence-two-en {
-  font-size: 1.5vw;
+  font-size: 1.4vw;
   word-wrap: break-word;
 }
 
 .sentence-one-ru,
 .sentence-two-ru {
-  font-size: 1.2vw;
-  padding-bottom: 15px;
+  font-size: 1.1vw;
+  padding-bottom: 20px;
   color: rgb(0, 0, 0, 0.6);
   word-wrap: break-word;
 }
@@ -144,9 +145,8 @@ select {
 .btn-learned_word,
 .btn-statistics_word,
 .btn-hard-restore {
-    width: 12vw;
-    height: 2vw;
     margin-right: 1.5vw;
+    padding: 5px;
 
     background-color: rgb(255, 255, 255);
     border: 1px solid #455774;
@@ -174,9 +174,51 @@ select {
 
 .bookmark {
     position: relative;
-    top: -15px;
+    top: -25px;
 }
 .bookmark img {
     width: 3vw;
     height: 30%;
+}
+
+
+
+.statistics-one_word {
+    display: none;
+    
+    width: 100vw;
+    height: 100vh;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.statistics-one_word table {
+    position: relative;
+    margin: 0 auto;
+    top: 35%;
+    background-color: #455774;
+
+    font-size: 2.2vmin;
+    padding: 10px;
+    color: white;
+}
+
+.statistics-one_word th,
+.statistics-one_word td {
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.btn-close_statistic {
+    font-size: 4vmin;
+
+    position: absolute;
+    top: -10px;
+    left: 5px;
+
+    cursor: pointer;
 }
