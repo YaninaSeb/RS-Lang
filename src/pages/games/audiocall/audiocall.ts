@@ -1,4 +1,4 @@
-import { getCookie, setCookie, updateUserStatistic, userStatistic } from '../../statistic/statistic-api';
+import { DayStatistic, getUserStatistic, updateUserStatistic, userStatistic } from '../../statistic/statistic-api';
 import { audioElement, renderAuidoCallStatistic, renderLevel, updateLevel } from './audiocall-html';
 import './audiocall.scss';
 import { array, showRightWord, Word } from './utils/utils';
@@ -13,20 +13,32 @@ export let seriesOfAnswers = 0;
 
 export class AudioGame {
   async render() {
-    userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
-    userStatistic.wordsPerDay = getCookie('wordsPerDay');
-    userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
-    userStatistic.audiocallRounds = getCookie('audiocallRounds');
-    userStatistic.allRounds = getCookie('allRounds');
-    userStatistic.audiocallPercent = getCookie('audiocallPercent')?.substr(0, 5);
-    userStatistic.totalPercent = getCookie('totalPercent')?.substr(0, 5);
-    userStatistic.audiocallSeries = getCookie('audiocallSeries');
+    //userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
+    //userStatistic.wordsPerDay = getCookie('wordsPerDay');
+    //userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
+    //userStatistic.audiocallRounds = getCookie('audiocallRounds');
+    //userStatistic.allRounds = getCookie('allRounds');
+    //userStatistic.audiocallPercent = getCookie('audiocallPercent')?.substr(0, 5);
+    //userStatistic.totalPercent = getCookie('totalPercent')?.substr(0, 5);
+    //userStatistic.audiocallSeries = getCookie('audiocallSeries');
     return audioElement();
   }
 
   async after_render() {
     
-  
+    const statisticStorage: DayStatistic= await getUserStatistic();
+    
+    
+    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+    userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
+    userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
+    userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
+    userStatistic.allRounds = statisticStorage.optional.allRounds;
+    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+    userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+    
+    
     const answersBody = document.querySelector('.answers__body') as HTMLElement;
     const repeatButton = (document.querySelector('.repeat') as HTMLButtonElement);
     const nextButton = (document.querySelector('.next') as HTMLButtonElement);
@@ -61,18 +73,29 @@ export class AudioGame {
           const auidoButton = document.querySelector('.audio') as HTMLElement;
           const rightAnswer = auidoButton.getAttribute('data-word');
           const selected = target.value;
+          
+          userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id] = {
+            audiocall: {
+              guessed: 0,
+              unguessed: 0
+            }
+          }
+          
           if (selected !== rightAnswer) {
+            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed + 1;
             seriesOfAnswers = 0;
             target.style.background = 'red';
             array[NUMBER_OF_ANSWER].choice = 'wrong';
             showRightWord();
           } else {
+            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed + 1;
             NUMBER_OF_RIGHT_ANSWERS++;
             seriesOfAnswers++;
             target.style.background = 'green';
             array[NUMBER_OF_ANSWER].choice = 'right';
             showRightWord();
           }
+          
         }
       });
     
@@ -86,54 +109,83 @@ export class AudioGame {
     });
 
     async function nextQuestion() {
+      
       if (NUMBER_OF_ANSWER === 19) {
         await renderAuidoCallStatistic();
         arrayOfResults.map(async (element: Word) => {
           if (userStatistic.wordsInQuiestions.includes(element.word) || dataUser.userId === '') {
             return;
           } else {
-              
-            const wordPerDay = {
-              wordsPerDay: userStatistic.wordsPerDay++,
-              optional: {
-                words: element.word,
-              }
-            }
-
-            userStatistic.audiocallwordsPerDay = Number(userStatistic.audiocallwordsPerDay) + 1;
+            userStatistic.audiocallwordsPerDay = userStatistic.audiocallwordsPerDay + 1;
+            userStatistic.wordsPerDay = userStatistic.wordsPerDay + 1;
             userStatistic.wordsInQuiestions.push(element.word);
-            setCookie('audiocallwordsPerDay', userStatistic.audiocallwordsPerDay);
-            setCookie('wordsPerDay', userStatistic.wordsPerDay);
-            setCookie('words', userStatistic.wordsInQuiestions);
+            console.log(userStatistic.wordsInQuiestions);
+            console.log(userStatistic.wordsPerDay);
+            if (seriesOfAnswers > userStatistic.audiocallSeries) {
+              userStatistic.audiocallSeries = seriesOfAnswers;
+              //setCookie('audiocallSeries', userStatistic.audiocallSeries);
+              //userStatistic.audiocallSeries = getCookie('audiocallSeries');
+            } 
 
-            userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
-            userStatistic.wordsPerDay = getCookie('wordsPerDay');
-            userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
+            //userStatistic.audiocallwordsPerDay = Number(userStatistic.audiocallwordsPerDay) + 1;
+            //userStatistic.wordsInQuiestions.push(element.word);
+            //setCookie('audiocallwordsPerDay', userStatistic.audiocallwordsPerDay);
+            //setCookie('wordsPerDay', userStatistic.wordsPerDay);
+            //setCookie('words', userStatistic.wordsInQuiestions);
+
+            //userStatistic.audiocallwordsPerDay = getCookie('audiocallwordsPerDay');
+            //userStatistic.wordsPerDay = getCookie('wordsPerDay');
+            //userStatistic.wordsInQuiestions = getCookie('words')?.split(',');
 
             
-            await updateUserStatistic(dataUser.userId, wordPerDay);
+            
           }
         })
         if (dataUser.userId !== '') {
-          userStatistic.audiocallRounds++;
-          userStatistic.allRounds++;
+          userStatistic.audiocallRounds = userStatistic.audiocallRounds + 1;
+          userStatistic.allRounds = userStatistic.allRounds + 1;
           userStatistic.audiocallPercent = (Number(userStatistic.audiocallPercent) + Number(((NUMBER_OF_RIGHT_ANSWERS / 20) * 100))) / userStatistic.audiocallRounds;
-          setCookie('audiocallPercent', userStatistic.audiocallPercent);
-          userStatistic.audiocallPercent = getCookie('audiocallPercent');
           userStatistic.totalPercent = (Number(userStatistic.totalPercent) + Number(((NUMBER_OF_RIGHT_ANSWERS / 20) * 100))) / userStatistic.allRounds;
-          setCookie('totalPercent', userStatistic.totalPercent );
-          userStatistic.totalPercent = getCookie('totalPercent');
-          setCookie('audiocallRounds', userStatistic.audiocallRounds);
-          setCookie('allRounds', userStatistic.allRounds);
-          userStatistic.audiocallRounds = getCookie('audiocallRounds');
-          userStatistic.allRounds = getCookie('allRounds');
+          
+          const wordPerDay = {
+            learnedWords: 0,
+            optional: {
+              wordsPerDay: userStatistic.wordsPerDay,
+              audiocallwordsPerDay: userStatistic.audiocallwordsPerDay,
+              audiocallRounds: userStatistic.audiocallRounds,
+              audiocallPercent: userStatistic.audiocallPercent,
+              sprintwordsPerDay: userStatistic.sprintwordsPerDay,
+              sprintRounds: userStatistic.sprintRounds,
+              sprintPercent: userStatistic.sprintPercent,
+              allRounds: userStatistic.allRounds,
+              totalPercent: userStatistic.totalPercent,
+              audiocallSeries: userStatistic.audiocallSeries,
+              sprintSeries: userStatistic.sprintSeries,
+              wordInGames: userStatistic.wordInGames,
+              
+            }
+          }
+          await updateUserStatistic(dataUser.userId, wordPerDay);
+          
+          //userStatistic.audiocallRounds++;
+          //userStatistic.allRounds++;
+          //userStatistic.audiocallPercent = (Number(userStatistic.audiocallPercent) + Number(((NUMBER_OF_RIGHT_ANSWERS / 20) * 100))) / userStatistic.audiocallRounds;
+          //setCookie('audiocallPercent', userStatistic.audiocallPercent);
+          //userStatistic.audiocallPercent = getCookie('audiocallPercent');
+          //userStatistic.totalPercent = (Number(userStatistic.totalPercent) + Number(((NUMBER_OF_RIGHT_ANSWERS / 20) * 100))) / userStatistic.allRounds;
+          //setCookie('totalPercent', userStatistic.totalPercent );
+          //userStatistic.totalPercent = getCookie('totalPercent');
+          //setCookie('audiocallRounds', userStatistic.audiocallRounds);
+          //setCookie('allRounds', userStatistic.allRounds);
+          //userStatistic.audiocallRounds = getCookie('audiocallRounds');
+          //userStatistic.allRounds = getCookie('allRounds');
           console.log(userStatistic.totalPercent);
           console.log(userStatistic.allRounds);
-          if (seriesOfAnswers > userStatistic.audiocallSeries) {
-            userStatistic.audiocallSeries = seriesOfAnswers;
-            setCookie('audiocallSeries', userStatistic.audiocallSeries);
-            userStatistic.audiocallSeries = getCookie('audiocallSeries');
-          } 
+          //if (seriesOfAnswers > userStatistic.audiocallSeries) {
+            //userStatistic.audiocallSeries = seriesOfAnswers;
+            //setCookie('audiocallSeries', userStatistic.audiocallSeries);
+            //userStatistic.audiocallSeries = getCookie('audiocallSeries');
+          //} 
         }
         
         while (answersBody.firstChild) {
@@ -179,3 +231,4 @@ export class AudioGame {
     
   }
 }
+
