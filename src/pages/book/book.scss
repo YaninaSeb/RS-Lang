@@ -1,0 +1,182 @@
+.book-page {
+    width: 100vw;
+    height: 77vh;
+    margin-top: 7vh;
+
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.book-navigation {
+    position: fixed;
+    left: 20vw;
+    top: 6.8vh;
+
+    display:flex;
+    flex-direction: row;
+    padding: 10px;
+}
+ 
+select {
+    appearance: none;
+}
+
+.pages-book {
+    display:flex;
+    flex-direction: row;
+}
+
+.num-group,
+.sprint-game,
+.audio-game {
+    // width: 10vw;
+    margin: 0 10px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border:1px solid #455774;
+    color: #455774;
+    cursor: pointer;
+    //transition: 0.4s;
+}
+.num-pages {
+    margin: 0;
+    padding: 5px 10px;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    cursor: pointer;
+}
+.prev-page,
+.next-page {
+    border: 1px solid black;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    padding: 5px;
+    cursor: pointer;
+}
+.prev-page {
+    border-radius: 5px 0 0 5px;
+}
+.next-page {
+    border-radius: 0 5px 5px 0;
+}
+
+
+.container-words {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-word {
+    width: 80vw;
+    height: auto;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+
+    background-color: rgba(136, 153, 180, 0.2);
+
+    display: flex;
+    flex-direction: row;
+    word-wrap: break-word;
+}
+
+.img-word {
+    width: 35%;
+    height: 100%;
+}
+.img-word img {
+    width: 85%;
+}
+
+.description-word {
+    width: 57%;
+    height: 100%;
+}
+
+.word-en {
+  font-size: 2vw;
+  padding-bottom: 25px;
+  font-weight: 600;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.audio {
+    width: 2.5vw;
+    height: 2.5vw;
+    margin-left: 1vw;
+    background: url('../../assets/svg/play-audio.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.audio:hover {
+    transform: scale(105%);
+}
+
+.sentence-one-en,
+.sentence-two-en {
+  font-size: 1.5vw;
+  word-wrap: break-word;
+}
+
+.sentence-one-ru,
+.sentence-two-ru {
+  font-size: 1.2vw;
+  padding-bottom: 15px;
+  color: rgb(0, 0, 0, 0.6);
+  word-wrap: break-word;
+}
+
+.btns-extra_fuctional {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.btn-hard_word,
+.btn-learned_word,
+.btn-statistics_word,
+.btn-hard-restore {
+    width: 12vw;
+    height: 2vw;
+    margin-right: 1.5vw;
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #455774;
+    border-radius: 5px;
+
+    text-align: center;
+    font-size: 1.3vw;
+    color: #455774;
+}
+.btn-hard_word:hover,
+.btn-learned_word:hover,
+.btn-statistics_word:hover,
+.btn-hard-restore:hover {
+    background-color: #455774;
+    color: white;
+    cursor: pointer;
+}
+
+.hard_word-select,
+.learned_word-select {
+    background-color: #455774;
+    color: white;
+}
+
+
+.bookmark {
+    position: relative;
+    top: -15px;
+}
+.bookmark img {
+    width: 3vw;
+    height: 30%;
+}

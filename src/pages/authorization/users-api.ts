@@ -55,6 +55,8 @@ export const dataUser: any = {
       dataUser.message = content.message;
 
       console.log(content);
+      console.log(dataUser);
+
     } catch (err: any) {
       dataUser.errCode = err.message;
     }
