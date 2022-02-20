@@ -1,10 +1,9 @@
 import { storeSprintInterface, wordInterface } from './instance';
-import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
 import { WordResult } from '../pages/games/sprint/word';
-import { getWords } from './api';
 import { DayStatistic, getUserStatistic, updateUserStatistic, userStatistic } from '../pages/statistic/statistic-api';
 import { dataUser } from '../pages/authorization/users-api';
+import { deleteUserWord, updateUserWord } from '../pages/book/book-api';
 export const renderSprintQuestion = (
   id: number,
   arrWords: wordInterface[],
@@ -45,9 +44,16 @@ export const answerAdd = (
     storeSprint.statisticWord[idAllAnswer] = {trueUnswer: 0,
     falseUnswer: 0}
   }
+  if (storeSprint.seriasTrueAnswer < storeSprint.correctAnswers) {
+    storeSprint.seriasTrueAnswer = storeSprint.correctAnswers;
+  }
   if (answer) {
     storeSprint.allAnswersSprint[idAllAnswer] = storeSprint.allAnswersSprint[idAllAnswer] ?  
     storeSprint.allAnswersSprint[idAllAnswer] += 1 : storeSprint.allAnswersSprint[idAllAnswer] = 1;
+
+    storeSprint.idTrueWordsAnswer[idAllAnswer] = storeSprint.idTrueWordsAnswer[idAllAnswer] ?  
+    storeSprint.idTrueWordsAnswer[idAllAnswer] += 1 : storeSprint.idTrueWordsAnswer[idAllAnswer] = 1;
+    
     blockQuestinWrap?.classList.add('questin__true');
     addPoints(storeSprint, blockScore);
     addClass(storeSprint, blockArr);
@@ -56,6 +62,8 @@ export const answerAdd = (
     storeSprint.numberTrueAnswer++;
   } else {
     storeSprint.allAnswersSprint[idAllAnswer] = 0;
+    storeSprint.idFalseWordsAnswer[idAllAnswer] = storeSprint.idFalseWordsAnswer[idAllAnswer] ?  
+    storeSprint.idFalseWordsAnswer[idAllAnswer] += 1 : storeSprint.idFalseWordsAnswer[idAllAnswer] = 1;
     blockQuestinWrap?.classList.add('questin__false');
     storeSprint.correctAnswers = 0;
     storeSprint.statisticWord[idAllAnswer].falseUnswer++;
@@ -76,7 +84,7 @@ export const answerAdd = (
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
   blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement>, arrWords: wordInterface[]) => {
-  let count = 10;
+  let count = 60;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {
@@ -167,11 +175,10 @@ export const addWordsResult =  async(blockTrue: HTMLElement, blockFalse: HTMLEle
     await wordResultInstance.after_render();
   });
  storeSprint.numberOfGamesSprint++;
-  arrWords.forEach((word: wordInterface) => {
-    console.log(storeSprint.allAnswersSprint);
-    if (storeSprint.allAnswersSprint[word.id] && storeSprint.allAnswersSprint[word.id] > 2) {
-      console.log(storeSprint.allAnswersSprint);
-
+ const arrThreeTrueAnswer = Object.keys(storeSprint.allAnswersSprint)
+ arrThreeTrueAnswer.forEach(async (id) => {
+    if (storeSprint.allAnswersSprint[id] > 2) {
+      await updateUserWord(dataUser.userId, id, { "difficulty": "learned" });
     }
   })
   const statisticStorage: DayStatistic = await getUserStatistic();
@@ -187,9 +194,10 @@ export const addWordsResult =  async(blockTrue: HTMLElement, blockFalse: HTMLEle
   if (dataUser.userId !== '') {
     userStatistic.sprintRounds = userStatistic.sprintRounds + 1;
     userStatistic.allRounds = userStatistic.allRounds + 1;
-    userStatistic.sprintPercent = (Number(userStatistic.sprintPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.audiocallRounds;
+    userStatistic.sprintPercent = (Number(userStatistic.sprintPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.sprintRounds;
     userStatistic.totalPercent = (Number(userStatistic.totalPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.allRounds;
-    
+    userStatistic.sprintwordsPerDay = storeSprint.numberTrueAnswer;
+    userStatistic.sprintSeries = storeSprint.seriasTrueAnswer;
     const wordPerDay = {
       learnedWords: 0,
       optional: {
@@ -208,7 +216,17 @@ export const addWordsResult =  async(blockTrue: HTMLElement, blockFalse: HTMLEle
         
       }
     }
+    const keyInWordResult = Object.keys(storeSprint.statisticWord);
+    keyInWordResult.forEach((id) => {
+      userStatistic.wordInGames[id] = {
+      sprint: {
+        guessed: storeSprint.statisticWord[id].trueUnswer,
+        unguessed:  storeSprint.statisticWord[id].falseUnswer,
+      }
+    }
+    })
     await updateUserStatistic(dataUser.userId, wordPerDay);
+    console.log(userStatistic);
   }
 }
 

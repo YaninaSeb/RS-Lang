@@ -9,5 +9,8 @@ export const storeSprint: storeSprintInterface = {
     audioSprint: true,//Включение или отключение звука
     statisticWord: {},
     numberOfGamesSprint: 0,// Всего сыграно раз
-    numberTrueAnswer: 0//Колличество правильных ответов для статистики
+    numberTrueAnswer: 0,//Колличество правильных ответов для статистики
+    idTrueWordsAnswer: {},
+    idFalseWordsAnswer: {},
+    seriasTrueAnswer: 0
 }

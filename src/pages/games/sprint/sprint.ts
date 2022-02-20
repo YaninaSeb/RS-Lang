@@ -23,20 +23,7 @@ export class Sprint {
   }
 
   async after_render() {
-    const statisticStorage: DayStatistic = await getUserStatistic();
-    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
-    userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
-    userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
-    userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
-    userStatistic.allRounds = statisticStorage.optional.allRounds;
-    userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
-    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
-    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
-
-
-
-
-
+    
 
     const btnStart: HTMLElement | null = document.querySelector('.button__start');
     const sections: NodeListOf<HTMLElement> = document.querySelectorAll('.section');
@@ -142,6 +129,7 @@ export class Sprint {
       if (dataUser.userId != '') {
         learnedWords = await getUserWords(dataUser.userId).then((response) => response.filter((word: userWordSprint) => word.difficulty === "learned"));
       }
+      console.log(await getUserWords(dataUser.userId))
       if (!infoBook.isFromBook) {
         arrWords = await Promise.all([
           await getWords(1, groupNumber),
