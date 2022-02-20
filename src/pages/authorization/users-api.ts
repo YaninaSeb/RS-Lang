@@ -72,11 +72,15 @@ export const dataUser: any = {
     });
     return rawResponse.json();
   };
+  
 
   // получение нового токена пользователя
-  export const getNewTokenUser = async (id: string) => {
+  export const getNewTokenUser = async (id: string, refreshToken: string) => {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${id}/tokens`, {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+     }
     });
     return rawResponse.json();
   };
