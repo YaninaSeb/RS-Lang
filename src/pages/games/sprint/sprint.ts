@@ -2,7 +2,6 @@ import { shuffle } from 'lodash';
 import { getWords } from '../../../utils/api';
 import { userWordSprint, wordInterface, wordValuesInterface } from '../../../utils/instance';
 import {
-  addAllWordsGroup,
   addRemoveWindow,
   addWordsResult,
   answerAdd,
@@ -12,6 +11,7 @@ import {
 } from '../../../utils/listener';
 import { dataUser } from '../../authorization/users-api';
 import { getUserWords, infoBook } from '../../book/book-api';
+import { DayStatistic, getUserStatistic, userStatistic } from '../../statistic/statistic-api';
 import { Question } from './qustion';
 import { sprintElement } from './sprint-html';
 import './sprint.scss';
@@ -23,6 +23,21 @@ export class Sprint {
   }
 
   async after_render() {
+    const statisticStorage: DayStatistic = await getUserStatistic();
+    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+    userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+    userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+    userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+    userStatistic.allRounds = statisticStorage.optional.allRounds;
+    userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+
+
+
+
+
+
     const btnStart: HTMLElement | null = document.querySelector('.button__start');
     const sections: NodeListOf<HTMLElement> = document.querySelectorAll('.section');
     const sectionQuestion: HTMLElement | null = document.querySelector('.questions');
@@ -159,6 +174,7 @@ export class Sprint {
           arrWordAdition.forEach((word: wordInterface) => additionWords.push(word));
         }
       }
+      
     });
 
 

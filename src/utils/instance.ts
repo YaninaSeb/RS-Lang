@@ -21,7 +21,9 @@ export interface storeSprintInterface {
   timer: NodeJS.Timer | null,
   allAnswersSprint: {[id: string]: number},
   audioSprint: boolean, 
-  statisticWord: {[id: string]: statisticWord} 
+  statisticWord: {[id: string]: statisticWord},
+  numberOfGamesSprint: number,
+  numberTrueAnswer: number 
 }
 
 interface statisticWord {

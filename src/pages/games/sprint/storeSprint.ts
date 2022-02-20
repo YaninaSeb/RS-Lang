@@ -7,5 +7,7 @@ export const storeSprint: storeSprintInterface = {
     timer: null,
     allAnswersSprint: {},// подсчет правильных ответов по id для добавления в изученные,
     audioSprint: true,//Включение или отключение звука
-    statisticWord: {}
+    statisticWord: {},
+    numberOfGamesSprint: 0,// Всего сыграно раз
+    numberTrueAnswer: 0//Колличество правильных ответов для статистики
 }

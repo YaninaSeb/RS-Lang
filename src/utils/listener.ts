@@ -3,7 +3,8 @@ import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
 import { WordResult } from '../pages/games/sprint/word';
 import { getWords } from './api';
-
+import { DayStatistic, getUserStatistic, updateUserStatistic, userStatistic } from '../pages/statistic/statistic-api';
+import { dataUser } from '../pages/authorization/users-api';
 export const renderSprintQuestion = (
   id: number,
   arrWords: wordInterface[],
@@ -52,6 +53,7 @@ export const answerAdd = (
     addClass(storeSprint, blockArr);
     storeSprint.correctAnswers++;
     storeSprint.statisticWord[idAllAnswer].trueUnswer++;
+    storeSprint.numberTrueAnswer++;
   } else {
     storeSprint.allAnswersSprint[idAllAnswer] = 0;
     blockQuestinWrap?.classList.add('questin__false');
@@ -144,7 +146,7 @@ const giveAnswer = (event: Event | KeyboardEvent) => {
 };
 
 //Функция отрисовки результатов
-export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, storeSprint: storeSprintInterface, arrWords: wordInterface[]) => {
+export const addWordsResult =  async(blockTrue: HTMLElement, blockFalse: HTMLElement, storeSprint: storeSprintInterface, arrWords: wordInterface[]) => {
   blockTrue.innerHTML = '';
   blockFalse.innerHTML = '';
   const nameBlockTrue = document.createElement('div');
@@ -164,15 +166,50 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
     await answer.answer ? blockTrue.append(wordElement) : blockFalse.append(wordElement);
     await wordResultInstance.after_render();
   });
-
-  
+ storeSprint.numberOfGamesSprint++;
   arrWords.forEach((word: wordInterface) => {
     console.log(storeSprint.allAnswersSprint);
     if (storeSprint.allAnswersSprint[word.id] && storeSprint.allAnswersSprint[word.id] > 2) {
       console.log(storeSprint.allAnswersSprint);
+
     }
   })
+  const statisticStorage: DayStatistic = await getUserStatistic();
+  userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+  userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+  userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+  userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+  userStatistic.allRounds = statisticStorage.optional.allRounds;
+  userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+  userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+  userStatistic.wordInGames = statisticStorage.optional.wordInGames;
 
+  if (dataUser.userId !== '') {
+    userStatistic.sprintRounds = userStatistic.sprintRounds + 1;
+    userStatistic.allRounds = userStatistic.allRounds + 1;
+    userStatistic.sprintPercent = (Number(userStatistic.sprintPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.audiocallRounds;
+    userStatistic.totalPercent = (Number(userStatistic.totalPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.allRounds;
+    
+    const wordPerDay = {
+      learnedWords: 0,
+      optional: {
+        wordsPerDay: userStatistic.wordsPerDay,
+        audiocallwordsPerDay: userStatistic.audiocallwordsPerDay,
+        audiocallRounds: userStatistic.audiocallRounds,
+        audiocallPercent: userStatistic.audiocallPercent,
+        sprintwordsPerDay: userStatistic.sprintwordsPerDay,
+        sprintRounds: userStatistic.sprintRounds,
+        sprintPercent: userStatistic.sprintPercent,
+        allRounds: userStatistic.allRounds,
+        totalPercent: userStatistic.totalPercent,
+        audiocallSeries: userStatistic.audiocallSeries,
+        sprintSeries: userStatistic.sprintSeries,
+        wordInGames: userStatistic.wordInGames,
+        
+      }
+    }
+    await updateUserStatistic(dataUser.userId, wordPerDay);
+  }
 }
 
 //Перемешивание массива
@@ -187,13 +224,4 @@ export const shuffle = (array: wordInterface[]) => {
 export const addRemoveWindow = (sections: NodeListOf<HTMLElement>, vievSection: HTMLElement) => {
   sections.forEach((section) => section.classList.add('close'));
   vievSection?.classList.remove('close');
-}
-//Функция добавить слова
-export const addAllWordsGroup = async (groupNumber: number) => {
-  const arrWords:  wordInterface[] = [];
-  for (let i = 1; i < 20; i++) {
-    let arrWords1: wordInterface[] = await getWords(i, groupNumber);
-    await arrWords1.forEach((word) => arrWords.push(word));
-  }
-  return arrWords;
 }
