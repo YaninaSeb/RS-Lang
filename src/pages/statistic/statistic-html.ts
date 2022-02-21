@@ -10,7 +10,7 @@ export const statisticElement = () => `
           <div class="audiocall-game game-statistic blur">
             <h3 class="game-title">Аудиовызов</h3>
             <div class="statistic__container">
-              <div class="game-text">Изучено слов:</div>
+              <div class="game-text">Новых слов:</div>
               <div class="words-learned">${userStatistic.audiocallwordsPerDay}</div>
             </div>
             <div class="statistic__container">
@@ -25,7 +25,7 @@ export const statisticElement = () => `
           <div class="sprint-game game-statistic blur">
             <h3 class="game-title">Спринт</h3>
             <div class="statistic__container">
-              <div class="game-text">Изучено слов:</div>
+              <div class="game-text">Новых слов:</div>
               <div class="words-learned">${userStatistic.sprintwordsPerDay}</div>
             </div>
             <div class="statistic__container">
@@ -41,8 +41,12 @@ export const statisticElement = () => `
         <div class="day-statistic blur">
           <h2 class="statistic-title">Общая статистика</h2>
           <div class="statistic__container">
-            <div class="game-text">Изучено слов:</div>
+            <div class="game-text">Новых слов:</div>
             <div class="words-learned">${userStatistic.wordsPerDay}</div>
+          </div>
+          <div class="statistic__container">
+            <div class="game-text">Изученно слов:</div>
+            <div class="words-learned-total">${userStatistic.learnedWordsFromBook}</div>
           </div>
           <div class="statistic__container">
             <div class="game-text">Правильно %:</div>

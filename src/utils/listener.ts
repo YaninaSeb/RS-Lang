@@ -1,9 +1,9 @@
 import { storeSprintInterface, wordInterface } from './instance';
-import { Question } from '../pages/games/sprint/qustion';
 import { storeSprint } from '../pages/games/sprint/storeSprint';
 import { WordResult } from '../pages/games/sprint/word';
-import { getWords } from './api';
-
+import { DayStatistic, getUserStatistic, updateUserStatistic, userStatistic } from '../pages/statistic/statistic-api';
+import { dataUser } from '../pages/authorization/users-api';
+import { deleteUserWord, updateUserWord } from '../pages/book/book-api';
 export const renderSprintQuestion = (
   id: number,
   arrWords: wordInterface[],
@@ -31,7 +31,6 @@ export const answerAdd = (
   event: Event,
   wordValues: { img: string; nameEng: string; nameRus: string; answer: boolean, word: wordInterface }[],
   storeSprint: storeSprintInterface,
-  arrWords: wordInterface[],
   i: number,
   blockQuestinWrap: HTMLElement,
   blockScore: HTMLElement,
@@ -41,17 +40,33 @@ export const answerAdd = (
   const answer = giveAnswer(event) === String(wordValues[i].answer);
   storeSprint.answers.push({ word: wordValues[i].word, answer: answer });
   const idAllAnswer: string = wordValues[i].word.id;
+  if (!storeSprint.statisticWord.idAllAnswer) {
+    storeSprint.statisticWord[idAllAnswer] = {trueUnswer: 0,
+    falseUnswer: 0}
+  }
+  if (storeSprint.seriasTrueAnswer < storeSprint.correctAnswers) {
+    storeSprint.seriasTrueAnswer = storeSprint.correctAnswers;
+  }
   if (answer) {
     storeSprint.allAnswersSprint[idAllAnswer] = storeSprint.allAnswersSprint[idAllAnswer] ?  
     storeSprint.allAnswersSprint[idAllAnswer] += 1 : storeSprint.allAnswersSprint[idAllAnswer] = 1;
+
+    storeSprint.idTrueWordsAnswer[idAllAnswer] = storeSprint.idTrueWordsAnswer[idAllAnswer] ?  
+    storeSprint.idTrueWordsAnswer[idAllAnswer] += 1 : storeSprint.idTrueWordsAnswer[idAllAnswer] = 1;
+    
     blockQuestinWrap?.classList.add('questin__true');
     addPoints(storeSprint, blockScore);
     addClass(storeSprint, blockArr);
     storeSprint.correctAnswers++;
+    storeSprint.statisticWord[idAllAnswer].trueUnswer++;
+    storeSprint.numberTrueAnswer++;
   } else {
     storeSprint.allAnswersSprint[idAllAnswer] = 0;
+    storeSprint.idFalseWordsAnswer[idAllAnswer] = storeSprint.idFalseWordsAnswer[idAllAnswer] ?  
+    storeSprint.idFalseWordsAnswer[idAllAnswer] += 1 : storeSprint.idFalseWordsAnswer[idAllAnswer] = 1;
     blockQuestinWrap?.classList.add('questin__false');
     storeSprint.correctAnswers = 0;
+    storeSprint.statisticWord[idAllAnswer].falseUnswer++;
     blockArr.forEach((li) => li.classList.remove('activ__round'));
   }
   soundAnswer(answer);
@@ -68,13 +83,13 @@ export const answerAdd = (
 
 export const timerSprint = (block: HTMLElement, blockTrue: HTMLElement, blockFalse: HTMLElement, 
   answers: { word: wordInterface; answer: boolean; }[], sections: NodeListOf<HTMLElement>, 
-  blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement> ) => {
+  blockResult: HTMLElement, blockArr: NodeListOf<HTMLElement>, arrWords: wordInterface[]) => {
   let count = 60;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {
       clearInterval(storeSprint.timer!);
-      addWordsResult(blockTrue, blockFalse, answers);
+      addWordsResult(blockTrue, blockFalse, storeSprint, arrWords);
       addRemoveWindow(sections, blockResult!);
       removeClassTotal(storeSprint, blockArr)
       storeSprint.points = 0;
@@ -118,11 +133,13 @@ export const removeClassTotal = (storeSprint: storeSprintInterface, blockArr: No
 
 //Функция звука ответа
 const soundAnswer = (flag: boolean) => {
-  const audio = new Audio();
-  audio.src = flag
-    ? './../assets/sound-sprint/zvuk-pravilnogo-otveta-iz-peredachi-100-k-1-5200.mp3'
-    : './../assets/sound-sprint/standartnyiy-zvuk-s-oshibochnyim-otvetom-5199-1__=8.mp3';
-  audio.autoplay = true;
+  if (storeSprint.audioSprint) {
+    const audio = new Audio();
+    audio.src = flag
+      ? './../assets/sound-sprint/zvuk-pravilnogo-otveta-iz-peredachi-100-k-1-5200.mp3'
+      : './../assets/sound-sprint/standartnyiy-zvuk-s-oshibochnyim-otvetom-5199-1__=8.mp3';
+    audio.autoplay = true;
+  }
 };
 
 //Функция получения ответа
@@ -137,7 +154,7 @@ const giveAnswer = (event: Event | KeyboardEvent) => {
 };
 
 //Функция отрисовки результатов
-export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement, answers: {word: wordInterface, answer: boolean}[]) => {
+export const addWordsResult =  async(blockTrue: HTMLElement, blockFalse: HTMLElement, storeSprint: storeSprintInterface, arrWords: wordInterface[]) => {
   blockTrue.innerHTML = '';
   blockFalse.innerHTML = '';
   const nameBlockTrue = document.createElement('div');
@@ -148,7 +165,7 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
   nameBlockFalse.innerHTML = 'Вы ответили неправильно';
   blockTrue.append(nameBlockTrue);
   blockFalse.append(nameBlockFalse);
-  answers.forEach(async (answer) => {
+  storeSprint.answers.forEach(async (answer) => {
     const word = answer.word;
     const wordResultInstance = new WordResult(word.transcription, word.word, word.wordTranslate, word.audio);
     const wordElement = document.createElement('div');
@@ -156,7 +173,61 @@ export const addWordsResult =  (blockTrue: HTMLElement, blockFalse: HTMLElement,
     
     await answer.answer ? blockTrue.append(wordElement) : blockFalse.append(wordElement);
     await wordResultInstance.after_render();
+  });
+ storeSprint.numberOfGamesSprint++;
+ const arrThreeTrueAnswer = Object.keys(storeSprint.allAnswersSprint)
+ arrThreeTrueAnswer.forEach(async (id) => {
+    if (storeSprint.allAnswersSprint[id] > 2) {
+      await updateUserWord(dataUser.userId, id, { "difficulty": "learned" });
+    }
   })
+  const statisticStorage: DayStatistic = await getUserStatistic();
+  userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+  userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+  userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+  userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+  userStatistic.allRounds = statisticStorage.optional.allRounds;
+  userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+  userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+  userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+
+  if (dataUser.userId !== '') {
+    userStatistic.sprintRounds = userStatistic.sprintRounds + 1;
+    userStatistic.allRounds = userStatistic.allRounds + 1;
+    userStatistic.sprintPercent = (Number(userStatistic.sprintPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.sprintRounds;
+    userStatistic.totalPercent = (Number(userStatistic.totalPercent) + Number(((storeSprint.numberTrueAnswer / 20) * 100))) / userStatistic.allRounds;
+    userStatistic.sprintwordsPerDay = storeSprint.numberTrueAnswer;
+    userStatistic.sprintSeries = storeSprint.seriasTrueAnswer;
+    const wordPerDay = {
+      learnedWords: 0,
+      optional: {
+        wordsPerDay: userStatistic.wordsPerDay,
+        audiocallwordsPerDay: userStatistic.audiocallwordsPerDay,
+        audiocallRounds: userStatistic.audiocallRounds,
+        audiocallPercent: userStatistic.audiocallPercent,
+        sprintwordsPerDay: userStatistic.sprintwordsPerDay,
+        sprintRounds: userStatistic.sprintRounds,
+        sprintPercent: userStatistic.sprintPercent,
+        allRounds: userStatistic.allRounds,
+        totalPercent: userStatistic.totalPercent,
+        audiocallSeries: userStatistic.audiocallSeries,
+        sprintSeries: userStatistic.sprintSeries,
+        wordInGames: userStatistic.wordInGames,
+        
+      }
+    }
+    const keyInWordResult = Object.keys(storeSprint.statisticWord);
+    keyInWordResult.forEach((id) => {
+      userStatistic.wordInGames[id] = {
+      sprint: {
+        guessed: storeSprint.statisticWord[id].trueUnswer,
+        unguessed:  storeSprint.statisticWord[id].falseUnswer,
+      }
+    }
+    })
+    await updateUserStatistic(dataUser.userId, wordPerDay);
+    console.log(userStatistic);
+  }
 }
 
 //Перемешивание массива
@@ -171,13 +242,4 @@ export const shuffle = (array: wordInterface[]) => {
 export const addRemoveWindow = (sections: NodeListOf<HTMLElement>, vievSection: HTMLElement) => {
   sections.forEach((section) => section.classList.add('close'));
   vievSection?.classList.remove('close');
-}
-//Функция добавить слова
-export const addAllWordsGroup = async (groupNumber: number) => {
-  const arrWords:  wordInterface[] = [];
-  for (let i = 1; i < 20; i++) {
-    let arrWords1: wordInterface[] = await getWords(i, groupNumber);
-    await arrWords1.forEach((word) => arrWords.push(word));
-  }
-  return arrWords;
 }

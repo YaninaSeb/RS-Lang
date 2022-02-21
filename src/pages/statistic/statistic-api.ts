@@ -13,7 +13,8 @@ export const userStatistic: any =  {
   sprintRounds: 0,
   audiocallSeries: 0,
   sprintSeries: 0,
-  wordInGames: {}
+  wordInGames: {},
+  learnedWordsFromBook: 0
 }
 
 export type DayStatistic = {
@@ -34,6 +35,9 @@ export type DayStatistic = {
   }
 }
 
+export type LearnedWords = {
+  difficulty: string,
+}
 
 export async function getWords(page: number, group: number) {
   const response = await fetch(`https://rs-lang25.herokuapp.com/words?page=${page}&group=${group}`);

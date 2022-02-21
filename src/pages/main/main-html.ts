@@ -37,7 +37,7 @@ export const mainElement = () => `<main>
                 Коля Калибабчук 
                 <a href="https://github.com/KNV1987"><div class="img-github"></div></a>
             </span>
-            <span class="team-about_person">Сделал дизайн и функционал мини-игры "Спринт", создал локальную копию бекенда. Участвовал в разработке ...</span>
+            <span class="team-about_person">Настройка роутера, сделана базовая настройка проекта, создана игра Спринт, создана локальная копия бэкенда, сохранение прогресса игры Спринт</span>
         </div>
     </div>
 
