@@ -132,7 +132,7 @@ export class Sprint {
           blockQuestion!.innerHTML = await questionInstance.render();
         }
       }, 1000);
-      if (dataUser.userId != '') {
+      if (dataUser.userId) {
         const arr = await getUserWords(dataUser.userId).finally();
         dificeltyAnswer = arr.filter((word: userWordSprint) => word.difficulty === 'hard');
         learnedWords = arr.filter((word: userWordSprint) => word.difficulty === "learned");

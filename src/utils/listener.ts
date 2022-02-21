@@ -82,7 +82,7 @@ export const answerAdd = (
     storeSprint.correctAnswers = 0;
     storeSprint.statisticWord[idAllAnswer].falseUnswer++;
     blockArr.forEach((li) => li.classList.remove('activ__round'));
-    if(dataUser.userId != '' && learnedWords.length !== 0) {
+    if(dataUser.userId && learnedWords.length !== 0) {
       learnedWords.forEach((word: userWordSprint) => {
         if (idAllAnswer === word.wordId) {
           deleteUserWord(dataUser.userId, idAllAnswer);
@@ -217,7 +217,7 @@ export const addWordsResult = async (
   });
   storeSprint.numberOfGamesSprint++;
   
-  if (dataUser.userId != '') {
+  if (dataUser.userId) {
     const arrThreeTrueAnswer = Object.keys(storeSprint.allAnswersSprint);
     arrThreeTrueAnswer.forEach(async (id) => {
       if (storeSprint.allAnswersSprint[id] > 2) {
@@ -236,7 +236,7 @@ export const addWordsResult = async (
   userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
   userStatistic.wordInGames = statisticStorage.optional.wordInGames;
 
-  if (dataUser.userId !== '') {
+  if (dataUser.userId) {
     userStatistic.sprintRounds = userStatistic.sprintRounds + 1;
     userStatistic.allRounds = userStatistic.allRounds + 1;
     userStatistic.sprintPercent =
