@@ -22,7 +22,7 @@ export class Book {
     const notes = <HTMLElement>document.querySelector('.notes-learned_page');
     let countLearnedWords = 0;
 
-    if (dataUser.userId != '') {
+    if (dataUser.userId) {
       const optionGroupHardWord = document.createElement('option');
       optionGroupHardWord.textContent = 'Сложные слова';
       optionGroupHardWord.setAttribute('value', '7');
@@ -34,7 +34,7 @@ export class Book {
     //отрисовка слов учебника
     async function createPageBook() {
       let arrWords;
-      if (infoBook.group == 7 && dataUser.userId != '') {
+      if (infoBook.group == 7 && dataUser.userId) {
         arrWords = await getArrHardWords();
         containerPages.style.display = 'none';
       } else {
