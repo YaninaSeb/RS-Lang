@@ -48,9 +48,8 @@ export const bookElement = () => `
       <div class="next-page">></div>
     </div>
 
-    <div class="sprint-game">Спринт</div>
-    <div class="audio-game">Аудиовызов</div>
-
+    <button class="sprint-game">Спринт</button>
+    <button class="audio-game">Аудиовызов</button>
   </div>
 
   <div class="notes-learned_page"></div>
