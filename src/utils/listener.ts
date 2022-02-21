@@ -112,7 +112,7 @@ export const timerSprint = (
   blockArr: NodeListOf<HTMLElement>,
   arrWords: wordInterface[]
 ) => {
-  let count = 10;
+  let count = 60;
   storeSprint.timer = setInterval(() => {
     count--;
     if (count === 0) {

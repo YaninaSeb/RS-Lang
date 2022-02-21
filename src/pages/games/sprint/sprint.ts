@@ -19,14 +19,12 @@ import { storeSprint } from './storeSprint';
 
 export class Sprint {
   async render() {
+    const footer: HTMLElement | null = document.querySelector('.footer__body');
+    footer!.style.display = 'none';
     return sprintElement();
   }
 
   async after_render() {
-    
-    
-    
-
     const btnStart: HTMLElement | null = document.querySelector('.button__start');
     const sections: NodeListOf<HTMLElement> = document.querySelectorAll('.section');
     const sectionQuestion: HTMLElement | null = document.querySelector('.questions');
