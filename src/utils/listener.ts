@@ -167,8 +167,8 @@ const soundAnswer = (flag: boolean) => {
   if (storeSprint.audioSprint) {
     const audio = new Audio();
     audio.src = flag
-      ? './../assets/sound-sprint/zvuk-pravilnogo-otveta-iz-peredachi-100-k-1-5200.mp3'
-      : './../assets/sound-sprint/standartnyiy-zvuk-s-oshibochnyim-otvetom-5199-1__=8.mp3';
+      ? './assets/sound-sprint/zvuk-pravilnogo-otveta-iz-peredachi-100-k-1-5200.mp3'
+      : './assets/sound-sprint/standartnyiy-zvuk-s-oshibochnyim-otvetom-5199-1__=8.mp3';
     audio.autoplay = true;
   }
 };

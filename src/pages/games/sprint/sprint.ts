@@ -99,7 +99,7 @@ export class Sprint {
         timerStart!.innerHTML = String(count);
         if (count > 0) {
           const audio = new Audio();
-          audio.src = './../assets/sound-sprint/zvuk-otvet-zaschitan-galochka-5193-1-1.mp3';
+          audio.src = './assets/sound-sprint/zvuk-otvet-zaschitan-galochka-5193-1-1.mp3';
           audio.autoplay = true;
         }
         if (count < 0) {
