@@ -262,8 +262,8 @@ export class Book {
 
         for (let oneWord in answersForAllWords) {
           if (oneWord == idCurrentWord) {
-            // textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
-            // textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;
+            textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
+            textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;
 
             textRightAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.guessed;
             textWrongAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.unguessed;
