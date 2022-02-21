@@ -1,4 +1,10 @@
 import { dataUser } from '../authorization/users-api';
+
+export type WordType = {
+  wordId: string,
+  difficulty: string
+}
+
 export const infoBook = {
   group: 1,
   page: 1,
@@ -31,7 +37,7 @@ export const getWord = async (wordId: string) => {
 };
 
 //запрос для получения сложных и изученных слов
-export const getUserWords = async (userId: number) => {
+export const getUserWords = async (userId: string) => {
   try {
     const rawResponse = await fetch(`https://rs-lang25.herokuapp.com/users/${userId}/words`, {
       method: 'GET',
@@ -46,8 +52,8 @@ export const getUserWords = async (userId: number) => {
     const content = await rawResponse.json();
     return content;
 
-  } catch (err: any) {
-    dataUser.errCode = err.message;
+  } catch (err) {
+    if (err instanceof Error) dataUser.errCode = err.message;
   }
 };
 

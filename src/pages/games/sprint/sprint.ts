@@ -44,7 +44,6 @@ export class Sprint {
     const timerStartWrap: HTMLElement | null = document.querySelector('.timer__start-section');
 
     let groupNumber = selectGroup.selectedIndex;
-    console.log(groupNumber)
     let arrWords: wordInterface[] = []// = await addAllWordsGroup(groupNumber);
     for (let i = 1; i < 20; i++) {
       let arrWords1: wordInterface[] = await getWords(i, groupNumber);
@@ -71,7 +70,6 @@ export class Sprint {
     let questionNumber = 0;
     //Старт
     btnStart?.addEventListener('click', () => {
-      console.log(1);
       let count = 5;
       addRemoveWindow(sections, timerStartWrap!);
         timerStart!.innerHTML = String(count);
