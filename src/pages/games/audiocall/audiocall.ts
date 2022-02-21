@@ -23,16 +23,20 @@ export class AudioGame {
       (document.querySelector('.audiocall-description') as HTMLElement).classList.add('hide');
       (document.querySelector('.audiocall-description-frombook') as HTMLElement).classList.remove('hide');
     }
-    const statisticStorage: DayStatistic= await getUserStatistic();
-  
-    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
-    userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
-    userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
-    userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
-    userStatistic.allRounds = statisticStorage.optional.allRounds;
-    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
-    userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
-    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+    if (dataUser.userId !== '') {
+      const statisticStorage: DayStatistic= await getUserStatistic();
+      
+      userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+      userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
+      userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
+      userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
+      userStatistic.allRounds = statisticStorage.optional.allRounds;
+      userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+      userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+      userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+    
+    }
+    
     
     const answersBody = document.querySelector('.answers__body') as HTMLElement;
     const repeatButton = (document.querySelector('.repeat') as HTMLButtonElement);
