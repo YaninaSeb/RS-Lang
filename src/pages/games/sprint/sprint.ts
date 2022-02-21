@@ -24,6 +24,8 @@ export class Sprint {
 
   async after_render() {
     
+    
+    
 
     const btnStart: HTMLElement | null = document.querySelector('.button__start');
     const sections: NodeListOf<HTMLElement> = document.querySelectorAll('.section');
@@ -51,6 +53,10 @@ export class Sprint {
     const wrapContener: HTMLElement | null = document.querySelector('.wrap__game');
     const btnFullScreen: HTMLElement | null = document.querySelector('.button__full');
 
+    if(infoBook.isFromBook) {
+      selectGroup.style.display = 'none';
+    }
+
     let groupNumber = selectGroup.selectedIndex;
     let arrWords: wordInterface[] = [];
     let additionWords: wordInterface[] = [];
@@ -59,6 +65,7 @@ export class Sprint {
     //Выбор уровня
     selectGroup?.addEventListener('change', async () => {
       groupNumber = selectGroup.selectedIndex;
+      infoBook.isFromBook = false;
     });
 
     let wordValues: {
@@ -361,6 +368,7 @@ export class Sprint {
     //Повтор игры
     btnPlayAgain?.addEventListener('click', () => {
       addRemoveWindow(sections, sectionMain!);
+      selectGroup.style.display = 'block';
     });
 
     //Отлючить звук
