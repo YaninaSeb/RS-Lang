@@ -59,7 +59,7 @@ export const mainElement = () => `<main>
                 Витя Швырев 
                 <a href="https://github.com/BlackMamba51"><div class="img-github"></div></a>
             </span>
-            <span class="team-about_person">Сделаны базовые настройки проекта, начальная компоновка, настройка редукса, настройка роутера, форма входа, часть страницы TextBook, игра "Audio Challenge", игра "Savannah", бэкенд</span>
+            <span class="team-about_person">Создана игра "Аудиовызов", создана страница статистики, сохранение данных статистики на бэкенд</span>
         </div>
     </div>
 

@@ -1,12 +1,13 @@
-import { DayStatistic, getUserStatistic, updateUserStatistic, userStatistic } from '../../statistic/statistic-api';
+import { DayStatistic, getUserStatistic, getWords, updateUserStatistic, userStatistic } from '../../statistic/statistic-api';
 import { audioElement, renderAuidoCallStatistic, renderLevel, updateLevel } from './audiocall-html';
 import './audiocall.scss';
 import { array, showRightWord, Word } from './utils/utils';
 import { dataUser } from '../../authorization/users-api';
-import { createUserWord, getUserWords } from '../../book/book-api';
+import { createUserWord, infoBook, updateUserWord } from '../../book/book-api';
 
 
-export let NUMBER_OF_ANSWER = 0;
+
+export let NUMBER_OF_ANSWER = -1;
 export let arrayOfResults: Word[] = [];
 export let NUMBER_OF_RIGHT_ANSWERS = 0;
 export let seriesOfAnswers = 0;
@@ -18,6 +19,10 @@ export class AudioGame {
   }
 
   async after_render() {
+    if (infoBook.isFromBook) {
+      (document.querySelector('.audiocall-description') as HTMLElement).classList.add('hide');
+      (document.querySelector('.audiocall-description-frombook') as HTMLElement).classList.remove('hide');
+    }
     const statisticStorage: DayStatistic= await getUserStatistic();
   
     userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
@@ -34,20 +39,33 @@ export class AudioGame {
     const nextButton = (document.querySelector('.next') as HTMLButtonElement);
 
     function openLevels() {
-      (document.querySelector('.audiocall') as HTMLElement).addEventListener('click', async (event) => {
-        const target = event.target as HTMLButtonElement;
-        if (target.classList.contains('levels')) {
+      if (infoBook.isFromBook) {
+        (document.querySelector('.audiocall-start') as HTMLButtonElement).addEventListener('click', async () => {
           arrayOfResults = [];
           (document.querySelector('.audiocall .container') as HTMLElement).classList.add('hide');
           NUMBER_OF_ANSWER = 0;
           while (answersBody.firstChild) {
             answersBody.removeChild(answersBody.firstChild);
           }
-          repeatButton.value = target.value;
-          await renderLevel(+target.value);
+          await renderLevel(infoBook.group - 1);
           (document.querySelector('.audiocall-round') as HTMLElement).classList.remove('hide');
-        }
-      }); 
+        });
+      } else {
+        (document.querySelector('.audiocall') as HTMLElement).addEventListener('click', async (event) => {
+          const target = event.target as HTMLButtonElement;
+          if (target.classList.contains('levels')) {
+            arrayOfResults = [];
+            (document.querySelector('.audiocall .container') as HTMLElement).classList.add('hide');
+            NUMBER_OF_ANSWER = 0;
+            while (answersBody.firstChild) {
+              answersBody.removeChild(answersBody.firstChild);
+            }
+            repeatButton.value = target.value;
+            await renderLevel(+target.value);
+            (document.querySelector('.audiocall-round') as HTMLElement).classList.remove('hide');
+          }
+        }); 
+      } 
     }
     openLevels();
 
@@ -60,20 +78,21 @@ export class AudioGame {
       (document.querySelector('.answers__body') as HTMLElement).addEventListener('click', async (event) => {
         const target = event.target as HTMLButtonElement;
         if (target.classList.contains('answers')) {
-          const auidoButton = document.querySelector('.audio') as HTMLElement;
+          const auidoButton = document.querySelector('.audio-audiocall-game') as HTMLElement;
           const rightAnswer = auidoButton.getAttribute('data-word');
           const selected = target.value;
-          const userWords: Word[] = await getUserWords(dataUser.userId);
           const currentWord = { "difficulty": "hard" };
-
+         
           userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id] = {
             audiocall: {
               guessed: 0,
-              unguessed: 0
+              unguessed: 0,
+              guessedInARow: 0,
             }
           }
           
           if (selected !== rightAnswer) {
+            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow = 0;
             userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed + 1;
             seriesOfAnswers = 0;
             target.style.background = 'red';
@@ -81,12 +100,16 @@ export class AudioGame {
             showRightWord();
             await createUserWord(dataUser.userId, array[NUMBER_OF_ANSWER].id, currentWord);
           } else {
+            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow++;
             userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed + 1;
             NUMBER_OF_RIGHT_ANSWERS++;
             seriesOfAnswers++;
             target.style.background = 'green';
             array[NUMBER_OF_ANSWER].choice = 'right';
             showRightWord();
+            if (userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow > 2) {
+              await updateUserWord(dataUser.userId, array[NUMBER_OF_ANSWER].id, { "difficulty": "learned" });
+            }
           }
           
         }
@@ -112,8 +135,6 @@ export class AudioGame {
             userStatistic.audiocallwordsPerDay = userStatistic.audiocallwordsPerDay + 1;
             userStatistic.wordsPerDay = userStatistic.wordsPerDay + 1;
             userStatistic.wordsInQuiestions.push(element.word);
-            console.log(userStatistic.wordsInQuiestions);
-            console.log(userStatistic.wordsPerDay);
             if (seriesOfAnswers > userStatistic.audiocallSeries) {
               userStatistic.audiocallSeries = seriesOfAnswers;
             } 
@@ -151,7 +172,6 @@ export class AudioGame {
           answersBody.removeChild(answersBody.firstChild);
         }
         (document.querySelector('.audiocall-round') as HTMLElement).classList.add('hide');
-        (document.querySelector('.audiocall-close') as HTMLElement).classList.add('hide');
         (document.querySelector('.audiocall-statistic') as HTMLElement).classList.remove('hide');
       } else {
         NUMBER_OF_ANSWER++;
@@ -165,7 +185,7 @@ export class AudioGame {
       document.addEventListener('keydown', (event) => {
         document.querySelectorAll('.answers').forEach(async (element) => {
           if (element.getAttribute('data-number') === event.code) {
-            const auidoButton = document.querySelector('.audio') as HTMLElement;
+            const auidoButton = document.querySelector('.audio-audiocall-game') as HTMLElement;
             const button = ((document.querySelector('.answers__container') as HTMLElement)?.children[Number(`${event.code.split('')[5]}`) - 1]);
             const rightAnswer = auidoButton.getAttribute('data-word');
             const selected = button.getAttribute('data-word');
@@ -183,6 +203,7 @@ export class AudioGame {
           } 
         });
       });
+    
     
   }
 }

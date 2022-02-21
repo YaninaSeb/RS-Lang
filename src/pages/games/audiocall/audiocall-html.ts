@@ -10,7 +10,7 @@ export const renderLevel = async (group: number) => {
   arrayOfResults.push(array[NUMBER_OF_ANSWER]);
   const html = `
     <div class="right-word hide"></div>
-    <div "onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].wordTranslate}" class="audio">
+    <div "onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].wordTranslate}" class="audio-audiocall-game">
       <audio autoplay id="${array[NUMBER_OF_ANSWER].audio}-audio" src="./../../../../assets/${array[NUMBER_OF_ANSWER].audio}"></audio>
     </div>
     <div class="answers__container">
@@ -21,7 +21,7 @@ export const renderLevel = async (group: number) => {
     </div>
   `;
   (document.querySelector('.answers__body') as HTMLElement).innerHTML = html;
-  (document.querySelector('.audio') as HTMLElement).addEventListener('click', () => {
+  (document.querySelector('.audio-audiocall-game') as HTMLElement).addEventListener('click', () => {
   });
   shuffleAnswers();
 };
@@ -31,7 +31,7 @@ export function updateLevel() {
   arrayOfResults.push(array[NUMBER_OF_ANSWER]);
   const html = `
     <div class="right-word hide"></div>
-    <div onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].wordTranslate}" class="audio">
+    <div onclick="document.getElementById('${array[NUMBER_OF_ANSWER].audio}-audio').play()" data-word="${array[NUMBER_OF_ANSWER].wordTranslate}" class="audio-audiocall-game">
       <audio autoplay id="${array[NUMBER_OF_ANSWER].audio}-audio" src="./../../../../assets/${array[NUMBER_OF_ANSWER].audio}"></audio>
     </div>
     <div class="answers__container">
@@ -89,7 +89,6 @@ export const renderAuidoCallStatistic = () => {
 
 export const audioElement = () => `
   <section class="audiocall">
-    <a href="./#" class="audiocall-close"></a>
     <div class="container">
       <div class="audiocall__body">
         <div class="audiocall-description">
@@ -105,6 +104,13 @@ export const audioElement = () => `
             <button value="5" id="sixth-level" class="sixth-level levels">6</button>
           </div>
         </div>
+        <div class="audiocall-description-frombook hide">
+          <h1 class="audiocall-title">Аудиовызов</h1>
+          <div class="audiocall-text">Выберите из вариантов ответа правильный перевод слова, который услышите. 
+            Можно использовать клавишы 1, 2, 3, 4 для ответа и Enter для перехода к следующему вопросу.
+          </div>
+          <button class="audiocall-start">Начать</button>
+        </div>   
       </div>
     </div>
     <div class="audiocall-round hide">
@@ -121,7 +127,6 @@ export const audioElement = () => `
           <div class="audiocall-statistic__content"></div>
           <div class="results-buttons">
             <button value="" class="repeat after-game"></button>
-            <a href="#/textbook"><button class="book-button after-game"></button></a>
           </div>
         </div>
       </div>
