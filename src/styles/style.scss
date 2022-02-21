@@ -137,6 +137,7 @@ body {
 }
 .card-privilege_img {
   width: 45%;
+  height: 110%;
 }
 
 #img-1 {
@@ -155,7 +156,7 @@ body {
   background: url('./../assets/img/games.png');
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: left;
 }
 #img-4 {
   background: url('./../assets/img/statistic.jpeg');
