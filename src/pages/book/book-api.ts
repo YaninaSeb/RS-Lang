@@ -2,7 +2,7 @@ import { dataUser } from '../authorization/users-api';
 export const infoBook = {
   group: 1,
   page: 1,
-  isFromBook: true
+  isFromBook: false
 }
 
 export const getWords = async (numGroup: number, numPage: number) => {

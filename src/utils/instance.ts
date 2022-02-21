@@ -27,6 +27,7 @@ export interface storeSprintInterface {
   idTrueWordsAnswer: { [id: string]: number };
   idFalseWordsAnswer: { [id: string]: number };
   seriasTrueAnswer: number;
+  allAnswersInRaund: number
 }
 
 interface statisticWord {
