@@ -1,4 +1,4 @@
-export const questionElement = (img: string, nameEng: string, nameRus: string) => `
+export const questionElement = (nameEng: string, nameRus: string) => `
 <div class="block__img">
     <img src="./../../../../assets/svg/guacamaya.svg" alt="Image" class="img__word" />
 </div> 

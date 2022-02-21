@@ -15,9 +15,34 @@ export interface wordInterface {
   wordTranslate: string;
 }
 export interface storeSprintInterface {
-  answers: {word: wordInterface, answer: boolean}[] ,
-  correctAnswers: number,
-  points: number,
-  timer: NodeJS.Timer | null,
-  allAnswersSprint: {[id: string]: number} 
+  answers: { word: wordInterface; answer: boolean }[];
+  correctAnswers: number;
+  points: number;
+  timer: NodeJS.Timer | null;
+  allAnswersSprint: { [id: string]: number };
+  audioSprint: boolean;
+  statisticWord: { [id: string]: statisticWord };
+  numberOfGamesSprint: number;
+  numberTrueAnswer: number;
+  idTrueWordsAnswer: { [id: string]: number };
+  idFalseWordsAnswer: { [id: string]: number };
+  seriasTrueAnswer: number;
+}
+
+interface statisticWord {
+  trueUnswer: number;
+  falseUnswer: number;
+}
+export interface userWordSprint {
+  id: string;
+  difficulty: string;
+  wordId: string;
+}
+
+export interface wordValuesInterface {
+  img: string;
+  nameEng: string;
+  nameRus: string;
+  answer: boolean;
+  word: wordInterface;
 }
