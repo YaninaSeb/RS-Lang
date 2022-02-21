@@ -1,12 +1,12 @@
 /* Answrs */
 .wrap__game {
   margin: 0 auto;
-  padding: 15px;
+  padding: 0 15px;
+  height: 550px;
 }
 .button__setting {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
 }
 .btn__setting {
   cursor: pointer;
@@ -228,9 +228,7 @@
 .btn__play-again:hover {
   transform: scale(1.03);
 }
-.section {
-  min-height: 80vh;
-}
+
 .word__rus-sound {
   width: 20px;
   cursor: pointer;
