@@ -14,7 +14,7 @@ export class Header {
 
     //смена данных у кнопки входа
     titleUser.textContent = dataUser.name;
-    if (dataUser.name !== '') {
+    if (dataUser.name) {
       imgLogIn.style.display = 'none';
       imgLogOut.style.display = 'block';
     }
