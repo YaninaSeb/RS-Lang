@@ -1,9 +1,27 @@
-export const dataUser: any = {
+import { CatchClause } from "typescript";
+import { ErrorObject } from "webpack/node_modules/schema-utils/declarations/validate";
+import { Error404 } from "../Error404";
+
+export type User = {
+  name: string,
+  userId: string,
+  token: string,
+  refreshToken: string,
+  errCode: string,
+  message: string
+}
+
+export type Error = {
+  message: string
+}
+
+export const dataUser: User = {
   name: '',
   userId: '',
   token: '',
   refreshToken: '',
-  errCode: ''
+  errCode: '',
+  message: ''
 };
 
 
@@ -25,8 +43,8 @@ export const dataUser: any = {
 
       const content = await rawResponse.json();
 
-    } catch (err: any) {
-      dataUser.errCode = err.message;
+    } catch (err) {
+      if (err instanceof Error) dataUser.errCode = err.message;
     }
   };
 
@@ -54,11 +72,8 @@ export const dataUser: any = {
       dataUser.userId = content.userId;
       dataUser.message = content.message;
 
-      console.log(content);
-      console.log(dataUser);
-
-    } catch (err: any) {
-      dataUser.errCode = err.message;
+    } catch (err) {
+      if (err instanceof Error) dataUser.errCode = err.message;
     }
   };
 
@@ -95,9 +110,9 @@ export const dataUser: any = {
   window.addEventListener('beforeunload', setLocalStorageUser);
 
   function getLocalStorageUser() {
-    dataUser.token = localStorage.getItem('token');
-    dataUser.userId = localStorage.getItem('userId');
-    dataUser.name = localStorage.getItem('nameUser');
+    dataUser.token = <string>localStorage.getItem('token');
+    dataUser.userId = <string>localStorage.getItem('userId');
+    dataUser.name = <string>localStorage.getItem('nameUser');
   }
   window.addEventListener('load', getLocalStorageUser);
 

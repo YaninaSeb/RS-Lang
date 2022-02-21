@@ -84,7 +84,7 @@ export class Autorization {
       
       createUser({ 'name': name, 'email': email, 'password': password }).then(async () => {
         if (dataUser.errCode != '') {
-          errMessageRegistry.textContent = 'Неверный адрес электронной почты или пароль!';
+          errMessageRegistry.textContent = 'Проверьте корректность введенных Вами данных!';
           dataUser.errCode == '417' ? errMessageRegistry.textContent = 'Пользователь с указанной электронной почтой уже зарегистрирован!' : false;
           dataUser.errCode = '';
           

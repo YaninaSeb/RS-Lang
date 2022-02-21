@@ -2,7 +2,8 @@ import { bookElement } from './book-html';
 import './book.scss';
 import { getWords, getUserWords, createUserWord, updateUserWord, deleteUserWord, getWord } from './book-api';
 import { dataUser } from '../authorization/users-api';
-import { infoBook } from './book-api';
+import { infoBook, WordType } from './book-api';
+import { getUserStatistic, DayStatistic } from '../statistic/statistic-api';
 
 
 export class Book {
@@ -15,6 +16,10 @@ export class Book {
     const containerPages = <HTMLElement>document.querySelector('.pages-book');
     const containerSelectGroup = <HTMLSelectElement>document.querySelector('.num-group');
     const containerSelectPages = <HTMLSelectElement>document.querySelector('.num-pages');
+    const btnToGameSprint = <HTMLElement>document.querySelector('.sprint-game');
+    const btnToGameAudiocall = <HTMLElement>document.querySelector('.audio-game');
+
+    const notes = <HTMLElement>document.querySelector('.notes-learned_page');
     let countLearnedWords = 0;
 
     if (dataUser.userId != '') {
@@ -74,6 +79,13 @@ export class Book {
             <button class="btn-learned_word" data-learned=${arrWords[i].id}>Изученное слово</button>
             <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
             `;
+
+          countLearnedWords = 0;
+          notes.textContent = " ";
+          containerSelectPages.style.color = '#455774';
+          btnToGameSprint.removeAttribute('disabled');
+          btnToGameAudiocall.removeAttribute('disabled');
+
           checkHardLearnedWord(arrWords[i].id);
         }
         if (dataUser.token !== '' && infoBook.group == 7) {
@@ -82,7 +94,9 @@ export class Book {
             <button class="btn-hard-restore" data-restore=${arrWords[i].id}>Восстановить</button>
             <button class="btn-statistics_word" data-statistics=${arrWords[i].id}>Статистика</button>
             `;
-          
+
+          notes.textContent = " ";
+          containerSelectPages.style.color = '#455774';
         }
       }
     }
@@ -92,12 +106,12 @@ export class Book {
     async function checkHardLearnedWord(idCurrentWord: string) {
       const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
 
-      arrHardAndLearnedWords.forEach((oneWord: any) => {
+      arrHardAndLearnedWords.forEach((oneWord: WordType) => {
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
               const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
               btnHard.classList.add('hard_word-select');
               btnHard.setAttribute('disabled', 'true');
-              //countLearnedWords++;
+              countLearnedWords++;
           }
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'learned') {
             const btnLearned = <HTMLElement>document.querySelector(`button[data-learned='${idCurrentWord}']`);
@@ -105,16 +119,20 @@ export class Book {
             btnLearned.classList.add('learned_word-select');
             btnHard.setAttribute('disabled', 'true');
             btnLearned.setAttribute('disabled', 'true');
-            //countLearnedWords++;
+            countLearnedWords++;
           }
         });
       
-      // const notes = <HTMLElement>document.querySelector('.notes-learned_page');
-      // if (countLearnedWords == 20) {
-      //   notes.textContent = "Вы изучили данную страницу!";
-      // } else {
-      //   notes.textContent = "";
-      // }
+      if (countLearnedWords == 20) {
+        notes.textContent = "Вы изучили данную страницу!";
+
+        btnToGameSprint.setAttribute('disabled', 'true');
+        btnToGameAudiocall.setAttribute('disabled', 'true');
+
+        console.log(containerSelectPages[infoBook.page - 1]);
+        containerSelectPages.style.color = 'green';
+
+      }
     }
 
 
@@ -138,21 +156,15 @@ export class Book {
       if (btnNumPageBook.value > '1') {
         btnNumPageBook.value = (Number(btnNumPageBook.value) - 1).toString();
         infoBook.page -= 1;
-        console.log(btnNumPageBook.value);
-        console.log(infoBook.page);
         createPageBook();
       } 
     });
 
     const btnNextPage = <HTMLElement>document.querySelector('.next-page');
     btnNextPage.addEventListener('click', () => {
-      console.log('entry');
       if (Number(btnNumPageBook.value) < 30) {
         btnNumPageBook.value = (Number(btnNumPageBook.value) + 1).toString();
         infoBook.page += 1;
-
-        console.log(btnNumPageBook.value);
-        console.log(infoBook.page);
 
         createPageBook();
       } 
@@ -161,8 +173,6 @@ export class Book {
 
     containerWords.addEventListener('click', async (e) => {
       const elem = e.target as HTMLElement;
-
-      console.log(elem);
 
       //возможность прослушивать аудио к словам
       if (elem.classList.contains('audio')) {
@@ -204,7 +214,7 @@ export class Book {
 
         const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
         
-        arrHardAndLearnedWords.forEach((oneWord: any) => {
+        arrHardAndLearnedWords.forEach((oneWord: WordType) => {
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
             btnLearned.classList.add('learned_word-select');
             btnHard.classList.remove('hard_word-select');
@@ -235,22 +245,42 @@ export class Book {
 
       //отображение статистики слова
       const blockStatistic = <HTMLElement>document.querySelector('.statistics-one_word');
+      const textRightAnswersSprint = <HTMLElement>document.querySelector('.right-sprint');
+      const textWrongAnswersSprint = <HTMLElement>document.querySelector('.wrong-sprint');
+      const textRightAnswersAudiocall = <HTMLElement>document.querySelector('.right-audiocall');
+      const textWrongAnswersAudiocall = <HTMLElement>document.querySelector('.wrong-audiocall');
+
       if (elem.classList.contains('btn-statistics_word')) {
         const idCurrentWord = <string>elem.dataset.statistics;
-            
+        const statisticAllWords: DayStatistic = await getUserStatistic();
+        const answersForAllWords: any = statisticAllWords.optional.wordInGames;
 
+        textRightAnswersSprint.textContent = '0';
+        textWrongAnswersSprint.textContent = '0';
+        textRightAnswersAudiocall.textContent ='0';
+        textWrongAnswersAudiocall.textContent = '0';
+
+        for (let oneWord in answersForAllWords) {
+          if (oneWord == idCurrentWord) {
+            // textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
+            // textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;
+
+            textRightAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.guessed;
+            textWrongAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.unguessed;
+          }
+        }
         blockStatistic.style.display = 'block';
       }
-      //закрыть блок со статистикой слова
-      if (elem.classList.contains('btn-close_statistic')) {
-        console.log('close');
-        blockStatistic.style.display = 'none';
-      }
-
-
-
-
+ 
     });
+
+     //закрыть блок со статистикой слова
+     const btnCloseStatistic = <HTMLElement>document.querySelector('.btn-close_statistic');
+     const tableStatistic = <HTMLElement>document.querySelector('.statistics-one_word');
+     btnCloseStatistic.addEventListener('click', () => {
+       tableStatistic.style.display = 'none';
+     });
+    
 
     //выход пользователя
     const imgLogOut = <HTMLElement>document.querySelector('.img-logout');
@@ -268,7 +298,6 @@ export class Book {
     });
 
     //переход на игру Спринт
-    const btnToGameSprint = <HTMLElement>document.querySelector('.sprint-game');
     const linkToSprint = <HTMLLinkElement>document.querySelector('.link-game_sprint');
     btnToGameSprint.addEventListener('click', () => {
       infoBook.isFromBook = true;
@@ -276,7 +305,6 @@ export class Book {
     });
 
     //переход на игру Аудиовызов
-    const btnToGameAudiocall = <HTMLElement>document.querySelector('.audio-game');
     const linkToAudiocall = <HTMLLinkElement>document.querySelector('.link-game_audiocall');
     btnToGameAudiocall.addEventListener('click', () => {
       infoBook.isFromBook = true;
