@@ -1,5 +1,6 @@
 import { dataUser } from '../authorization/users-api';
-import { DayStatistic, getUserStatistic, userStatistic } from './statistic-api';
+import { getUserWords } from '../book/book-api';
+import { DayStatistic, getUserStatistic, LearnedWords, userStatistic } from './statistic-api';
 import { renderUnauthorized, statisticElement } from './statistic-html';
 import './statistic.scss';
 
@@ -14,6 +15,13 @@ export class Statistic {
     userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
     userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
     userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+    userStatistic.learnedWordsFromBook = 0;
+    const allLearnedWords = await getUserWords(dataUser.userId);
+    allLearnedWords.map((element: LearnedWords) => {
+      if (element.difficulty === 'learned') {
+        userStatistic.learnedWordsFromBook = userStatistic.learnedWordsFromBook + 1;
+      }
+    });
     userStatistic.allRounds = statisticStorage.optional.allRounds;
     userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
     userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
