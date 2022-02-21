@@ -1,4 +1,5 @@
 
+import { infoBook } from '../../../book/book-api';
 import { getWords } from '../api/api';
 import { NUMBER_OF_ANSWER } from '../audiocall';
 import { renderRightWord } from '../audiocall-html';
@@ -52,13 +53,17 @@ export type Word = {
 };
 
 export async function generateWords(group: number) {
-  for (let numberOfWord = 1; numberOfWord <= COUNT_OF_WORDS; numberOfWord++) {
-    const numberOfActualWord = randomInteger(0,19);
-    const words = await getWords(randomInteger(0,29), group);
-    let newWord: Word;
-    
-    newWord = (words.slice(numberOfActualWord, numberOfActualWord+ 1)).flat();
-    array.push(words[numberOfActualWord]);
+  if (infoBook.isFromBook) {
+    array = await getWords(infoBook.page - 1, infoBook.group - 1);
+  } else {
+    for (let numberOfWord = 1; numberOfWord <= COUNT_OF_WORDS; numberOfWord++) {
+      const numberOfActualWord = randomInteger(0,19);
+      const words = await getWords(randomInteger(0,29), group);
+      let newWord: Word;
+      
+      newWord = (words.slice(numberOfActualWord, numberOfActualWord+ 1)).flat();
+      array.push(words[numberOfActualWord]);
+    }
   }
   return array;
 }
@@ -71,7 +76,7 @@ document.body.addEventListener('click', (event) => {
 
 export async function showRightWord() {
   (document.querySelector('.right-word') as HTMLElement).classList.remove('hide');
-  (document.querySelector('.audio') as HTMLElement).classList.add('hide');
+  (document.querySelector('.audio-audiocall-game') as HTMLElement).classList.add('hide');
   renderRightWord();
 }
 
