@@ -22,21 +22,31 @@ a:hover {
 
 
 /* HOME PAGE -> HEADER*/
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  overflow-x: hidden;
+}
 
 .nav {
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   background-color: #455774;
   font-size: 22px;
-  padding: 5px 1vw;
+  padding: 5px 1%;
   font-size: 2.5vmin;
-  padding: 1vw;
+  padding: 1%;
+}
+.nav-link_to_pages {
+  width: 50%;
 }
 .nav-link_to_pages a {
   text-decoration: none;
-  margin-right: 1vw;
+  margin-right: 1%;
   color: #8899b4;
 }
 .nav-link_to_pages a:hover {
@@ -49,34 +59,35 @@ a:hover {
   color: #8899b4;
   display: flex;
   flex-direction: row;
+  margin-left: 800px;
 }
 
 .img-login {
-  width: 4vw;
-  height: 6vh;
+  width: 40px;
+  height: 40px;
   background: url('../assets/img/log_in.svg');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 40px 40px;
   margin-top: -1.2vh;
-  margin-left: 1.5vw;
+  margin-left: 1.5%;
   cursor: pointer;
 }
 .img-logout {
   display: none;
-  width: 4vw;
-  height: 6vh;
+  width: 40px;
+  height: 40px;
   background: url('../assets/img/log_out.svg');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 40px 40px;
   margin-top: -1.2vh;
-  margin-left: 1.5vw;
+  margin-left: 1.5%;
   cursor: pointer;
 }
 
 /* HOME PAGE -> MAIN*/
 
 .home-greeting {
-  width: 100vw;
+  width: 100%;
   height: 70vh;
 
   background: url('./../assets/bg/bg.png');
@@ -87,7 +98,7 @@ a:hover {
   position: absolute;
   top: 12%;
   right: 10%;
-  width: 70vw;
+  width: 70%;
   color: #455774;
   font-weight: 900;
   font-size: 7vmin;
@@ -95,13 +106,13 @@ a:hover {
 }
 
 .home-about_app {
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .about_app-title {
-  width: 100vw;
+  width: 100%;
   color: #38465e;
   font-weight: 100;
   font-size: 6vmin;
@@ -109,7 +120,8 @@ a:hover {
   margin: 5vh 0;
 }
 .card-privilege {
-  width: 85vw;
+  width: 85%;
+  height: 25vh;
   margin: 5vh auto;
 
   display: flex;
@@ -125,6 +137,7 @@ a:hover {
 }
 .card-privilege_img {
   width: 45%;
+  height: 110%;
 }
 
 #img-1 {
@@ -143,7 +156,7 @@ a:hover {
   background: url('./../assets/img/games.png');
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: left;
 }
 #img-4 {
   background: url('./../assets/img/statistic.jpeg');
@@ -154,20 +167,21 @@ a:hover {
 
 
 .team {
-  width: 100vw;
+  width: 100%;
   background-color: #455774;
   color: white;
   padding: 3vh 0;
 }
 .about_team-title {
-  width: 100vw;
+  width: 100%;
   color: white;
   font-weight: 100;
   font-size: 6vmin;
   text-align: center;
 }
 .card-team {
-  width: 75vw;
+  width: 75%;
+  // height: 30vh;
   margin: 5vh auto;
   padding: 2vh 0;
 
@@ -203,7 +217,7 @@ a:hover {
 .img-github {
   width: 24px;
   height: 24px;
-  margin-left: 1vw;
+  margin-left: 1%;
   background: url('./../assets/svg/github.svg');
   background-size: contain;
   background-repeat: no-repeat;
@@ -241,7 +255,7 @@ a:hover {
 /* HOME PAGE -> FOOTER*/
 footer {
   margin-top: 0.5vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -249,19 +263,32 @@ footer {
   text-align: center;
   background-color: #455774;
   color: white;
-  padding: 0 1vw;
+  
+
+  // position:fixed;
+  // bottom: 0;
+}
+footer .container {
+  width: 100%;
+}
+.footer__body {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
 }
 .link-github a {
   text-decoration: none;
   color: white;
-  margin-left: 2vw;
+  margin-left: 2%;
 }
 .img-rss {
-  height: 6vh;
-  width: 6vw;
+  height: 100px;
+  width: 100px;
   background: url('./../assets/svg/rss.svg');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 100px 100px;
   margin-top: 5px;
   margin-top: 2vh;
 }
