@@ -37,7 +37,7 @@ export const mainElement = () => `<main>
                 Коля Калибабчук 
                 <a href="https://github.com/KNV1987"><div class="img-github"></div></a>
             </span>
-            <span class="team-about_person">Сделаны базовые настройки проекта, начальная компоновка, настройка редукса, настройка роутера, форма входа, часть страницы TextBook, игра "Audio Challenge", игра "Savannah", бэкенд</span>
+            <span class="team-about_person">Настройка роутера, сделана базовая настройка проекта, создана игра Спринт, создана локальная копия бэкенда, сохранение прогресса игры Спринт</span>
         </div>
     </div>
 

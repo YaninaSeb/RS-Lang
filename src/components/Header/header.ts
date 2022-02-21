@@ -1,6 +1,7 @@
 import './header.scss';
 import { headerHTML } from './header-html';
 import { dataUser } from '../../pages/authorization/users-api';
+import { infoBook } from '../../pages/book/book-api';
 
 export class Header {
   async render() {
@@ -30,6 +31,16 @@ export class Header {
           imgLogOut.style.display = 'none';
       }
     );
+
+    //переключение значения infoBook
+    const navMenu: HTMLElement | null = document.querySelector('.nav-link_to_pages');
+    navMenu?.addEventListener('click', (e) => {
+      if (e.target instanceof HTMLElement && e.target.tagName === 'SPAN') {
+        if (e.target.parentElement?.className == 'link-book') {
+          infoBook.isFromBook = true;
+        } else infoBook.isFromBook = false;
+      }
+    })
     return;
   }
 }

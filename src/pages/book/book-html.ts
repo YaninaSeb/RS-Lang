@@ -53,7 +53,33 @@ export const bookElement = () => `
 
   </div>
 
-  <div class="container-words">
+  <div class="notes-learned_page"></div>
+
+  <div class="container-words"></div>
+
+  <div class="statistics-one_word">
+    <table>
+      <thead>
+        <tr>
+          <th class="btn-close_statistic">x</th>
+          <th>Правильных <br>ответов</th>
+          <th>Неправильных <br>ответов</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Спринт</td>
+          <td class="right-sprint">0</td>
+          <td class="wrong-sprint">0</td>
+        </tr>
+        <tr>
+          <td>Аудиовызов</td>
+          <td class="right-audiocall">0</td>
+          <td class="wrong-audiocall">0</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
 </div>
 `;

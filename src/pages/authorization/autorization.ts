@@ -1,3 +1,4 @@
+import { updateUserStatistic, userStatistic } from '../statistic/statistic-api';
 import { autorizationElement } from './autorization-html';
 import './autorization.scss';
 import { dataUser, createUser, loginUser} from './users-api';
@@ -56,21 +57,43 @@ export class Autorization {
     }
 
       //кнопка регистрации
-    btnRegistry.addEventListener('click', () => {
+    btnRegistry.addEventListener('click', async () => {
       const email = inputEmailRegistry.value;
       const name = inputNameRegistry.value;
       const password = inputPasswordRegistry.value;
-    
-      createUser({ 'name': name, 'email': email, 'password': password }).then(() => {
+      const wordPerDay = {
+        learnedWords: 0,
+        optional: {
+          wordsPerDay: 0,
+          audiocallwordsPerDay: 0,
+          audiocallRounds: 0,
+          audiocallPercent: 0,
+          allRounds: 0,
+          totalPercent: 0,
+          audiocallSeries: 0,
+          sprintwordsPerDay: 0,
+          sprintRounds: 0,
+          sprintPercent: 0,
+          sprintSeries: 0,
+          wordInGames: {
+            wordId: ''
+          },
+         
+        }
+      }
+      
+      createUser({ 'name': name, 'email': email, 'password': password }).then(async () => {
         if (dataUser.errCode != '') {
           errMessageRegistry.textContent = 'Неверный адрес электронной почты или пароль!';
           dataUser.errCode == '417' ? errMessageRegistry.textContent = 'Пользователь с указанной электронной почтой уже зарегистрирован!' : false;
           dataUser.errCode = '';
+          
         } else {
-          loginUser({ 'email': email, 'password': password }).then(() => {
+          loginUser({ 'email': email, 'password': password }).then(async () => {
             errMessageRegistry.textContent = '';
             changeBtnEntry();
             linkToHomePage.click();
+            await updateUserStatistic(dataUser.userId, wordPerDay);
           });
         }
       });
@@ -94,3 +117,4 @@ export class Autorization {
 
   }
 }
+

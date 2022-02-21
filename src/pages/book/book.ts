@@ -4,6 +4,7 @@ import { getWords, getUserWords, createUserWord, updateUserWord, deleteUserWord,
 import { dataUser } from '../authorization/users-api';
 import { infoBook } from './book-api';
 
+
 export class Book {
   async render() {
     return bookElement();
@@ -11,10 +12,10 @@ export class Book {
 
   async after_render() {
     const containerWords = <HTMLElement>document.querySelector('.container-words');
+    const containerPages = <HTMLElement>document.querySelector('.pages-book');
     const containerSelectGroup = <HTMLSelectElement>document.querySelector('.num-group');
     const containerSelectPages = <HTMLSelectElement>document.querySelector('.num-pages');
-    const containerPages = <HTMLElement>document.querySelector('.pages-book');
-
+    let countLearnedWords = 0;
 
     if (dataUser.userId != '') {
       const optionGroupHardWord = document.createElement('option');
@@ -22,6 +23,8 @@ export class Book {
       optionGroupHardWord.setAttribute('value', '7');
       containerSelectGroup.appendChild(optionGroupHardWord);
     }
+
+    setPageBook();
 
     //отрисовка слов учебника
     async function createPageBook() {
@@ -88,11 +91,13 @@ export class Book {
     //проверяем, является ли слово сложным или изученным
     async function checkHardLearnedWord(idCurrentWord: string) {
       const arrHardAndLearnedWords = await getUserWords(dataUser.userId);
+
       arrHardAndLearnedWords.forEach((oneWord: any) => {
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'hard') {
               const btnHard = <HTMLElement>document.querySelector(`button[data-hard='${idCurrentWord}']`);
               btnHard.classList.add('hard_word-select');
               btnHard.setAttribute('disabled', 'true');
+              //countLearnedWords++;
           }
           if (oneWord.wordId == idCurrentWord && oneWord.difficulty == 'learned') {
             const btnLearned = <HTMLElement>document.querySelector(`button[data-learned='${idCurrentWord}']`);
@@ -100,8 +105,16 @@ export class Book {
             btnLearned.classList.add('learned_word-select');
             btnHard.setAttribute('disabled', 'true');
             btnLearned.setAttribute('disabled', 'true');
+            //countLearnedWords++;
           }
         });
+      
+      // const notes = <HTMLElement>document.querySelector('.notes-learned_page');
+      // if (countLearnedWords == 20) {
+      //   notes.textContent = "Вы изучили данную страницу!";
+      // } else {
+      //   notes.textContent = "";
+      // }
     }
 
 
@@ -125,23 +138,31 @@ export class Book {
       if (btnNumPageBook.value > '1') {
         btnNumPageBook.value = (Number(btnNumPageBook.value) - 1).toString();
         infoBook.page -= 1;
+        console.log(btnNumPageBook.value);
+        console.log(infoBook.page);
         createPageBook();
       } 
     });
 
     const btnNextPage = <HTMLElement>document.querySelector('.next-page');
     btnNextPage.addEventListener('click', () => {
-      if (btnNumPageBook.value < '30') {
+      console.log('entry');
+      if (Number(btnNumPageBook.value) < 30) {
         btnNumPageBook.value = (Number(btnNumPageBook.value) + 1).toString();
         infoBook.page += 1;
+
+        console.log(btnNumPageBook.value);
+        console.log(infoBook.page);
+
         createPageBook();
       } 
     });
 
 
-
     containerWords.addEventListener('click', async (e) => {
       const elem = e.target as HTMLElement;
+
+      console.log(elem);
 
       //возможность прослушивать аудио к словам
       if (elem.classList.contains('audio')) {
@@ -212,6 +233,23 @@ export class Book {
         createPageBook();
       }
 
+      //отображение статистики слова
+      const blockStatistic = <HTMLElement>document.querySelector('.statistics-one_word');
+      if (elem.classList.contains('btn-statistics_word')) {
+        const idCurrentWord = <string>elem.dataset.statistics;
+            
+
+        blockStatistic.style.display = 'block';
+      }
+      //закрыть блок со статистикой слова
+      if (elem.classList.contains('btn-close_statistic')) {
+        console.log('close');
+        blockStatistic.style.display = 'none';
+      }
+
+
+
+
     });
 
     //выход пользователя
@@ -228,6 +266,23 @@ export class Book {
        createPageBook();
       }
     });
+
+    //переход на игру Спринт
+    const btnToGameSprint = <HTMLElement>document.querySelector('.sprint-game');
+    const linkToSprint = <HTMLLinkElement>document.querySelector('.link-game_sprint');
+    btnToGameSprint.addEventListener('click', () => {
+      infoBook.isFromBook = true;
+      linkToSprint.click();
+    });
+
+    //переход на игру Аудиовызов
+    const btnToGameAudiocall = <HTMLElement>document.querySelector('.audio-game');
+    const linkToAudiocall = <HTMLLinkElement>document.querySelector('.link-game_audiocall');
+    btnToGameAudiocall.addEventListener('click', () => {
+      infoBook.isFromBook = true;
+      linkToAudiocall.click();
+    });
+
 
   }
 }
@@ -248,5 +303,21 @@ export class Book {
     return arrHardWords;
   }
 
-  
+function setPageBook() {
+  const containerSelectGroup = <HTMLSelectElement>document.querySelector('.num-group');
+  const containerSelectPages = <HTMLSelectElement>document.querySelector('.num-pages');
 
+  if (localStorage.getItem('groupBook') && localStorage.getItem('groupBook') != '') {
+    infoBook.group = Number(localStorage.getItem('groupBook'));
+    infoBook.page = Number(localStorage.getItem('pageBook'));
+
+    containerSelectGroup.value = (infoBook.group).toString();
+    containerSelectPages.value = (infoBook.page).toString();
+
+    localStorage.setItem('groupBook', '');
+    localStorage.setItem('pageBook', '');
+    } else {
+    infoBook.group = 1;
+    infoBook.page = 1;
+  }
+}
