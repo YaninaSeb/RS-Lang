@@ -119,8 +119,6 @@ export class AudioGame {
             userStatistic.audiocallwordsPerDay = userStatistic.audiocallwordsPerDay + 1;
             userStatistic.wordsPerDay = userStatistic.wordsPerDay + 1;
             userStatistic.wordsInQuiestions.push(element.word);
-            console.log(userStatistic.wordsInQuiestions);
-            console.log(userStatistic.wordsPerDay);
             if (seriesOfAnswers > userStatistic.audiocallSeries) {
               userStatistic.audiocallSeries = seriesOfAnswers;
               //setCookie('audiocallSeries', userStatistic.audiocallSeries);
@@ -179,8 +177,6 @@ export class AudioGame {
           //setCookie('allRounds', userStatistic.allRounds);
           //userStatistic.audiocallRounds = getCookie('audiocallRounds');
           //userStatistic.allRounds = getCookie('allRounds');
-          console.log(userStatistic.totalPercent);
-          console.log(userStatistic.allRounds);
           //if (seriesOfAnswers > userStatistic.audiocallSeries) {
             //userStatistic.audiocallSeries = seriesOfAnswers;
             //setCookie('audiocallSeries', userStatistic.audiocallSeries);
