@@ -8,7 +8,7 @@ export type WordType = {
 export const infoBook = {
   group: 1,
   page: 1,
-  isFromBook: true
+  isFromBook: false
 }
 
 export const getWords = async (numGroup: number, numPage: number) => {

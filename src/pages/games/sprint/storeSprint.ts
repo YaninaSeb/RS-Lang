@@ -12,5 +12,6 @@ export const storeSprint: storeSprintInterface = {
     numberTrueAnswer: 0,//Колличество правильных ответов для статистики
     idTrueWordsAnswer: {},
     idFalseWordsAnswer: {},
-    seriasTrueAnswer: 0
+    seriasTrueAnswer: 0,
+    allAnswersInRaund: 0//Всего ответов в раунде
 }

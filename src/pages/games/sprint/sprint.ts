@@ -19,12 +19,12 @@ import { storeSprint } from './storeSprint';
 
 export class Sprint {
   async render() {
+    const footer: HTMLElement | null = document.querySelector('.footer__body');
+    footer!.style.display = 'none';
     return sprintElement();
   }
 
   async after_render() {
-    
-
     const btnStart: HTMLElement | null = document.querySelector('.button__start');
     const sections: NodeListOf<HTMLElement> = document.querySelectorAll('.section');
     const sectionQuestion: HTMLElement | null = document.querySelector('.questions');
@@ -51,13 +51,19 @@ export class Sprint {
     const wrapContener: HTMLElement | null = document.querySelector('.wrap__game');
     const btnFullScreen: HTMLElement | null = document.querySelector('.button__full');
 
+    if(infoBook.isFromBook) {
+      selectGroup.style.display = 'none';
+    }
+
     let groupNumber = selectGroup.selectedIndex;
     let arrWords: wordInterface[] = [];
     let additionWords: wordInterface[] = [];
     let learnedWords: userWordSprint[] = [];
+    let dificeltyAnswer: userWordSprint[] = [];
     //Выбор уровня
     selectGroup?.addEventListener('change', async () => {
       groupNumber = selectGroup.selectedIndex;
+      infoBook.isFromBook = false;
     });
 
     let wordValues: {
@@ -76,9 +82,10 @@ export class Sprint {
     }[] = [];
     let questionNumber = 0;
     let questionNumberAddition = 0;
-
     //Старт
     btnStart?.addEventListener('click', async () => {
+      storeSprint.numberTrueAnswer = 0;
+      storeSprint.allAnswersInRaund = 0;
       additionWords.splice(0, additionWords.length);
       let count = 8;
       addRemoveWindow(sections, timerStartWrap!);
@@ -90,7 +97,7 @@ export class Sprint {
         timerStart!.innerHTML = String(count);
         if (count > 0) {
           const audio = new Audio();
-          audio.src = './../assets/sound-sprint/zvuk-otvet-zaschitan-galochka-5193-1-1.mp3';
+          audio.src = './assets/sound-sprint/zvuk-otvet-zaschitan-galochka-5193-1-1.mp3';
           audio.autoplay = true;
         }
         if (count < 0) {
@@ -106,7 +113,6 @@ export class Sprint {
             resultAnswerArr,arrWords
           );
           wordValues = await arrWords.map((word, id) => renderSprintQuestion(id, arrWords, word));
-          
           addRemoveWindow(sections, sectionQuestion!);
           additionWordValues = additionWords.map((word, id) =>
           renderSprintQuestion(id, additionWords, word)
@@ -127,9 +133,10 @@ export class Sprint {
         }
       }, 1000);
       if (dataUser.userId != '') {
-        learnedWords = await getUserWords(dataUser.userId).then((response) => response.filter((word: userWordSprint) => word.difficulty === "learned"));
+        const arr = await getUserWords(dataUser.userId).finally();
+        dificeltyAnswer = arr.filter((word: userWordSprint) => word.difficulty === 'hard');
+        learnedWords = arr.filter((word: userWordSprint) => word.difficulty === "learned");
       }
-      console.log(await getUserWords(dataUser.userId))
       if (!infoBook.isFromBook) {
         arrWords = await Promise.all([
           await getWords(1, groupNumber),
@@ -177,7 +184,8 @@ export class Sprint {
             questionNumber,
             blockQuestinWrap!,
             blockScore!,
-            resultAnswerArr
+            resultAnswerArr,
+            learnedWords
           );
           questionNumber++;
           const questionInstance = await new Question(
@@ -200,7 +208,8 @@ export class Sprint {
             questionNumberAddition,
             blockQuestinWrap!,
             blockScore!,
-            resultAnswerArr
+            resultAnswerArr,
+            learnedWords
           );
           questionNumberAddition++;
           if (questionNumberAddition === additionWordValues.length) {
@@ -268,7 +277,8 @@ export class Sprint {
             questionNumber,
             blockQuestinWrap!,
             blockScore!,
-            resultAnswerArr
+            resultAnswerArr,
+            learnedWords
           );
           questionNumber++;
           const questionInstance = await new Question(
@@ -291,7 +301,8 @@ export class Sprint {
             questionNumberAddition,
             blockQuestinWrap!,
             blockScore!,
-            resultAnswerArr
+            resultAnswerArr,
+            learnedWords
           );
           questionNumberAddition++;
           if (questionNumberAddition === additionWordValues.length) {
@@ -355,6 +366,7 @@ export class Sprint {
     //Повтор игры
     btnPlayAgain?.addEventListener('click', () => {
       addRemoveWindow(sections, sectionMain!);
+      selectGroup.style.display = 'block';
     });
 
     //Отлючить звук
