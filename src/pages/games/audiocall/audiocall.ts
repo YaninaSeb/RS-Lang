@@ -15,6 +15,8 @@ export let seriesOfAnswers = 0;
 
 export class AudioGame {
   async render() {
+    const footer: HTMLElement | null = document.querySelector('.footer__body');
+    footer!.style.display = 'none';
     return audioElement();
   }
 
