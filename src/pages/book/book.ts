@@ -66,8 +66,7 @@ export class Book {
               <div class="btns-extra_fuctional" id="extra-${arrWords[i].id}"></div>
             </div>
 
-            <div class="bookmark">
-              <img src="../../assets/img/bookmark/group${arrWords[i].group + 1}.png" alt="bookmark">
+            <div class="bookmark bookmark-group-${arrWords[i].group + 1}">
             </div>
           </div>
         `;
@@ -129,9 +128,7 @@ export class Book {
         btnToGameSprint.setAttribute('disabled', 'true');
         btnToGameAudiocall.setAttribute('disabled', 'true');
 
-        console.log(containerSelectPages[infoBook.page - 1]);
         containerSelectPages.style.color = 'green';
-
       }
     }
 
@@ -262,11 +259,17 @@ export class Book {
 
         for (let oneWord in answersForAllWords) {
           if (oneWord == idCurrentWord) {
-            textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
-            textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;
+            console.log(oneWord);
 
-            textRightAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.guessed;
-            textWrongAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.unguessed;
+            if (answersForAllWords[oneWord].sprint) {
+              textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
+              textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;  
+            }
+
+            if (answersForAllWords[oneWord].audiocall) {
+              textRightAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.guessed;
+              textWrongAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.unguessed;
+            }
           }
         }
         blockStatistic.style.display = 'block';

@@ -147,8 +147,13 @@
   transform: scale(1.03);
 }
 .block__img {
-  display: flex;
-  justify-content: center;
+  width: 20vmin;
+  height: 20vmin;
+  margin: 0 auto;
+
+  background: url('../../../assets/svg/guacamaya.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .sprint__block-question {
   margin-bottom: 30px;
@@ -190,7 +195,7 @@
     border: 1px solid transparent;
     border-radius: 10px;
     background-color: rgba($color: #05a3be, $alpha: 0.8);
-    width: 80%;
+    // width: 80%;
     margin: 0 auto;
     padding: 15px;
     .result__block {

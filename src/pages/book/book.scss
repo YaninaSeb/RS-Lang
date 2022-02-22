@@ -1,19 +1,18 @@
 .book-page {
     width: 100%;
-    margin-top: 7%;
-
+    height: 80vh;
     display: flex;
     flex-direction: column;
     overflow: scroll;
 }
 
 .book-navigation {
+    position: relative;
+    top: 0;
     width: 100%;
-    position: fixed;
-    top: 10%;
     text-align: center;
 
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     padding: 10px;
@@ -25,7 +24,7 @@ select {
 }
 
 .pages-book {
-    display:flex;
+    display: flex;
     flex-direction: row;
 }
 
@@ -72,11 +71,9 @@ select {
 
 .card-word {
     width: 80%;
-    height: auto;
     margin: 10px auto;
     padding: 20px;
     border-radius: 10px;
-
     background-color: rgba(136, 153, 180, 0.2);
 
     display: flex;
@@ -118,6 +115,7 @@ select {
 }
 .audio:hover {
     transform: scale(105%);
+    box-shadow: none;
 }
 
 .sentence-one-en,
@@ -174,13 +172,40 @@ select {
 .bookmark {
     position: relative;
     top: -25px;
-}
-.bookmark img {
     width: 3vw;
-    height: 30%;
+    height: 35%;
 }
 
-
+.bookmark-group-1 {
+    background: url('../../assets/img/bookmark/group1.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-2 {
+    background: url('../../assets/img/bookmark/group2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-3 {
+    background: url('../../assets/img/bookmark/group3.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-4 {
+    background: url('../../assets/img/bookmark/group4.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-5 {
+    background: url('../../assets/img/bookmark/group5.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-6 {
+    background: url('../../assets/img/bookmark/group6.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
 
 .statistics-one_word {
     display: none;

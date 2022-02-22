@@ -29,6 +29,9 @@ export class Header {
           titleUser.textContent = dataUser.name;
           imgLogIn.style.display = 'block';
           imgLogOut.style.display = 'none';
+
+          const notes = <HTMLElement>document.querySelector('.notes-learned_page');
+          notes.innerHTML = "";
       }
     );
 

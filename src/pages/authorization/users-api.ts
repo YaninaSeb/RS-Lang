@@ -110,9 +110,10 @@ export const dataUser: User = {
   window.addEventListener('beforeunload', setLocalStorageUser);
 
   function getLocalStorageUser() {
-    dataUser.token = <string>localStorage.getItem('token');
-    dataUser.userId = <string>localStorage.getItem('userId');
-    dataUser.name = <string>localStorage.getItem('nameUser');
+    if (localStorage.getItem('nameUser')) {
+      dataUser.token = <string>localStorage.getItem('token');
+      dataUser.userId = <string>localStorage.getItem('userId');
+      dataUser.name = <string>localStorage.getItem('nameUser');  
+    }
   }
   window.addEventListener('load', getLocalStorageUser);
-

@@ -50,7 +50,7 @@ export const renderRightWord = async() => {
   const html = `
     <div class="right-word__body">
       <div class="right-word__img">
-        <img src="./assets/${array[NUMBER_OF_ANSWER].image}" alt="${array[NUMBER_OF_ANSWER].wordTranslate}">
+        <img src="https://rs-lang25.herokuapp.com/${array[NUMBER_OF_ANSWER].image}" alt="${array[NUMBER_OF_ANSWER].wordTranslate}">
       </div>
       <div class="right-word__description">
         <p class="right-word__text">${array[NUMBER_OF_ANSWER].word} <span>${array[NUMBER_OF_ANSWER].transcription}</span> - ${array[NUMBER_OF_ANSWER].wordTranslate}</p>
