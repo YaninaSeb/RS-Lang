@@ -35,8 +35,8 @@ export class AudioGame {
       userStatistic.allRounds = statisticStorage.optional.allRounds;
       userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
       userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+      userStatistic.wordInAudiocall = statisticStorage.optional.wordInAudiocall;
       userStatistic.wordInGames = statisticStorage.optional.wordInGames;
-    
     }
     
     
@@ -89,7 +89,7 @@ export class AudioGame {
           const selected = target.value;
           const currentWord = { "difficulty": "hard" };
          
-          userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id] = {
+          userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id] = {
             audiocall: {
               guessed: 0,
               unguessed: 0,
@@ -98,22 +98,24 @@ export class AudioGame {
           }
           
           if (selected !== rightAnswer) {
-            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow = 0;
-            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.unguessed + 1;
+            userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow = 0;
+            userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.unguessed = userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.unguessed + 1;
             seriesOfAnswers = 0;
             target.style.background = 'red';
             array[NUMBER_OF_ANSWER].choice = 'wrong';
             showRightWord();
+            console.log(userStatistic.wordInAudiocall);
             await createUserWord(dataUser.userId, array[NUMBER_OF_ANSWER].id, currentWord);
           } else {
-            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow++;
-            userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed = userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessed + 1;
+            userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow++;
+            userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessed = userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessed + 1;
+            console.log(userStatistic.wordInAudiocall);
             NUMBER_OF_RIGHT_ANSWERS++;
             seriesOfAnswers++;
             target.style.background = 'green';
             array[NUMBER_OF_ANSWER].choice = 'right';
             showRightWord();
-            if (userStatistic.wordInGames[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow > 2) {
+            if (userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow > 2) {
               await updateUserWord(dataUser.userId, array[NUMBER_OF_ANSWER].id, { "difficulty": "learned" });
             }
           }
@@ -167,7 +169,7 @@ export class AudioGame {
               audiocallSeries: userStatistic.audiocallSeries,
               sprintSeries: userStatistic.sprintSeries,
               wordInGames: userStatistic.wordInGames,
-              
+              wordInAudiocall: userStatistic.wordInAudiocall,
             }
           }
           await updateUserStatistic(dataUser.userId, wordPerDay);

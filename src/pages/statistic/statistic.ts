@@ -7,26 +7,29 @@ import './statistic.scss';
 
 export class Statistic {
   async render() {
-    const statisticStorage: DayStatistic = await getUserStatistic();
-    userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
-    userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
-    userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
-    userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
-    userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
-    userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
-    userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
-    userStatistic.learnedWordsFromBook = 0;
-    const allLearnedWords = await getUserWords(dataUser.userId);
-    allLearnedWords.map((element: LearnedWords) => {
-      if (element.difficulty === 'learned') {
-        userStatistic.learnedWordsFromBook = userStatistic.learnedWordsFromBook + 1;
-      }
-    });
-    userStatistic.allRounds = statisticStorage.optional.allRounds;
-    userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
-    userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
-    userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
-    userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+    if (dataUser.userId) {
+      const statisticStorage: DayStatistic = await getUserStatistic();
+      userStatistic.wordsPerDay = statisticStorage.optional.wordsPerDay;
+      userStatistic.audiocallwordsPerDay = statisticStorage.optional.audiocallwordsPerDay;
+      userStatistic.audiocallPercent = String(statisticStorage.optional.audiocallPercent).substr(0, 4);
+      userStatistic.audiocallRounds = statisticStorage.optional.audiocallRounds;
+      userStatistic.sprintwordsPerDay = statisticStorage.optional.sprintwordsPerDay;
+      userStatistic.sprintPercent = String(statisticStorage.optional.sprintPercent).substr(0, 4);
+      userStatistic.sprintRounds = statisticStorage.optional.sprintRounds;
+      userStatistic.learnedWordsFromBook = 0;
+      const allLearnedWords = await getUserWords(dataUser.userId);
+      allLearnedWords.map((element: LearnedWords) => {
+        if (element.difficulty === 'learned') {
+          userStatistic.learnedWordsFromBook = userStatistic.learnedWordsFromBook + 1;
+        }
+      });
+      userStatistic.allRounds = statisticStorage.optional.allRounds;
+      userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
+      userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
+      userStatistic.audiocallSeries = statisticStorage.optional.audiocallSeries;
+      userStatistic.wordInGames = statisticStorage.optional.wordInGames;
+      userStatistic.wordInAudiocall= statisticStorage.optional.wordInAudiocall;
+    }
     return statisticElement();
   }
 

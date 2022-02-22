@@ -78,7 +78,9 @@ export class Autorization {
           wordInGames: {
             wordId: ''
           },
-         
+          wordInAudiocall: {
+            wordId: ''
+          }
         }
       }
       

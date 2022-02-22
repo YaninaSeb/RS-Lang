@@ -235,7 +235,7 @@ export const addWordsResult = async (
   userStatistic.sprintSeries = statisticStorage.optional.sprintSeries;
   userStatistic.totalPercent = String(statisticStorage.optional.totalPercent).substr(0, 4);
   userStatistic.wordInGames = statisticStorage.optional.wordInGames;
-
+  userStatistic.wordInAudiocall = statisticStorage.optional.wordInAudiocall;
   if (dataUser.userId !== '') {
     userStatistic.sprintRounds = userStatistic.sprintRounds + 1;
     userStatistic.allRounds = userStatistic.allRounds + 1;
@@ -262,6 +262,7 @@ export const addWordsResult = async (
         audiocallSeries: userStatistic.audiocallSeries,
         sprintSeries: userStatistic.sprintSeries,
         wordInGames: userStatistic.wordInGames,
+        wordInAudiocall: userStatistic.wordInAudiocall
       },
     };
     const keyInWordResult = Object.keys(storeSprint.statisticWord);

@@ -246,12 +246,13 @@ export class Book {
       const textWrongAnswersSprint = <HTMLElement>document.querySelector('.wrong-sprint');
       const textRightAnswersAudiocall = <HTMLElement>document.querySelector('.right-audiocall');
       const textWrongAnswersAudiocall = <HTMLElement>document.querySelector('.wrong-audiocall');
-
+      
       if (elem.classList.contains('btn-statistics_word')) {
         const idCurrentWord = <string>elem.dataset.statistics;
         const statisticAllWords: DayStatistic = await getUserStatistic();
         const answersForAllWords: any = statisticAllWords.optional.wordInGames;
-
+        const answersForAudiocallWords: any = statisticAllWords.optional.wordInAudiocall;
+        
         textRightAnswersSprint.textContent = '0';
         textWrongAnswersSprint.textContent = '0';
         textRightAnswersAudiocall.textContent ='0';
@@ -265,13 +266,19 @@ export class Book {
               textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
               textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;  
             }
-
-            if (answersForAllWords[oneWord].audiocall) {
-              textRightAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.guessed;
-              textWrongAnswersAudiocall.textContent = answersForAllWords[oneWord].audiocall.unguessed;
+          }
+        }
+        for (let oneWord in answersForAudiocallWords) {
+          if (oneWord == idCurrentWord) {
+            if (answersForAudiocallWords[oneWord].audiocall) {
+              textRightAnswersAudiocall.textContent = answersForAudiocallWords[oneWord].audiocall.guessed;
+              textWrongAnswersAudiocall.textContent = answersForAudiocallWords[oneWord].audiocall.unguessed;
             }
           }
         }
+            
+          
+
         blockStatistic.style.display = 'block';
       }
  
