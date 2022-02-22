@@ -250,8 +250,10 @@ export class Book {
       if (elem.classList.contains('btn-statistics_word')) {
         const idCurrentWord = <string>elem.dataset.statistics;
         const statisticAllWords: DayStatistic = await getUserStatistic();
-        const answersForAllWords: any = statisticAllWords.optional.wordInGames;
-        const answersForAudiocallWords: any = statisticAllWords.optional.wordInAudiocall;
+
+        const answersForAllWords: any = statisticAllWords.optional.wordInGames; //для Спринта
+        const answersForAudiocallWords: any = statisticAllWords.optional.wordInAudiocall; //для Аудиовызова
+
         
         textRightAnswersSprint.textContent = '0';
         textWrongAnswersSprint.textContent = '0';
@@ -260,8 +262,6 @@ export class Book {
 
         for (let oneWord in answersForAllWords) {
           if (oneWord == idCurrentWord) {
-            console.log(oneWord);
-
             if (answersForAllWords[oneWord].sprint) {
               textRightAnswersSprint.textContent = answersForAllWords[oneWord].sprint.guessed;
               textWrongAnswersSprint.textContent = answersForAllWords[oneWord].sprint.unguessed;  
@@ -276,8 +276,7 @@ export class Book {
             }
           }
         }
-            
-          
+
 
         blockStatistic.style.display = 'block';
       }

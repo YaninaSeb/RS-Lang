@@ -104,12 +104,10 @@ export class AudioGame {
             target.style.background = 'red';
             array[NUMBER_OF_ANSWER].choice = 'wrong';
             showRightWord();
-            console.log(userStatistic.wordInAudiocall);
             await createUserWord(dataUser.userId, array[NUMBER_OF_ANSWER].id, currentWord);
           } else {
             userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessedInARow++;
             userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessed = userStatistic.wordInAudiocall[array[NUMBER_OF_ANSWER].id].audiocall.guessed + 1;
-            console.log(userStatistic.wordInAudiocall);
             NUMBER_OF_RIGHT_ANSWERS++;
             seriesOfAnswers++;
             target.style.background = 'green';

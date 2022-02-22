@@ -58,7 +58,6 @@ export const getUserStatistic = async(id = dataUser.userId) => {
     }
   });
   const settings = await rawResponse.json();
-  console.log(settings);
   return settings;
 }
 
