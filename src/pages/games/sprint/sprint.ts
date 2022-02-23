@@ -84,6 +84,7 @@ export class Sprint {
     let questionNumberAddition = 0;
     //Старт
     btnStart?.addEventListener('click', async () => {
+      removeClassTotal(storeSprint, resultAnswerArr);
       storeSprint.numberTrueAnswer = 0;
       storeSprint.allAnswersInRaund = 0;
       additionWords.splice(0, additionWords.length);

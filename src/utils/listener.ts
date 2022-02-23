@@ -245,8 +245,9 @@ export const addWordsResult = async (
     userStatistic.totalPercent =
       (Number(userStatistic.totalPercent) + Number((storeSprint.numberTrueAnswer / storeSprint.allAnswersInRaund) * 100)) /
       userStatistic.allRounds;
-    userStatistic.sprintwordsPerDay = storeSprint.numberTrueAnswer;
+    userStatistic.sprintwordsPerDay = userStatistic.sprintwordsPerDay + storeSprint.allAnswersInRaund;
     userStatistic.sprintSeries = storeSprint.seriasTrueAnswer;
+    userStatistic.wordsPerDay = userStatistic.sprintwordsPerDay + userStatistic.audiocallwordsPerDay;
     const wordPerDay = {
       learnedWords: 0,
       optional: {
