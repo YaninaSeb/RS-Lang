@@ -1,0 +1,258 @@
+.book-page {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.book-navigation {
+    position: relative;
+    top: 0;
+    width: 100%;
+    text-align: center;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
+    background-color: white;
+}
+ 
+select {
+    appearance: none;
+}
+
+.pages-book {
+    display: flex;
+    flex-direction: row;
+}
+
+.num-group,
+.sprint-game,
+.audio-game {
+    margin: 0 10px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border:1px solid #455774;
+    color: #455774;
+    cursor: pointer;
+}
+.num-pages {
+    margin: 0;
+    padding: 5px 10px;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    cursor: pointer;
+}
+.prev-page,
+.next-page {
+    border: 1px solid black;
+    text-align: center;
+    border-color: #455774;
+    color: #455774;
+    padding: 5px;
+    cursor: pointer;
+}
+.prev-page {
+    border-radius: 5px 0 0 5px;
+}
+.next-page {
+    border-radius: 0 5px 5px 0;
+}
+
+
+.container-words {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-word {
+    width: 80%;
+    margin: 10px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(136, 153, 180, 0.2);
+
+    display: flex;
+    flex-direction: row;
+    word-wrap: break-word;
+}
+
+.img-word {
+    width: 35%;
+    height: 100%;
+}
+.img-word img {
+    width: 85%;
+}
+
+.description-word {
+    width: 57%;
+    height: 100%;
+}
+
+.word-en {
+  font-size: 1.8vw;
+  padding-bottom: 25px;
+  font-weight: 600;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.audio {
+    width: 2.5vw;
+    height: 2.5vw;
+    margin-left: 1vw;
+    background: url('../../assets/svg/play-audio.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.audio:hover {
+    transform: scale(105%);
+    box-shadow: none;
+}
+
+.sentence-one-en,
+.sentence-two-en {
+  font-size: 1.4vw;
+  word-wrap: break-word;
+}
+
+.sentence-one-ru,
+.sentence-two-ru {
+  font-size: 1.1vw;
+  padding-bottom: 20px;
+  color: rgb(0, 0, 0, 0.6);
+  word-wrap: break-word;
+}
+
+.btns-extra_fuctional {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.btn-hard_word,
+.btn-learned_word,
+.btn-statistics_word,
+.btn-hard-restore {
+    margin-right: 1.5vw;
+    padding: 5px;
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #455774;
+    border-radius: 5px;
+
+    text-align: center;
+    font-size: 1.3vw;
+    color: #455774;
+}
+.btn-hard_word:hover,
+.btn-learned_word:hover,
+.btn-statistics_word:hover,
+.btn-hard-restore:hover {
+    background-color: #455774;
+    color: white;
+    cursor: pointer;
+}
+
+.hard_word-select,
+.learned_word-select {
+    background-color: #455774;
+    color: white;
+}
+
+
+.bookmark {
+    position: relative;
+    top: -25px;
+    width: 3vw;
+    height: 35%;
+}
+
+.bookmark-group-1 {
+    background: url('../../assets/img/bookmark/group1.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-2 {
+    background: url('../../assets/img/bookmark/group2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-3 {
+    background: url('../../assets/img/bookmark/group3.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-4 {
+    background: url('../../assets/img/bookmark/group4.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-5 {
+    background: url('../../assets/img/bookmark/group5.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.bookmark-group-6 {
+    background: url('../../assets/img/bookmark/group6.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.statistics-one_word {
+    display: none;
+    
+    width: 100vw;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.statistics-one_word table {
+    position: relative;
+    margin: 0 auto;
+    top: 35%;
+    background-color: #455774;
+
+    font-size: 2.2vmin;
+    padding: 10px;
+    color: white;
+}
+
+.statistics-one_word th,
+.statistics-one_word td {
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.btn-close_statistic {
+    font-size: 4vmin;
+
+    position: absolute;
+    top: -10px;
+    left: 5px;
+
+    cursor: pointer;
+}
+
+.notes-learned_page {
+    width: 100%;
+    text-align: center;
+    color: rgb(0, 128, 0);
+    font-size: 4vmin;
+    
+    font-weight: bolder;
+    padding: 1vh 0;
+}
